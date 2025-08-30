@@ -27,6 +27,16 @@ export default function StripeForm({
   const [errorMessage, setErrorMessage] = useState<string>()
   const [email, setEmail] = useState<string>()
 
+  // Derive locale prefix from current pathname (app uses /[locale]/... routing).
+  // This runs in the browser only (StripeForm is a client component).
+  const getLocalePrefix = () => {
+    if (typeof window === 'undefined') return ''
+    const parts = window.location.pathname.split('/')
+    // parts[0] is '', parts[1] should be the locale when present
+    const maybeLocale = parts[1]
+    return maybeLocale && maybeLocale.length > 0 ? `/${maybeLocale}` : ''
+  }
+
   // Use priceInCents for display
   const displayPrice = priceInCents / 100
 
@@ -40,7 +50,8 @@ export default function StripeForm({
       .confirmPayment({
         elements,
         confirmParams: {
-          return_url: `${site.url}/checkout/${orderId}/stripe-payment-success`,
+          // Include locale prefix so Stripe returns to the localized route
+          return_url: `${site.url}${getLocalePrefix()}/checkout/${orderId}/stripe-payment-success`,
         },
       })
       .then(({ error }) => {
