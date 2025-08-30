@@ -4,7 +4,6 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Search } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import {
   Select,
@@ -34,21 +33,14 @@ export default function HeaderSearch({
   const inputRef = useRef<HTMLInputElement>(null)
   const suggestionsRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
-  const t = useTranslations()
 
-  // Auto-detect locale from URL
-  const detectedLocale =
-    typeof window !== 'undefined'
-      ? (window.location.pathname.split('/')[1] as 'ar' | 'en-US' | 'nb-NO') ||
-        'en-US'
-      : 'en-US'
-  // Debounced suggestions fetch with faster response for header
+  // Debounced suggestions fetch
   useEffect(() => {
     const timeoutId = setTimeout(async () => {
       if (query.length >= 2) {
         try {
           const response = await fetch(
-            `/api/search-suggestions?q=${encodeURIComponent(query)}&locale=${detectedLocale}&limit=5`
+            `/api/search-suggestions?q=${encodeURIComponent(query)}&limit=5`
           )
           const data = await response.json()
           setSuggestions(data.suggestions || [])
@@ -64,7 +56,7 @@ export default function HeaderSearch({
     }, 150) // Faster response for header
 
     return () => clearTimeout(timeoutId)
-  }, [query, detectedLocale])
+  }, [query])
 
   const handleSearch = useCallback(() => {
     if (query.trim()) {
@@ -207,10 +199,10 @@ export default function HeaderSearch({
             )}
             aria-label='Select product category for search'
           >
-            <SelectValue placeholder={t('Header.All')} />
+            <SelectValue placeholder='All Categories' />
           </SelectTrigger>
           <SelectContent position='popper' className='min-w-[150px]'>
-            <SelectItem value='all'>{t('Header.All')}</SelectItem>
+            <SelectItem value='all'>All Categories</SelectItem>
             {categories.map((category) => (
               <SelectItem key={category} value={category}>
                 {category}
@@ -229,9 +221,7 @@ export default function HeaderSearch({
               compact ? 'text-xs xs:text-sm' : 'text-sm xs:text-base'
             )}
             placeholder={
-              compact
-                ? t('Header.Search')
-                : t('Header.Search Site', { name: 'Emirates Plaza' })
+              compact ? 'Search menu...' : 'Search our restaurant menu...'
             }
             name='q'
             type='search'
@@ -281,7 +271,7 @@ export default function HeaderSearch({
         >
           <div className='py-2'>
             <div className='px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider'>
-              {t('Search.Suggestions')}
+              Suggestions
             </div>
             {suggestions.map((suggestion, index) => (
               <button

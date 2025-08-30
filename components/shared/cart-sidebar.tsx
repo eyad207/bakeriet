@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 import { formatPrice } from '@/lib/currency'
 import Link from 'next/link'
 import React, { useEffect, useState, useCallback, useMemo, memo } from 'react'
-import { Button, buttonVariants } from '../ui/button'
+import { Button } from '../ui/button'
 import { ScrollArea } from '../ui/scroll-area'
 import Image from 'next/image'
 import {
@@ -25,8 +25,6 @@ import {
 } from 'lucide-react'
 import useSettingStore from '@/hooks/use-setting-store'
 import ProductPrice from './product/product-price'
-import { useLocale, useTranslations } from 'next-intl'
-import { getDirection } from '@/i18n-config'
 import { useCartSidebarStore } from '@/hooks/use-cart-sidebar-store'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useRouter } from 'next/navigation'
@@ -45,13 +43,11 @@ const QuantitySelector = memo(
     hasValidationIssue,
     isRefreshing,
     onQuantityUpdate,
-    t,
   }: {
     item: OrderItem
     hasValidationIssue: boolean
     isRefreshing: boolean
     onQuantityUpdate: (item: OrderItem, quantity: number) => void
-    t: (key: string) => string
   }) => {
     const maxStock = Math.min(
       item.colors
@@ -98,7 +94,7 @@ const QuantitySelector = memo(
             </SelectItem>
           ))}
           <SelectItem value='0' className='text-red-600'>
-            {t('Cart.Remove')}
+            Remove
           </SelectItem>
         </SelectContent>
       </Select>
@@ -220,9 +216,6 @@ export default function CartSidebar() {
     },
   } = useSettingStore()
 
-  const t = useTranslations()
-  const locale = useLocale()
-  const rtl = getDirection(locale) === 'rtl'
   const router = useRouter()
 
   // Enhanced state management
@@ -295,22 +288,22 @@ export default function CartSidebar() {
 
         if (totalIncreases > 0 && totalDecreases > 0) {
           toast({
-            title: t('Cart.Price and Discount Changes Detected'),
-            description: `${totalIncreases} ${t('Cart.items increased')}, ${totalDecreases} ${t('Cart.items decreased')}. ${t('Cart.Net change')}: ${formatPrice(totalIncrease - totalDecrease)}`,
+            title: 'Price and Discount Changes Detected',
+            description: `${totalIncreases} items increased, ${totalDecreases} items decreased. Net change: ${formatPrice(totalIncrease - totalDecrease)}`,
             variant: 'default',
             duration: 6000,
           })
         } else if (totalIncreases > 0) {
           toast({
-            title: t('Cart.Price Changes Detected'),
-            description: `${totalIncreases} ${t('Cart.items have increased by')} ${formatPrice(totalIncrease)} ${t('Cart.due to price or discount changes')}`,
+            title: 'Price Changes Detected',
+            description: `${totalIncreases} items have increased by ${formatPrice(totalIncrease)} due to price or discount changes`,
             variant: 'destructive',
             duration: 6000,
           })
         } else {
           toast({
-            title: t('Cart.Price Changes Detected'),
-            description: `${totalDecreases} ${t('Cart.items have decreased by')} ${formatPrice(totalDecrease)} ${t('Cart.due to price or discount changes')}`,
+            title: 'Price Changes Detected',
+            description: `${totalDecreases} items have decreased by ${formatPrice(totalDecrease)} due to price or discount changes`,
             variant: 'default',
             duration: 6000,
           })
@@ -324,15 +317,15 @@ export default function CartSidebar() {
     } catch (error) {
       console.error('Failed to check prices and stock:', error)
       toast({
-        title: t('Cart.Error'),
-        description: t('Cart.Failed to update cart information'),
+        title: 'Error',
+        description: 'Failed to update cart information',
         variant: 'destructive',
       })
     } finally {
       setIsRefreshing(false)
       setPriceChangeInfo((prev) => ({ ...prev, isProcessing: false }))
     }
-  }, [items.length, refreshCartPrices, refreshCartStock, t])
+  }, [items.length, refreshCartPrices, refreshCartStock])
 
   // Auto-refresh prices when cart sidebar opens
   useEffect(() => {
@@ -348,11 +341,11 @@ export default function CartSidebar() {
       priceChanges: [],
     })
     toast({
-      title: t('Cart.Price Changes Accepted'),
-      description: t('Cart.Your cart has been updated with current prices'),
+      title: 'Price Changes Accepted',
+      description: 'Your cart has been updated with current prices',
       variant: 'default',
     })
-  }, [t])
+  }, [])
 
   // Enhanced quantity update with validation
   const handleQuantityUpdate = useCallback(
@@ -360,8 +353,8 @@ export default function CartSidebar() {
       // Validate quantity before update
       if (newQuantity < 0 || !Number.isInteger(newQuantity)) {
         toast({
-          title: t('Cart.Invalid Quantity'),
-          description: t('Cart.Quantity must be a positive whole number'),
+          title: 'Invalid Quantity',
+          description: 'Quantity must be a positive whole number',
           variant: 'destructive',
         })
         return
@@ -373,8 +366,8 @@ export default function CartSidebar() {
 
       if (newQuantity > 0 && sizeObj && sizeObj.countInStock < newQuantity) {
         toast({
-          title: t('Cart.Insufficient Stock'),
-          description: `${t('Cart.Only')} ${sizeObj.countInStock} ${t('Cart.items available for')} ${item.name}`,
+          title: 'Insufficient Stock',
+          description: `Only ${sizeObj.countInStock} items available for ${item.name}`,
           variant: 'destructive',
         })
         return
@@ -385,21 +378,21 @@ export default function CartSidebar() {
 
         if (newQuantity === 0) {
           toast({
-            title: t('Cart.Item Removed'),
-            description: `${item.name} ${t('Cart.has been removed from your cart')}`,
+            title: 'Item Removed',
+            description: `${item.name} has been removed from your cart`,
             variant: 'default',
           })
         }
       } catch (error) {
         console.error('Failed to update item quantity:', error)
         toast({
-          title: t('Cart.Error'),
-          description: t('Cart.Failed to update item quantity'),
+          title: 'Error',
+          description: 'Failed to update item quantity',
           variant: 'destructive',
         })
       }
     },
-    [updateItem, t]
+    [updateItem]
   )
 
   // Auto-refresh when sidebar opens
@@ -426,432 +419,428 @@ export default function CartSidebar() {
 
           {/* Enhanced Sidebar */}
           <motion.div
-            initial={{ x: rtl ? -320 : 320 }}
+            initial={{ x: 340 }}
             animate={{ x: 0 }}
-            exit={{ x: rtl ? -320 : 320 }}
-            transition={{ type: 'spring', damping: 20 }}
+            exit={{ x: 340 }}
+            transition={{ type: 'spring', damping: 22 }}
             className={cn(
-              'fixed top-0 bottom-0 z-[101] w-full max-w-[280px] xs:max-w-[320px] bg-background shadow-xl',
-              rtl ? 'left-0' : 'right-0',
-              'border-l border-border/30'
+              'fixed top-0 bottom-0 z-[101] w-full max-w-[340px] xs:max-w-[380px] bg-white/70 dark:bg-zinc-900/80 shadow-2xl backdrop-blur-xl border-none rounded-l-3xl',
+              'right-0',
+              'overflow-hidden flex flex-col'
             )}
           >
-            <div className='flex flex-col h-full'>
-              {/* Enhanced Header */}
-              <div className='p-4 bg-header text-white flex items-center justify-between relative'>
-                <div className='flex items-center gap-2'>
-                  <ShoppingBag className='h-5 w-5' />
-                  <h2 className='font-semibold text-lg'>
-                    {t('Cart.Shopping Cart')}
+            {/* Modern Header */}
+            <div className='p-6 bg-gradient-to-r from-orange-500 to-yellow-400 text-white flex items-center justify-between relative shadow-lg rounded-tl-3xl'>
+              <div className='flex items-center gap-3'>
+                <div className='p-2 bg-white/30 rounded-xl backdrop-blur-md shadow-sm'>
+                  <ShoppingBag className='h-7 w-7 text-orange-600' />
+                </div>
+                <div>
+                  <h2 className='text-2xl font-extrabold tracking-wide drop-shadow-sm'>
+                    Your Order
                   </h2>
+                  <p className='text-white/90 text-sm font-medium'>
+                    {cartSummary.totalItems === 0
+                      ? 'Cart is empty'
+                      : `${cartSummary.totalItems} item${cartSummary.totalItems === 1 ? '' : 's'}`}
+                  </p>
                 </div>
-                <div className='flex items-center gap-3'>
-                  <div className='flex items-center gap-2'>
-                    <span className='text-sm font-medium'>
-                      {cartSummary.totalItems}{' '}
-                      {cartSummary.totalItems === 1
-                        ? t('Cart.item')
-                        : t('Cart.items')}
-                    </span>
-                    {validation.hasErrors && (
-                      <Badge
-                        variant='destructive'
-                        className='text-xs px-1.5 py-0.5'
-                      >
-                        {validation.stockIssues.length +
-                          validation.errors.length}
-                      </Badge>
-                    )}
-                  </div>
-                  <Button
-                    variant='ghost'
-                    size='icon'
-                    onClick={closeSidebar}
-                    className='h-8 w-8 p-0 text-white/80 hover:text-white hover:bg-white/10'
-                  >
-                    <X className='h-4 w-4' />
-                  </Button>
-                </div>
-
-                {/* Loading indicator */}
-                {(isRefreshing || priceChangeInfo.isProcessing) && (
-                  <div className='absolute bottom-0 left-0 right-0 h-0.5 bg-white/20'>
-                    <div className='h-full bg-white animate-pulse' />
-                  </div>
-                )}
               </div>
+              <div className='flex items-center gap-3'>
+                <div className='flex items-center gap-2'>
+                  <span className='text-sm font-semibold text-white/90'>
+                    {cartSummary.totalItems}{' '}
+                    {cartSummary.totalItems === 1 ? 'item' : 'items'}
+                  </span>
+                  {validation.hasErrors && (
+                    <Badge
+                      variant='destructive'
+                      className='text-xs px-1.5 py-0.5 shadow-md'
+                    >
+                      {validation.stockIssues.length + validation.errors.length}
+                    </Badge>
+                  )}
+                </div>
+                <Button
+                  variant='ghost'
+                  size='icon'
+                  onClick={closeSidebar}
+                  className='h-9 w-9 p-0 text-white/80 hover:text-white hover:bg-white/20 rounded-full border border-white/20 shadow-sm transition-all duration-150'
+                >
+                  <X className='h-5 w-5' />
+                </Button>
+              </div>
+              {/* Loading indicator */}
+              {(isRefreshing || priceChangeInfo.isProcessing) && (
+                <div className='absolute bottom-0 left-0 right-0 h-0.5 bg-white/20'>
+                  <div className='h-full bg-white animate-pulse' />
+                </div>
+              )}
+            </div>
 
-              {/* Enhanced Validation Notifications */}
-              {validation.hasErrors && (
-                <div className='p-3 bg-red-50 dark:bg-red-900/20 border-b border-red-200 dark:border-red-800'>
-                  <div className='flex items-start gap-2'>
-                    <AlertTriangle className='h-4 w-4 text-red-600 dark:text-red-400 mt-0.5 shrink-0' />
-                    <div className='flex-1 min-w-0'>
-                      <h3 className='text-sm font-medium text-red-800 dark:text-red-200 mb-1'>
-                        {t('Cart.Cart Issues Detected')}
-                      </h3>
-                      <div className='space-y-1 text-xs text-red-700 dark:text-red-300'>
-                        {validation.stockIssues.map((issue, index) => (
-                          <div key={index}>
-                            <span className='font-medium'>
-                              {issue.itemName}
-                            </span>
-                            {' - '}
-                            {t('Cart.Only')} {issue.availableStock}{' '}
-                            {t('Cart.in stock')},{t('Cart.requested')}{' '}
-                            {issue.requestedQuantity}
-                          </div>
-                        ))}
-                        {validation.errors.map((error, index) => (
-                          <div key={index}>{error}</div>
-                        ))}
-                      </div>
+            {/* Enhanced Validation Notifications */}
+            {validation.hasErrors && (
+              <div className='p-3 bg-red-50 dark:bg-red-900/20 border-b border-red-200 dark:border-red-800'>
+                <div className='flex items-start gap-2'>
+                  <AlertTriangle className='h-4 w-4 text-red-600 dark:text-red-400 mt-0.5 shrink-0' />
+                  <div className='flex-1 min-w-0'>
+                    <h3 className='text-sm font-medium text-red-800 dark:text-red-200 mb-1'>
+                      Cart Issues Detected
+                    </h3>
+                    <div className='space-y-1 text-xs text-red-700 dark:text-red-300'>
+                      {validation.stockIssues.map((issue, index) => (
+                        <div key={index}>
+                          <span className='font-medium'>{issue.itemName}</span>
+                          {' - '}
+                          Only {issue.availableStock} in stock, requested{' '}
+                          {issue.requestedQuantity}
+                        </div>
+                      ))}
+                      {validation.errors.map((error, index) => (
+                        <div key={index}>{error}</div>
+                      ))}
                     </div>
                   </div>
                 </div>
-              )}
+              </div>
+            )}
 
-              {/* Enhanced Price Change Notification */}
-              {priceChangeInfo.hasChanges && (
-                <div className='p-3 bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-800'>
-                  <div className='flex items-start gap-2'>
-                    <AlertTriangle className='h-4 w-4 text-amber-600 dark:text-amber-400 mt-0.5 shrink-0' />
-                    <div className='flex-1 min-w-0'>
-                      <h3 className='text-sm font-medium text-amber-800 dark:text-amber-200 mb-1'>
-                        {t('Cart.Price Changes Detected')}
-                      </h3>
-                      <div className='space-y-1 mb-2 max-h-20 overflow-y-auto'>
-                        {priceChangeInfo.priceChanges.map((change, index) => (
-                          <div
-                            key={index}
-                            className='text-xs text-amber-700 dark:text-amber-300'
-                          >
-                            <span className='font-medium'>
-                              {change.item.name}
-                            </span>
-                            {'  '}
-                            <span
-                              className={cn(
-                                'font-medium',
-                                change.changeType === 'increase'
-                                  ? 'text-red-600 dark:text-red-400'
-                                  : 'text-green-600 dark:text-green-400'
-                              )}
-                            >
-                              {change.changeType === 'increase' ? '+' : '-'}
-                              {formatPrice(change.priceChange)}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                      <Button
-                        size='sm'
-                        variant='outline'
-                        onClick={dismissPriceChanges}
-                        disabled={priceChangeInfo.isProcessing}
-                        className='h-6 px-2 text-xs bg-white dark:bg-amber-900/50 border-amber-300 dark:border-amber-700 text-amber-800 dark:text-amber-200 hover:bg-amber-100 dark:hover:bg-amber-900/70'
-                      >
-                        {priceChangeInfo.isProcessing ? (
-                          <>
-                            <Loader2 className='h-3 w-3 mr-1 animate-spin' />
-                            {t('Cart.Processing')}
-                          </>
-                        ) : (
-                          t('Cart.Accept Changes')
-                        )}
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Enhanced Cart Items */}
-              <ScrollArea className='flex-1 overflow-y-auto py-2'>
-                <div className='flex flex-col divide-y divide-border/30'>
-                  {items.length === 0 ? (
-                    <div className='p-8 text-center'>
-                      <ShoppingBag className='h-12 w-12 mx-auto text-muted-foreground/50 mb-3' />
-                      <p className='text-muted-foreground text-sm'>
-                        {t('Cart.Your Shopping Cart is empty')}
-                      </p>
-                      <Button
-                        variant='ghost'
-                        size='sm'
-                        onClick={closeSidebar}
-                        className='mt-2'
-                      >
-                        {t('Cart.Continue Shopping')}
-                      </Button>
-                    </div>
-                  ) : (
-                    items.map((item) => {
-                      const hasValidationIssue =
-                        validation.invalidItems.includes(
-                          item.clientId || item.product
-                        )
-                      const stockIssue = validation.stockIssues.find(
-                        (issue) =>
-                          issue.itemId === (item.clientId || item.product)
-                      )
-
-                      return (
+            {/* Enhanced Price Change Notification */}
+            {priceChangeInfo.hasChanges && (
+              <div className='p-3 bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-800'>
+                <div className='flex items-start gap-2'>
+                  <AlertTriangle className='h-4 w-4 text-amber-600 dark:text-amber-400 mt-0.5 shrink-0' />
+                  <div className='flex-1 min-w-0'>
+                    <h3 className='text-sm font-medium text-amber-800 dark:text-amber-200 mb-1'>
+                      Price Changes Detected
+                    </h3>
+                    <div className='space-y-1 mb-2 max-h-20 overflow-y-auto'>
+                      {priceChangeInfo.priceChanges.map((change, index) => (
                         <div
-                          key={`${item.clientId}-${item.quantity}`}
-                          className={cn(
-                            'p-3 hover:bg-muted/20 transition-colors',
-                            hasValidationIssue &&
-                              'bg-red-50/50 dark:bg-red-900/10'
-                          )}
-                          onMouseDown={(e) => {
-                            // Prevent mouse events from interfering with Select
-                            if (
-                              (e.target as HTMLElement).closest(
-                                '[data-radix-select-trigger]'
-                              )
-                            ) {
-                              e.stopPropagation()
-                            }
-                          }}
+                          key={index}
+                          className='text-xs text-amber-700 dark:text-amber-300'
                         >
-                          <div className='flex gap-3 items-center'>
-                            <Link
-                              href={`/product/${item.slug}`}
-                              className='shrink-0'
-                              onClick={closeSidebar}
-                            >
-                              <div className='relative h-16 w-16 rounded-md overflow-hidden border border-border/30'>
-                                <Image
-                                  src={item.image}
-                                  alt={item.name}
-                                  fill
-                                  sizes='64px'
-                                  className='object-contain'
-                                />
-                                {hasValidationIssue && (
-                                  <div className='absolute inset-0 bg-red-500/20 flex items-center justify-center'>
-                                    <AlertTriangle className='h-4 w-4 text-red-600' />
-                                  </div>
-                                )}
+                          <span className='font-medium'>
+                            {change.item.name}
+                          </span>
+                          {'  '}
+                          <span
+                            className={cn(
+                              'font-medium',
+                              change.changeType === 'increase'
+                                ? 'text-red-600 dark:text-red-400'
+                                : 'text-green-600 dark:text-green-400'
+                            )}
+                          >
+                            {change.changeType === 'increase' ? '+' : '-'}
+                            {formatPrice(change.priceChange)}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                    <Button
+                      size='sm'
+                      variant='outline'
+                      onClick={dismissPriceChanges}
+                      disabled={priceChangeInfo.isProcessing}
+                      className='h-6 px-2 text-xs bg-white dark:bg-amber-900/50 border-amber-300 dark:border-amber-700 text-amber-800 dark:text-amber-200 hover:bg-amber-100 dark:hover:bg-amber-900/70'
+                    >
+                      {priceChangeInfo.isProcessing ? (
+                        <>
+                          <Loader2 className='h-3 w-3 mr-1 animate-spin' />
+                          Processing
+                        </>
+                      ) : (
+                        'Accept Changes'
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Enhanced Cart Items */}
+            <ScrollArea className='flex-1 overflow-y-auto py-3 px-1'>
+              <div className='flex flex-col gap-3'>
+                {items.length === 0 ? (
+                  <div className='p-8 text-center'>
+                    <ShoppingBag className='h-12 w-12 mx-auto text-muted-foreground/50 mb-3' />
+                    <p className='text-muted-foreground text-sm'>
+                      Your Shopping Cart is empty
+                    </p>
+                    <Button
+                      variant='ghost'
+                      size='sm'
+                      onClick={closeSidebar}
+                      className='mt-2'
+                    >
+                      Continue Shopping
+                    </Button>
+                  </div>
+                ) : (
+                  items.map((item) => {
+                    const hasValidationIssue = validation.invalidItems.includes(
+                      item.clientId || item.product
+                    )
+                    const stockIssue = validation.stockIssues.find(
+                      (issue) =>
+                        issue.itemId === (item.clientId || item.product)
+                    )
+
+                    return (
+                      <div
+                        key={`${item.clientId}-${item.quantity}`}
+                        className={cn(
+                          'bg-white/80 dark:bg-zinc-900/80 rounded-2xl shadow-md p-4 flex gap-3 items-center group transition-all duration-200 border border-zinc-200 dark:border-zinc-800 hover:scale-[1.015] hover:shadow-lg',
+                          hasValidationIssue &&
+                            'border-red-300 ring-2 ring-red-200 dark:ring-red-400/40'
+                        )}
+                        onMouseDown={(e) => {
+                          // Prevent mouse events from interfering with Select
+                          if (
+                            (e.target as HTMLElement).closest(
+                              '[data-radix-select-trigger]'
+                            )
+                          ) {
+                            e.stopPropagation()
+                          }
+                        }}
+                      >
+                        <Link
+                          href={`/product/${item.slug}`}
+                          className='shrink-0'
+                          onClick={closeSidebar}
+                        >
+                          <div className='relative h-16 w-16 rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-700 bg-white/60 group-hover:shadow-md'>
+                            <Image
+                              src={item.image}
+                              alt={item.name}
+                              fill
+                              sizes='64px'
+                              className='object-contain'
+                            />
+                            {hasValidationIssue && (
+                              <div className='absolute inset-0 bg-red-500/20 flex items-center justify-center rounded-xl'>
+                                <AlertTriangle className='h-4 w-4 text-red-600' />
                               </div>
-                            </Link>
+                            )}
+                          </div>
+                        </Link>
 
-                            <div className='flex-1 min-w-0'>
-                              <Link
-                                href={`/product/${item.slug}`}
-                                className='font-medium text-sm line-clamp-1 hover:text-primary transition-colors'
-                                onClick={closeSidebar}
-                              >
-                                {item.name}
-                              </Link>
+                        <div className='flex-1 min-w-0'>
+                          <Link
+                            href={`/product/${item.slug}`}
+                            className='font-semibold text-base line-clamp-1 hover:text-orange-600 transition-colors'
+                            onClick={closeSidebar}
+                          >
+                            {item.name}
+                          </Link>
 
-                              <div className='text-muted-foreground text-xs mt-1'>
-                                {item.color && (
-                                  <span className='mr-2'>
-                                    {t('Cart.Color')}: {item.color}
-                                  </span>
-                                )}
-                                {item.size && (
-                                  <span>
-                                    {t('Cart.Size')}: {item.size}
-                                  </span>
-                                )}
-                              </div>
+                          <div className='text-zinc-500 dark:text-zinc-300 text-xs mt-1 flex gap-2'>
+                            {item.color && (
+                              <span className='mr-2'>
+                                <span className='font-medium'>Color:</span>{' '}
+                                {item.color}
+                              </span>
+                            )}
+                            {item.size && (
+                              <span>
+                                <span className='font-medium'>Size:</span>{' '}
+                                {item.size}
+                              </span>
+                            )}
+                          </div>
 
-                              {/* Stock warning */}
-                              {stockIssue && (
-                                <div className='text-xs text-red-600 dark:text-red-400 mt-1 flex items-center gap-1'>
-                                  <AlertTriangle className='h-3 w-3' />
-                                  {t('Cart.Only')} {stockIssue.availableStock}{' '}
-                                  {t('Cart.available')}
+                          {/* Stock warning */}
+                          {stockIssue && (
+                            <div className='text-xs text-red-600 dark:text-red-400 mt-1 flex items-center gap-1'>
+                              <AlertTriangle className='h-3 w-3' />
+                              Only {stockIssue.availableStock} available
+                            </div>
+                          )}
+
+                          <div className='flex items-center justify-between mt-2'>
+                            <div className='font-bold text-base text-orange-700 dark:text-yellow-300'>
+                              <ProductPrice
+                                price={item.price}
+                                discountedPrice={item.discountedPrice}
+                                plain
+                              />
+                              {item.discountedPrice && item.discount && (
+                                <div className='text-xs text-green-600 mt-1'>
+                                  {item.discount}% discount applied
                                 </div>
                               )}
+                            </div>
 
-                              <div className='flex items-center justify-between mt-2'>
-                                <div className='font-medium text-sm'>
-                                  <ProductPrice
-                                    price={item.price}
-                                    discountedPrice={item.discountedPrice}
-                                    plain
-                                  />
-                                  {item.discountedPrice && item.discount && (
-                                    <div className='text-xs text-green-600 mt-1'>
-                                      {item.discount}%{' '}
-                                      {t('Cart.discount applied')}
-                                    </div>
-                                  )}
-                                </div>
+                            <div className='flex items-center gap-2'>
+                              <QuantitySelector
+                                item={item}
+                                hasValidationIssue={hasValidationIssue}
+                                isRefreshing={isRefreshing}
+                                onQuantityUpdate={handleQuantityUpdate}
+                              />
 
-                                <div className='flex items-center gap-2'>
-                                  <QuantitySelector
-                                    item={item}
-                                    hasValidationIssue={hasValidationIssue}
-                                    isRefreshing={isRefreshing}
-                                    onQuantityUpdate={handleQuantityUpdate}
-                                    t={t}
-                                  />
-
-                                  <Button
-                                    variant='ghost'
-                                    size='sm'
-                                    className='h-7 w-7 p-0 text-muted-foreground hover:text-destructive'
-                                    onClick={() => removeItem(item)}
-                                    disabled={isRefreshing}
-                                  >
-                                    <TrashIcon className='w-4 h-4' />
-                                  </Button>
-                                </div>
-                              </div>
+                              <Button
+                                variant='ghost'
+                                size='sm'
+                                className='h-8 w-8 p-0 text-zinc-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-colors duration-150'
+                                onClick={() => removeItem(item)}
+                                disabled={isRefreshing}
+                              >
+                                <TrashIcon className='w-5 h-5' />
+                              </Button>
                             </div>
                           </div>
                         </div>
-                      )
-                    })
-                  )}
-                </div>
-              </ScrollArea>
-
-              {/* Enhanced Summary and Checkout */}
-              <div className='p-4 bg-muted/30 border-t border-border/30'>
-                {items.length > 0 && (
-                  <>
-                    {/* Enhanced free shipping message */}
-                    {cartSummary.freeShippingRemaining > 0 ? (
-                      <div className='text-sm mb-3 p-2 bg-primary/10 rounded-md border border-primary/20'>
-                        <div className='flex items-center gap-2 mb-1'>
-                          <ShoppingBag className='h-4 w-4 text-primary' />
-                          <span className='font-medium text-primary'>
-                            {t('Cart.Free Shipping Available')}
-                          </span>
-                        </div>
-                        <p className='text-xs text-muted-foreground'>
-                          {t('Cart.Add')}{' '}
-                          <span className='text-primary font-medium'>
-                            {formatPrice(cartSummary.freeShippingRemaining)}
-                          </span>{' '}
-                          {t('Cart.more to qualify for free shipping')}
-                        </p>
-                        <div className='mt-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2'>
-                          <div
-                            className='bg-primary h-2 rounded-full transition-all duration-300'
-                            style={{
-                              width: `${Math.min((itemsPrice / freeShippingMinPrice) * 100, 100)}%`,
-                            }}
-                          />
-                        </div>
                       </div>
-                    ) : (
-                      <div className='text-sm mb-3 p-2 bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-300 rounded-md border border-green-200 dark:border-green-800'>
-                        <div className='flex items-center gap-2'>
-                          <div className='h-4 w-4 rounded-full bg-green-500 flex items-center justify-center'>
-                            <div className='h-2 w-2 bg-white rounded-full' />
-                          </div>
-                          <span className='font-medium'>
-                            {t('Cart.Your order qualifies for FREE Shipping')}
-                          </span>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Enhanced subtotal */}
-                    <div className='flex items-center justify-between mb-4'>
-                      <span className='text-muted-foreground'>
-                        {t('Cart.Subtotal')} ({cartSummary.totalItems}{' '}
-                        {cartSummary.totalItems === 1
-                          ? t('Cart.item')
-                          : t('Cart.items')}
-                        )
-                      </span>
-                      <span className='font-bold text-lg'>
-                        <ProductPrice price={itemsPrice} plain />
-                      </span>
-                    </div>
-                  </>
+                    )
+                  })
                 )}
+              </div>
+            </ScrollArea>
 
-                {/* Enhanced Action Buttons */}
-                <div className='space-y-2'>
-                  <Button
-                    type='button'
-                    onClick={() => {
-                      closeSidebar()
-                      router.push('/checkout')
-                    }}
-                    className={cn(
-                      buttonVariants({ size: 'sm' }),
-                      'w-full',
-                      (!cartSummary.canCheckout || validation.hasErrors) &&
-                        'opacity-50 pointer-events-none'
-                    )}
-                    disabled={
-                      !cartSummary.canCheckout ||
-                      validation.hasErrors ||
-                      isRefreshing
-                    }
-                  >
+            {/* Enhanced Summary and Checkout */}
+            <div className='p-4 bg-muted/30 border-t border-border/30'>
+              {items.length > 0 && (
+                <>
+                  {/* Enhanced free shipping message */}
+                  {cartSummary.freeShippingRemaining > 0 ? (
+                    <div className='text-sm mb-3 p-2 bg-primary/10 rounded-md border border-primary/20'>
+                      <div className='flex items-center gap-2 mb-1'>
+                        <ShoppingBag className='h-4 w-4 text-primary' />
+                        <span className='font-medium text-primary'>
+                          Free Shipping Available
+                        </span>
+                      </div>
+                      <p className='text-xs text-muted-foreground'>
+                        Add{' '}
+                        <span className='text-primary font-medium'>
+                          {formatPrice(cartSummary.freeShippingRemaining)}
+                        </span>{' '}
+                        more to qualify for free shipping
+                      </p>
+                      <div className='mt-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2'>
+                        <div
+                          className='bg-primary h-2 rounded-full transition-all duration-300'
+                          style={{
+                            width: `${Math.min((itemsPrice / freeShippingMinPrice) * 100, 100)}%`,
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className='text-sm mb-3 p-2 bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-300 rounded-md border border-green-200 dark:border-green-800'>
+                      <div className='flex items-center gap-2'>
+                        <div className='h-4 w-4 rounded-full bg-green-500 flex items-center justify-center'>
+                          <div className='h-2 w-2 bg-white rounded-full' />
+                        </div>
+                        <span className='font-medium'>
+                          Your order qualifies for FREE Shipping
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Enhanced subtotal */}
+                  <div className='flex items-center justify-between mb-4'>
+                    <span className='text-muted-foreground'>
+                      Subtotal ({cartSummary.totalItems}{' '}
+                      {cartSummary.totalItems === 1 ? 'item' : 'items'})
+                    </span>
+                    <span className='font-bold text-lg'>
+                      <ProductPrice price={itemsPrice} plain />
+                    </span>
+                  </div>
+                </>
+              )}
+
+              {/* Enhanced Action Buttons */}
+              <div className='space-y-2'>
+                <Button
+                  type='button'
+                  onClick={() => {
+                    closeSidebar()
+                    router.push('/checkout')
+                  }}
+                  className={cn(
+                    'w-full py-2 text-base font-semibold rounded-2xl border-2 border-orange-300 text-orange-700 bg-white shadow-sm hover:bg-orange-50 hover:border-orange-500 hover:text-orange-900 transition-all duration-300 flex items-center justify-center focus-visible:ring-2 focus-visible:ring-orange-200',
+                    (!cartSummary.canCheckout || validation.hasErrors) &&
+                      'opacity-60 pointer-events-none'
+                  )}
+                  style={{ position: 'relative' }}
+                  disabled={
+                    !cartSummary.canCheckout ||
+                    validation.hasErrors ||
+                    isRefreshing
+                  }
+                >
+                  <span className='absolute inset-0 pointer-events-none transition-opacity duration-300 bg-black/10 opacity-0 group-hover:opacity-100' />
+                  <span className='relative z-10 flex items-center justify-center'>
                     {validation.hasErrors ? (
                       <>
-                        <AlertTriangle className='h-4 w-4 mr-2' />
-                        {t('Cart.Fix Issues to Checkout')}
+                        <AlertTriangle className='h-5 w-5 mr-2' />
+                        Fix Issues to Checkout
                       </>
                     ) : isRefreshing ? (
                       <>
-                        <Loader2 className='h-4 w-4 mr-2 animate-spin' />
-                        {t('Cart.Updating')}
+                        <Loader2 className='h-5 w-5 mr-2 animate-spin' />
+                        Updating
                       </>
                     ) : (
-                      t('Cart.Proceed to Checkout')
+                      'Proceed to Checkout'
                     )}
-                  </Button>
+                  </span>
+                </Button>
 
-                  <Link
-                    href='/cart'
-                    className={cn(
-                      buttonVariants({ variant: 'outline', size: 'sm' }),
-                      'w-full bg-zinc-800 text-white hover:bg-zinc-400 hover:text-black',
-                      items.length === 0 && 'opacity-50 pointer-events-none'
-                    )}
-                    onClick={closeSidebar}
-                  >
-                    {t('Cart.Go to Cart')}
-                  </Link>
-
-                  {items.length > 0 && (
-                    <div className='flex gap-2'>
-                      <Button
-                        variant='ghost'
-                        size='sm'
-                        onClick={checkPricesAndStock}
-                        disabled={isRefreshing}
-                        className='flex-1 text-xs'
-                      >
-                        {isRefreshing ? (
-                          <>
-                            <Loader2 className='h-3 w-3 mr-1 animate-spin' />
-                            {t('Cart.Refreshing')}
-                          </>
-                        ) : (
-                          <>
-                            <RefreshCw className='h-3 w-3 mr-1' />
-                            {t('Cart.Refresh')}
-                          </>
-                        )}
-                      </Button>
-
-                      <Button
-                        variant='destructive'
-                        size='sm'
-                        onClick={() => {
-                          clearCart()
-                          closeSidebar()
-                        }}
-                        disabled={isRefreshing}
-                        className='flex-1 text-xs'
-                      >
-                        {t('Cart.Empty Cart')}
-                      </Button>
-                    </div>
+                <Link
+                  href='/cart'
+                  className={cn(
+                    'w-full py-2 text-base font-semibold rounded-2xl border-2 border-orange-300 text-orange-700 bg-white shadow-sm transition-all duration-300 flex items-center justify-center focus-visible:ring-2 focus-visible:ring-orange-200 hover:bg-gradient-to-r hover:from-orange-50 hover:to-yellow-50 hover:border-orange-400 hover:text-orange-800 hover:shadow-md hover:scale-[1.02]',
+                    items.length === 0 && 'opacity-50 pointer-events-none'
                   )}
-                </div>
+                  onClick={closeSidebar}
+                >
+                  Go to Cart
+                </Link>
+
+                {items.length > 0 && (
+                  <div className='flex gap-2'>
+                    <Button
+                      variant='ghost'
+                      size='sm'
+                      onClick={checkPricesAndStock}
+                      disabled={isRefreshing}
+                      className='flex-1 text-xs rounded-xl border border-yellow-400 bg-yellow-50 hover:bg-yellow-200 text-yellow-800 hover:text-yellow-900 shadow-sm hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-1 focus-visible:ring-2 focus-visible:ring-yellow-300'
+                    >
+                      {isRefreshing ? (
+                        <>
+                          <Loader2 className='h-4 w-4 mr-1 animate-spin' />
+                          Refreshing
+                        </>
+                      ) : (
+                        <>
+                          <RefreshCw className='h-4 w-4 mr-1' />
+                          Refresh
+                        </>
+                      )}
+                    </Button>
+
+                    <Button
+                      variant='destructive'
+                      size='sm'
+                      onClick={() => {
+                        clearCart()
+                        closeSidebar()
+                      }}
+                      disabled={isRefreshing}
+                      className='flex-1 text-xs rounded-xl border border-red-400 bg-red-50 hover:bg-red-200 text-red-700 shadow-sm hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-1 focus-visible:ring-2 focus-visible:ring-red-300'
+                    >
+                      <TrashIcon className='h-4 w-4 mr-1' />
+                      Empty Cart
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           </motion.div>

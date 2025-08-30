@@ -16,8 +16,12 @@ body {
     --card-foreground: 20 14.3% 4.1%;
     --popover: 0 0% 100%;
     --popover-foreground: 20 14.3% 4.1%;
-    --primary: 47.9 95.8% 53.1%;
+    --primary: 47.9 95.8% 53.1%; /* Keep yellow as primary */
     --primary-foreground: 26 83.3% 14.1%;
+    --restaurant-orange: 24 100% 50%; /* Pure orange */
+    --restaurant-yellow: 47 100% 50%; /* Pure yellow */
+    --restaurant-gradient-start: 24 100% 50%; /* Orange */
+    --restaurant-gradient-end: 47 100% 50%; /* Yellow */
     --secondary: 60 4.8% 95.9%;
     --secondary-foreground: 24 9.8% 10%;
     --muted: 60 4.8% 95.9%;
@@ -244,6 +248,27 @@ body {
 
   .nav-button {
     @apply block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 bg-primary text-primary-foreground hover:bg-primary/80;
+  }
+
+  /* Restaurant-specific styles */
+  .restaurant-gradient {
+    @apply bg-gradient-to-r from-orange-400 via-yellow-400 to-orange-500;
+  }
+
+  .restaurant-header-gradient {
+    @apply bg-gradient-to-br from-orange-500 to-yellow-500;
+  }
+
+  .restaurant-card {
+    @apply bg-gradient-to-br from-orange-50 to-yellow-50 border-orange-200 shadow-lg hover:shadow-xl transition-all duration-300;
+  }
+
+  .restaurant-button {
+    @apply bg-gradient-to-r from-orange-500 to-yellow-400 text-white font-bold shadow-lg hover:scale-105 hover:from-yellow-400 hover:to-orange-500 transition-all duration-200;
+  }
+
+  .restaurant-nav-link {
+    @apply relative text-white hover:text-yellow-200 transition-colors duration-200 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-yellow-200 hover:after:w-full after:transition-all after:duration-300;
   }
 }
 

@@ -2,10 +2,7 @@
 
 import { ShoppingCartIcon } from 'lucide-react'
 import useIsMounted from '@/hooks/use-is-mounted'
-import { cn } from '@/lib/utils'
 import useCartStore from '@/hooks/use-cart-store'
-import { useLocale, useTranslations } from 'next-intl'
-import { getDirection } from '@/i18n-config'
 import { useCartSidebarStore } from '@/hooks/use-cart-sidebar-store'
 
 export default function CartButton() {
@@ -15,32 +12,23 @@ export default function CartButton() {
     cart: { items },
   } = useCartStore()
   const cartItemsCount = items.reduce((a, c) => a + c.quantity, 0)
-  const t = useTranslations()
-  const locale = useLocale()
 
   return (
     <button
       onClick={toggleSidebar}
-      className='px-2 py-1.5 header-button rounded-md flex items-center gap-1'
+      className='px-6 py-2 w-[148px] h-[48px] flex items-center justify-center rounded-xl bg-gradient-to-r from-white/60 to-yellow-100 text-orange-700 font-semibold border border-orange-200 shadow-md hover:shadow-lg transform hover:scale-[1.04] transition-all duration-200'
     >
-      <div className='flex items-center text-xs relative'>
+      <div className='flex items-center text-sm relative w-full h-full justify-center'>
         <div className='relative'>
-          <ShoppingCartIcon className='h-6 w-6 sm:h-7 sm:w-7' />
+          <ShoppingCartIcon className='h-5 w-5 sm:h-6 sm:w-6 text-orange-600' />
           {isMounted && cartItemsCount > 0 && (
-            <span
-              className={cn(
-                `absolute bg-primary px-1 rounded-full text-black text-xs font-bold ${
-                  getDirection(locale) === 'rtl' ? '-right-1' : '-right-1'
-                } -top-1 z-10 min-w-[18px] h-[18px] flex items-center justify-center`,
-                cartItemsCount >= 10 && 'text-[10px] px-0'
-              )}
-            >
+            <span className='absolute bg-orange-500 text-white px-1.5 rounded-full text-xs font-bold -right-2 -top-2 z-10 min-w-[18px] h-[18px] flex items-center justify-center shadow-md'>
               {cartItemsCount}
             </span>
           )}
         </div>
-        <span className='font-bold text-sm ml-1 hidden sm:inline'>
-          {t('Header.Cart')}
+        <span className='font-semibold text-sm ml-2 hidden sm:inline text-orange-800'>
+          Cart
         </span>
       </div>
     </button>
