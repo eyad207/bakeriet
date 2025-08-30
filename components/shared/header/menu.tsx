@@ -37,15 +37,73 @@ const Menu = async ({}: { forAdmin?: boolean }) => {
           </SheetTrigger>
 
           <SheetContent
-            className='bg-gradient-to-br from-orange-500 to-yellow-500 text-white flex flex-col py-6 w-80'
+            className='bg-gradient-to-br from-orange-500 to-yellow-500 text-white flex flex-col py-6 w-80 h-screen overflow-y-auto'
             side='right'
           >
             <SheetHeader className='w-full text-left border-b border-white/20 pb-4'>
               <SheetTitle className='text-white text-2xl font-bold'>
-                Restaurant Menu
+                Menu
               </SheetTitle>
             </SheetHeader>
-
+            {/* Account Section */}
+            <div className='space-y-4'>
+              <h3 className='text-lg font-semibold text-white/90'>
+                Your Account
+              </h3>
+              <div className='space-y-3 flex flex-col'>
+                <SheetClose asChild>
+                  <NavigationButton
+                    href='/account'
+                    className='py-3 px-4 bg-white/10 backdrop-blur-sm rounded-xl hover:bg-white/20 transition-all duration-200 text-white font-medium flex items-center gap-2'
+                  >
+                    👤 Your Account
+                  </NavigationButton>
+                </SheetClose>
+                <SheetClose asChild>
+                  <NavigationButton
+                    href='/account/orders'
+                    className='py-3 px-4 bg-white/10 backdrop-blur-sm rounded-xl hover:bg-white/20 transition-all duration-200 text-white font-medium flex items-center gap-2'
+                  >
+                    📋 Your Orders
+                  </NavigationButton>
+                </SheetClose>
+                {/* Admin dashboard link */}
+                {session?.user.role === 'Admin' && (
+                  <SheetClose asChild>
+                    <Link
+                      href='/admin/overview'
+                      className='py-3 px-4 bg-white/10 backdrop-blur-sm rounded-xl hover:bg-white/20 transition-all duration-200 text-white font-medium flex items-center gap-2'
+                    >
+                      ⚙️ Admin
+                    </Link>
+                  </SheetClose>
+                )}
+                {/* Sign out button */}
+                {session ? (
+                  <SheetClose asChild>
+                    <form action={SignOut} className='w-full'>
+                      <Button
+                        className='w-full py-3 px-4 bg-red-500/20 backdrop-blur-sm rounded-xl hover:bg-red-500/30 transition-all duration-200 text-white font-medium flex items-center gap-2'
+                        variant='ghost'
+                        type='submit'
+                      >
+                        🚪 Sign Out
+                      </Button>
+                    </form>
+                  </SheetClose>
+                ) : (
+                  <SheetClose asChild>
+                    <Link
+                      href='/sign-in'
+                      className='py-3 px-4 bg-green-500/20 backdrop-blur-sm rounded-xl hover:bg-green-500/30 transition-all duration-200 text-white font-medium flex items-center gap-2'
+                      aria-label='Sign in'
+                    >
+                      🔐 Sign In
+                    </Link>
+                  </SheetClose>
+                )}
+              </div>
+            </div>
             <div className='mt-6 flex flex-col gap-6 flex-1'>
               {/* Restaurant Navigation */}
               <div className='space-y-4'>
@@ -114,66 +172,6 @@ const Menu = async ({}: { forAdmin?: boolean }) => {
                     <Clock className='h-4 w-4' />
                     <span>Mon-Sun: 11:00 - 22:00</span>
                   </div>
-                </div>
-              </div>
-
-              {/* Account Section */}
-              <div className='space-y-4'>
-                <h3 className='text-lg font-semibold text-white/90'>
-                  Your Account
-                </h3>
-                <div className='space-y-3 flex flex-col'>
-                  <SheetClose asChild>
-                    <NavigationButton
-                      href='/account'
-                      className='py-3 px-4 bg-white/10 backdrop-blur-sm rounded-xl hover:bg-white/20 transition-all duration-200 text-white font-medium flex items-center gap-2'
-                    >
-                      👤 Your Account
-                    </NavigationButton>
-                  </SheetClose>
-                  <SheetClose asChild>
-                    <NavigationButton
-                      href='/account/orders'
-                      className='py-3 px-4 bg-white/10 backdrop-blur-sm rounded-xl hover:bg-white/20 transition-all duration-200 text-white font-medium flex items-center gap-2'
-                    >
-                      📋 Your Orders
-                    </NavigationButton>
-                  </SheetClose>
-                  {/* Admin dashboard link */}
-                  {session?.user.role === 'Admin' && (
-                    <SheetClose asChild>
-                      <Link
-                        href='/admin/overview'
-                        className='py-3 px-4 bg-white/10 backdrop-blur-sm rounded-xl hover:bg-white/20 transition-all duration-200 text-white font-medium flex items-center gap-2'
-                      >
-                        ⚙️ Admin
-                      </Link>
-                    </SheetClose>
-                  )}
-                  {/* Sign out button */}
-                  {session ? (
-                    <SheetClose asChild>
-                      <form action={SignOut} className='w-full'>
-                        <Button
-                          className='w-full py-3 px-4 bg-red-500/20 backdrop-blur-sm rounded-xl hover:bg-red-500/30 transition-all duration-200 text-white font-medium flex items-center gap-2'
-                          variant='ghost'
-                          type='submit'
-                        >
-                          🚪 Sign Out
-                        </Button>
-                      </form>
-                    </SheetClose>
-                  ) : (
-                    <SheetClose asChild>
-                      <Link
-                        href='/sign-in'
-                        className='py-3 px-4 bg-green-500/20 backdrop-blur-sm rounded-xl hover:bg-green-500/30 transition-all duration-200 text-white font-medium flex items-center gap-2'
-                        aria-label='Sign in'
-                      >
-                        🔐 Sign In
-                      </Link>
-                    </SheetClose>
-                  )}
                 </div>
               </div>
 

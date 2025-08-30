@@ -5,27 +5,18 @@ import { useRouter } from 'next/navigation'
 import { Search } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '../../ui/select'
 
 interface HeaderSearchProps {
   compact?: boolean
   className?: string
-  categories?: string[]
 }
 
 export default function HeaderSearch({
   compact = false,
   className = '',
-  categories = [],
 }: HeaderSearchProps) {
   const [query, setQuery] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState('all')
+  // Removed category state
   const [suggestions, setSuggestions] = useState<string[]>([])
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(-1)
@@ -62,33 +53,11 @@ export default function HeaderSearch({
     if (query.trim()) {
       const searchParams = new URLSearchParams()
       searchParams.set('q', query.trim())
-      if (selectedCategory !== 'all') {
-        searchParams.set('category', selectedCategory)
-      }
       const searchUrl = `/search?${searchParams.toString()}`
       router.push(searchUrl)
       setShowSuggestions(false)
     }
-  }, [query, selectedCategory, router])
-
-  const handleCategoryChange = useCallback(
-    (categoryValue: string) => {
-      setSelectedCategory(categoryValue)
-
-      // If a specific category is selected, redirect immediately to that category page
-      // without the search query to show all products in that category
-      if (categoryValue !== 'all') {
-        const searchParams = new URLSearchParams()
-        searchParams.set('category', categoryValue)
-        searchParams.set('q', 'all') // Clear search query when selecting category
-        const searchUrl = `/search?${searchParams.toString()}`
-        router.push(searchUrl)
-        setQuery('') // Clear the search input
-        setShowSuggestions(false)
-      }
-    },
-    [router]
-  )
+  }, [query, router])
 
   const handleSuggestionClick = useCallback(
     (suggestion: string) => {
@@ -96,13 +65,10 @@ export default function HeaderSearch({
       setShowSuggestions(false)
       const searchParams = new URLSearchParams()
       searchParams.set('q', suggestion)
-      if (selectedCategory !== 'all') {
-        searchParams.set('category', selectedCategory)
-      }
       const searchUrl = `/search?${searchParams.toString()}`
       router.push(searchUrl)
     },
-    [selectedCategory, router]
+    [router]
   )
 
   // Handle keyboard navigation
@@ -183,33 +149,7 @@ export default function HeaderSearch({
           handleSearch()
         }}
       >
-        {/* Category Select */}
-        <Select
-          value={selectedCategory}
-          onValueChange={handleCategoryChange}
-          name='category'
-        >
-          <SelectTrigger
-            className={cn(
-              'w-auto border-0 dark:border-gray-300 bg-gray-100 text-black rounded-r-none rounded-l-md rtl:rounded-r-md rtl:rounded-l-none',
-              heightClass,
-              compact
-                ? 'min-w-[40px] xs:min-w-[60px] text-[10px] xs:text-xs'
-                : 'min-w-[70px] xs:min-w-[80px]'
-            )}
-            aria-label='Select product category for search'
-          >
-            <SelectValue placeholder='All Categories' />
-          </SelectTrigger>
-          <SelectContent position='popper' className='min-w-[150px]'>
-            <SelectItem value='all'>All Categories</SelectItem>
-            {categories.map((category) => (
-              <SelectItem key={category} value={category}>
-                {category}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        {/* Modern Search Bar - No Category Select */}
 
         {/* Search Input */}
         <div className='relative flex-1'>

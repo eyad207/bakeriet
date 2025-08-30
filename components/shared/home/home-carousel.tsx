@@ -11,55 +11,109 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel'
 import Link from 'next/link'
-import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { ICarousel } from '@/types'
+import { ChefHat, Clock, Star } from 'lucide-react'
 
 export function HomeCarousel({ items }: { items: ICarousel[] }) {
   const plugin = React.useRef(
-    Autoplay({ delay: 3000, stopOnInteraction: true })
+    Autoplay({ delay: 4000, stopOnInteraction: true })
   )
 
   return (
-    <Carousel
-      dir='ltr'
-      plugins={[plugin.current]}
-      className='w-full mx-auto mb-3 sm:mb-4'
-      onMouseEnter={plugin.current.stop}
-      onMouseLeave={plugin.current.reset}
-    >
-      <CarouselContent>
-        {items.map((item, index) => (
-          <CarouselItem key={`${item.title}-${index}`}>
-            <Link href={item.url}>
-              <div className='flex aspect-[16/10] sm:aspect-[16/8] md:aspect-[16/6] items-center justify-center relative transition-transform duration-300 hover:scale-[1.02]'>
-                <Image
-                  src={item.image}
-                  alt={item.title}
-                  fill
-                  className='object-cover'
-                  priority
-                />
-                {/* Updated width to 35% on all screen sizes including mobile */}
-                <div className='absolute w-[35%] left-2 sm:left-6 md:left-10 top-1/2 transform -translate-y-1/2'>
-                  <h2
-                    className={cn(
-                      'text-lg sm:text-2xl md:text-4xl lg:text-6xl font-bold mb-2 md:mb-4 text-primary drop-shadow-md'
-                    )}
-                  >
-                    {item.title}
-                  </h2>
-                  <Button size='sm' className='text-xs sm:text-sm md:text-base'>
-                    {item.buttonCaption}
-                  </Button>
+    <div className='relative w-full mx-auto mb-6 sm:mb-8'>
+      <Carousel
+        dir='ltr'
+        plugins={[plugin.current]}
+        className='w-full rounded-3xl overflow-hidden shadow-2xl'
+        onMouseEnter={plugin.current.stop}
+        onMouseLeave={plugin.current.reset}
+      >
+        <CarouselContent>
+          {items.map((item, index) => (
+            <CarouselItem key={`${item.title}-${index}`}>
+              <Link href={item.url} className='block relative group'>
+                <div className='relative aspect-[16/9] sm:aspect-[16/8] md:aspect-[16/7] overflow-hidden'>
+                  {/* Background Image with Overlay */}
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    className='object-cover transition-transform duration-700 group-hover:scale-105'
+                    priority
+                  />
+
+                  {/* Gradient Overlay for Better Text Readability */}
+                  <div className='absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent' />
+
+                  {/* Content Container */}
+                  <div className='absolute inset-0 flex items-center'>
+                    <div className='w-full max-w-2xl px-6 sm:px-12 md:px-16 lg:px-20'>
+                      {/* Restaurant Badge */}
+                      <div className='flex items-center gap-2 mb-3 sm:mb-4'>
+                        <div className='flex items-center gap-1 bg-orange-500/90 backdrop-blur-sm text-white px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium'>
+                          <ChefHat className='h-3 w-3 sm:h-4 sm:w-4' />
+                          Fresh Daily
+                        </div>
+                        <div className='flex items-center gap-1 bg-yellow-500/90 backdrop-blur-sm text-white px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium'>
+                          <Star className='h-3 w-3 sm:h-4 sm:w-4 fill-current' />
+                          Chef&apos;s Special
+                        </div>
+                      </div>
+
+                      {/* Main Title */}
+                      <h2 className='text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-3 sm:mb-4 md:mb-6 text-white leading-tight drop-shadow-2xl'>
+                        {item.title}
+                      </h2>
+
+                      {/* Description */}
+                      <p className='text-sm sm:text-base md:text-lg lg:text-xl text-white/90 mb-4 sm:mb-6 md:mb-8 max-w-lg leading-relaxed drop-shadow-lg'>
+                        Experience authentic flavors crafted with love and the
+                        finest ingredients
+                      </p>
+
+                      {/* Call-to-Action Button */}
+                      <div className='flex items-center gap-3 sm:gap-4'>
+                        <Button
+                          size='lg'
+                          className='bg-gradient-to-r from-orange-500 to-yellow-400 hover:from-yellow-400 hover:to-orange-500 text-white font-bold px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base md:text-lg rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 border-0'
+                        >
+                          {item.buttonCaption}
+                        </Button>
+
+                        {/* Quick Info */}
+                        <div className='hidden sm:flex items-center gap-1 text-white/80 text-sm'>
+                          <Clock className='h-4 w-4' />
+                          <span>Ready in 15-20 min</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Decorative Elements */}
+                  <div className='absolute top-4 right-4 sm:top-6 sm:right-6 opacity-20'>
+                    <ChefHat className='h-12 w-12 sm:h-16 sm:w-16 md:h-20 md:w-20 text-white' />
+                  </div>
                 </div>
-              </div>
-            </Link>
-          </CarouselItem>
-        ))}
-      </CarouselContent>
-      <CarouselPrevious className='hidden sm:flex left-2 sm:left-4 md:left-12' />
-      <CarouselNext className='hidden sm:flex right-2 sm:right-4 md:right-12' />
-    </Carousel>
+              </Link>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+
+        {/* Navigation Arrows */}
+        <CarouselPrevious className='hidden sm:flex left-4 md:left-8 bg-white/20 hover:bg-white/30 border-white/30 text-white backdrop-blur-md hover:scale-110 transition-all duration-200' />
+        <CarouselNext className='hidden sm:flex right-4 md:right-8 bg-white/20 hover:bg-white/30 border-white/30 text-white backdrop-blur-md hover:scale-110 transition-all duration-200' />
+
+        {/* Carousel Indicators */}
+        <div className='absolute bottom-4 sm:bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2'>
+          {items.map((_, index) => (
+            <div
+              key={index}
+              className='w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-white/50 backdrop-blur-sm'
+            />
+          ))}
+        </div>
+      </Carousel>
+    </div>
   )
 }

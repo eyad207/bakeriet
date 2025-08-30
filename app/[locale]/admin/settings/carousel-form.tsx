@@ -146,7 +146,13 @@ export default function CarouselForm({
             type='button'
             variant={'outline'}
             onClick={() =>
-              append({ url: '', title: '', image: '', buttonCaption: '' })
+              append({
+                url: '',
+                title: '',
+                image: '',
+                buttonCaption: '',
+                isPublished: true,
+              })
             }
           >
             Add Carousel

@@ -5,7 +5,7 @@ import Link from 'next/link'
 import React, { useEffect, useRef, useState } from 'react'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
-import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
+import { ChevronLeftIcon, ChevronRightIcon, Utensils } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 type CardItem = {
@@ -25,6 +25,22 @@ export function HomeCard({ cards }: { cards: CardItem[] }) {
   const [currentCardIndex, setCurrentCardIndex] = useState(0)
   const autoScrollIntervalRef = useRef<NodeJS.Timeout | null>(null)
   const [isMobile, setIsMobile] = useState(false)
+
+  // Add CSS for gradient animation
+  React.useEffect(() => {
+    const style = document.createElement('style')
+    style.textContent = `
+      @keyframes gradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+    `
+    document.head.appendChild(style)
+    return () => {
+      document.head.removeChild(style)
+    }
+  }, [])
 
   // Check if we're on mobile or desktop
   useEffect(() => {
@@ -181,39 +197,92 @@ export function HomeCard({ cards }: { cards: CardItem[] }) {
 
   // Render different layouts for mobile and desktop
   if (!isMobile) {
-    // Desktop layout - grid with 100% width and larger cards
+    // Desktop layout - geometric shapes design with hexagons and diamonds
     return (
-      <div className='w-full grid grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6'>
-        {processedCards.map((card) => (
+      <div className='w-full grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8'>
+        {processedCards.map((card, cardIndex) => (
           <Card
             key={card.title}
-            className='rounded-lg shadow-md hover:shadow-xl transition-all duration-500 flex flex-col border-2 border-border/30 hover:border-primary/40 dark:border-zinc-700 dark:hover:border-primary/60 dark:bg-zinc-900 dark:hover:bg-zinc-900'
+            className='group relative flex flex-col overflow-hidden bg-gradient-to-br from-white via-orange-50/30 to-yellow-50/30 dark:from-zinc-900 dark:via-orange-950/30 dark:to-yellow-950/30 transition-all duration-700 hover:scale-[1.02] transform'
+            style={{
+              clipPath:
+                cardIndex % 2 === 0
+                  ? 'polygon(20px 0%, 100% 0%, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0% 100%, 0% 20px)'
+                  : 'polygon(0% 0%, calc(100% - 20px) 0%, 100% 20px, 100% 100%, 20px 100%, 0% calc(100% - 20px))',
+              boxShadow:
+                '0 10px 25px rgba(0,0,0,0.1), 0 20px 48px rgba(251,146,60,0.1)',
+            }}
           >
-            <CardContent className='p-4 sm:p-5 md:p-7 flex-1'>
-              <h3 className='text-lg sm:text-xl font-bold mb-4 sm:mb-6 border-b pb-3 sm:pb-4 text-foreground dark:text-foreground/90'>
-                {card.title}
-              </h3>
+            {/* Animated border effect */}
+            <div
+              className='absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700'
+              style={{
+                background:
+                  'linear-gradient(45deg, #f97316, #eab308, #f97316, #eab308)',
+                backgroundSize: '400% 400%',
+                animation: 'gradient 3s ease infinite',
+                clipPath:
+                  cardIndex % 2 === 0
+                    ? 'polygon(20px 0%, 100% 0%, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0% 100%, 0% 20px)'
+                    : 'polygon(0% 0%, calc(100% - 20px) 0%, 100% 20px, 100% 100%, 20px 100%, 0% calc(100% - 20px))',
+                padding: '3px',
+              }}
+            >
+              <div
+                className='w-full h-full bg-white dark:bg-zinc-900'
+                style={{
+                  clipPath:
+                    cardIndex % 2 === 0
+                      ? 'polygon(20px 0%, 100% 0%, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0% 100%, 0% 20px)'
+                      : 'polygon(0% 0%, calc(100% - 20px) 0%, 100% 20px, 100% 100%, 20px 100%, 0% calc(100% - 20px))',
+                }}
+              />
+            </div>
 
-              <div className='grid grid-cols-2 gap-4 sm:gap-6'>
+            <CardContent className='p-6 sm:p-7 md:p-8 flex-1 relative z-10'>
+              <div className='flex items-center mb-6'>
+                <div
+                  className='w-12 h-12 bg-gradient-to-br from-orange-500 to-yellow-500 mr-4 flex items-center justify-center group-hover:rotate-12 transition-transform duration-500'
+                  style={{
+                    clipPath:
+                      'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
+                  }}
+                >
+                  <Utensils className='w-6 h-6 text-white' />
+                </div>
+                <h3 className='text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100 group-hover:text-orange-700 dark:group-hover:text-orange-300 transition-colors duration-500'>
+                  {card.title}
+                </h3>
+              </div>
+
+              <div className='grid grid-cols-2 gap-5 sm:gap-6'>
                 {card.items.map((item) => (
                   <Link
                     key={item.name}
                     href={item.href}
-                    className={cn('flex flex-col group', item.className)}
+                    className={cn(
+                      'flex flex-col group/item cursor-pointer',
+                      item.className
+                    )}
                   >
-                    <div className='bg-secondary/40 dark:bg-zinc-800 rounded-lg p-3 sm:p-4 flex items-center justify-center mb-2 sm:mb-3 overflow-hidden relative border border-border/50 dark:border-zinc-700 hover:border-primary/50 dark:hover:border-primary/60 transition-colors duration-300'>
-                      <div className='absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500'></div>
-                      <div className='transform transition-transform duration-500 ease-out group-hover:translate-y-[-4px] sm:group-hover:translate-y-[-6px] relative z-10'>
-                        <Image
-                          src={item.image}
-                          alt={item.name}
-                          className='aspect-square object-contain max-w-full h-auto mx-auto group-hover:scale-110 transition-transform duration-700 drop-shadow-sm'
-                          height={100}
-                          width={100}
-                        />
+                    <div className='relative mb-3 sm:mb-4 group-hover/item:scale-110 transition-transform duration-500'>
+                      {/* Rectangle shape for all items */}
+                      <div className='w-24 h-24 sm:w-28 sm:h-28 mx-auto bg-gradient-to-br from-orange-100 to-yellow-100 dark:from-orange-950/70 dark:to-yellow-950/70 flex items-center justify-center overflow-hidden relative transition-all duration-500 hover:shadow-lg group-hover/item:shadow-xl rounded-xl border-2 border-orange-200/50 dark:border-orange-800/50'>
+                        {/* Animated background */}
+                        <div className='absolute inset-0 bg-gradient-to-tr from-orange-200/50 via-yellow-200/30 to-orange-300/50 opacity-0 group-hover/item:opacity-100 transition-opacity duration-700 rounded-xl' />
+
+                        <div className='relative z-10 p-2'>
+                          <Image
+                            src={item.image}
+                            alt={item.name}
+                            className='w-full h-full object-cover transition-all duration-700 group-hover/item:scale-110 rounded-lg'
+                            height={80}
+                            width={80}
+                          />
+                        </div>
                       </div>
                     </div>
-                    <p className='text-center text-sm sm:text-base font-medium whitespace-nowrap overflow-hidden text-ellipsis group-hover:text-primary transition-colors duration-300 dark:font-semibold'>
+                    <p className='text-center text-sm sm:text-base font-semibold whitespace-nowrap overflow-hidden text-ellipsis group-hover/item:text-orange-600 dark:group-hover/item:text-orange-400 transition-colors duration-500 text-gray-700 dark:text-gray-200'>
                       {item.name}
                     </p>
                   </Link>
@@ -222,26 +291,20 @@ export function HomeCard({ cards }: { cards: CardItem[] }) {
             </CardContent>
 
             {card.link && (
-              <CardFooter className='border-t pt-3 pb-4 px-4 sm:pt-4 sm:pb-5 sm:px-7'>
+              <CardFooter className='pt-4 pb-5 px-6 sm:pt-5 sm:pb-6 sm:px-8 relative'>
+                <div className='absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-orange-300 to-transparent'></div>
                 <Link
                   href={card.link.href}
-                  className='text-sm sm:text-base font-semibold text-primary hover:text-emerald-500 dark:text-emerald-300 dark:hover:text-primary transition-colors duration-300 flex items-center group hover-arrow-animation'
+                  className='group/link w-full flex items-center justify-center py-3 px-6 bg-gradient-to-r from-orange-500 to-yellow-500 text-white font-bold transition-all duration-500 hover:scale-105 transform hover:shadow-lg relative overflow-hidden'
+                  style={{
+                    clipPath:
+                      'polygon(15px 0%, 100% 0%, calc(100% - 15px) 100%, 0% 100%)',
+                  }}
                 >
-                  {card.link.text}
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    width='16'
-                    height='16'
-                    viewBox='0 0 24 24'
-                    fill='none'
-                    stroke='currentColor'
-                    strokeWidth='2'
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    className='ml-1 h-4 w-4 sm:h-5 sm:w-5 transform transition-transform duration-300'
-                  >
-                    <path d='m9 18 6-6-6-6' />
-                  </svg>
+                  {/* Animated background */}
+                  <div className='absolute inset-0 bg-gradient-to-r from-yellow-500 to-orange-500 opacity-0 group-hover/link:opacity-100 transition-opacity duration-500'></div>
+                  <span className='relative z-10'>{card.link.text}</span>
+                  <ChevronRightIcon className='ml-2 h-5 w-5 sm:h-6 sm:w-6 transform transition-transform duration-500 group-hover/link:translate-x-2 relative z-10' />
                 </Link>
               </CardFooter>
             )}
@@ -251,35 +314,43 @@ export function HomeCard({ cards }: { cards: CardItem[] }) {
     )
   }
 
-  // Mobile layout - scrollable with navigation and dots
+  // Mobile layout - geometric shapes scrollable design
   return (
     <div className='relative'>
-      {/* Navigation buttons - mobile only */}
+      {/* Navigation buttons - mobile only with hexagon shape */}
       <Button
         variant='outline'
         size='icon'
-        className='absolute left-0 top-1/2 -translate-y-1/2 z-10 rounded-full bg-background/80 backdrop-blur-sm dark:bg-zinc-800 dark:border-zinc-700 dark:hover:bg-zinc-700 w-7 h-7 sm:w-8 sm:h-8'
+        className='absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 backdrop-blur-sm shadow-lg border-2 border-orange-200/50 hover:border-orange-300/70 dark:bg-zinc-800/90 dark:border-orange-800/50 dark:hover:border-orange-600/70 w-12 h-12 hover:scale-110 transition-all duration-300'
         onClick={scrollPrev}
         aria-label='Previous card'
         disabled={currentCardIndex === 0}
+        style={{
+          clipPath:
+            'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
+        }}
       >
-        <ChevronLeftIcon className='h-3 w-3 sm:h-4 sm:w-4' />
+        <ChevronLeftIcon className='h-6 w-6 text-orange-600 dark:text-orange-400' />
       </Button>
 
       <Button
         variant='outline'
         size='icon'
-        className='absolute right-0 top-1/2 -translate-y-1/2 z-10 rounded-full bg-background/80 backdrop-blur-sm dark:bg-zinc-800 dark:border-zinc-700 dark:hover:bg-zinc-700 w-7 h-7 sm:w-8 sm:h-8'
+        className='absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 backdrop-blur-sm shadow-lg border-2 border-orange-200/50 hover:border-orange-300/70 dark:bg-zinc-800/90 dark:border-orange-800/50 dark:hover:border-orange-600/70 w-12 h-12 hover:scale-110 transition-all duration-300'
         onClick={scrollNext}
         aria-label='Next card'
         disabled={currentCardIndex === totalCards - 1}
+        style={{
+          clipPath:
+            'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
+        }}
       >
-        <ChevronRightIcon className='h-3 w-3 sm:h-4 sm:w-4' />
+        <ChevronRightIcon className='h-6 w-6 text-orange-600 dark:text-orange-400' />
       </Button>
 
       {/* Card container with scroll snapping - mobile only */}
       <div
-        className='overflow-x-auto pb-4 scrollbar-hide px-6 scroll-smooth snap-x snap-mandatory'
+        className='overflow-x-auto pb-6 scrollbar-hide px-8 scroll-smooth snap-x snap-mandatory'
         ref={scrollContainerRef}
         onScroll={handleManualScroll}
         onMouseEnter={() => {
@@ -290,66 +361,109 @@ export function HomeCard({ cards }: { cards: CardItem[] }) {
           handleManualScroll()
         }}
       >
-        <div className='flex gap-4 min-w-max'>
-          {processedCards.map((card, index) => (
+        <div className='flex gap-6 min-w-max'>
+          {processedCards.map((card, cardIndex) => (
             <Card
               key={card.title}
-              className={`card-item rounded-lg shadow-md hover:shadow-xl transition-all duration-500 flex flex-col border-2 border-border/30 hover:border-primary/40 dark:border-zinc-700 dark:hover:border-primary/60 dark:bg-zinc-900 dark:hover:bg-zinc-900 w-[85vw] max-w-[350px] sm:w-[340px] flex-shrink-0 snap-center`}
-              data-index={index}
+              className={`card-item group relative flex flex-col w-[90vw] max-w-[380px] sm:w-[360px] flex-shrink-0 snap-center transition-all duration-700 hover:scale-[1.02] transform overflow-hidden bg-gradient-to-br from-white via-orange-50/30 to-yellow-50/30 dark:from-zinc-900 dark:via-orange-950/30 dark:to-yellow-950/30`}
+              data-index={cardIndex}
+              style={{
+                clipPath:
+                  cardIndex % 2 === 0
+                    ? 'polygon(15px 0%, 100% 0%, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0% 100%, 0% 15px)'
+                    : 'polygon(0% 0%, calc(100% - 15px) 0%, 100% 15px, 100% 100%, 15px 100%, 0% calc(100% - 15px))',
+                boxShadow:
+                  '0 10px 25px rgba(0,0,0,0.1), 0 20px 48px rgba(251,146,60,0.1)',
+              }}
             >
-              <CardContent className='p-3 sm:p-4 md:p-6 flex-1'>
-                <h3 className='text-base sm:text-lg font-bold mb-3 sm:mb-5 border-b pb-2 sm:pb-3 text-foreground dark:text-foreground/90'>
-                  {card.title}
-                </h3>
+              {/* Animated border effect */}
+              <div
+                className='absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700'
+                style={{
+                  background:
+                    'linear-gradient(45deg, #f97316, #eab308, #f97316, #eab308)',
+                  backgroundSize: '400% 400%',
+                  animation: 'gradient 3s ease infinite',
+                  clipPath:
+                    cardIndex % 2 === 0
+                      ? 'polygon(15px 0%, 100% 0%, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0% 100%, 0% 15px)'
+                      : 'polygon(0% 0%, calc(100% - 15px) 0%, 100% 15px, 100% 100%, 15px 100%, 0% calc(100% - 15px))',
+                  padding: '2px',
+                }}
+              >
+                <div
+                  className='w-full h-full bg-white dark:bg-zinc-900'
+                  style={{
+                    clipPath:
+                      cardIndex % 2 === 0
+                        ? 'polygon(15px 0%, 100% 0%, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0% 100%, 0% 15px)'
+                        : 'polygon(0% 0%, calc(100% - 15px) 0%, 100% 15px, 100% 100%, 15px 100%, 0% calc(100% - 15px))',
+                  }}
+                />
+              </div>
 
-                <div className='grid grid-cols-2 gap-3 sm:gap-4'>
+              <CardContent className='p-4 sm:p-5 md:p-7 flex-1 relative z-10'>
+                <div className='flex items-center mb-4 sm:mb-6'>
+                  <div
+                    className='w-10 h-10 bg-gradient-to-br from-orange-500 to-yellow-500 mr-3 flex items-center justify-center group-hover:rotate-12 transition-transform duration-500'
+                    style={{
+                      clipPath:
+                        'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
+                    }}
+                  >
+                    <Utensils className='w-5 h-5 text-white' />
+                  </div>
+                  <h3 className='text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-100 group-hover:text-orange-700 dark:group-hover:text-orange-300 transition-colors duration-500'>
+                    {card.title}
+                  </h3>
+                </div>
+
+                <div className='grid grid-cols-2 gap-4 sm:gap-5'>
                   {card.items.map((item) => (
                     <Link
                       key={item.name}
                       href={item.href}
-                      className={cn('flex flex-col group', item.className)}
+                      className={cn(
+                        'flex flex-col group/item cursor-pointer',
+                        item.className
+                      )}
                     >
-                      <div className='bg-secondary/40 dark:bg-zinc-800 rounded-lg p-2 sm:p-3 flex items-center justify-center mb-1 sm:mb-2 overflow-hidden relative border border-border/50 dark:border-zinc-700 hover:border-primary/50 dark:hover:border-primary/60 transition-colors duration-300'>
-                        <div className='absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500'></div>
-                        <div className='transform transition-transform duration-500 ease-out group-hover:translate-y-[-2px] sm:group-hover:translate-y-[-5px] relative z-10'>
+                      <div className='bg-gradient-to-br from-orange-50 to-yellow-50 dark:from-orange-950/50 dark:to-yellow-950/50 rounded-xl p-3 sm:p-4 flex items-center justify-center mb-2 sm:mb-3 overflow-hidden relative border-2 border-orange-100/70 dark:border-orange-800/40 hover:border-orange-300/80 dark:hover:border-orange-600/60 transition-all duration-500 hover:shadow-lg group-hover/item:shadow-xl group-hover/item:shadow-orange-200/30 dark:group-hover/item:shadow-orange-900/20'>
+                        {/* Animated background */}
+                        <div className='absolute inset-0 bg-gradient-to-tr from-orange-200/30 via-yellow-200/20 to-orange-300/30 opacity-0 group-hover/item:opacity-100 transition-opacity duration-700 rounded-xl' />
+
+                        {/* Floating animation */}
+                        <div className='transform transition-all duration-700 ease-out group-hover/item:translate-y-[-6px] sm:group-hover/item:translate-y-[-8px] relative z-10 group-hover/item:scale-110'>
                           <Image
                             src={item.image}
                             alt={item.name}
-                            className='aspect-square object-contain max-w-full h-auto mx-auto group-hover:scale-110 transition-transform duration-700 drop-shadow-sm'
-                            height={80}
-                            width={80}
+                            className='aspect-square object-cover max-w-full h-auto mx-auto rounded-lg shadow-sm group-hover/item:shadow-md transition-all duration-700'
+                            height={100}
+                            width={100}
                           />
                         </div>
+
+                        {/* Subtle glow effect */}
+                        <div className='absolute inset-0 rounded-xl bg-gradient-to-tr from-orange-400/10 to-yellow-400/10 opacity-0 group-hover/item:opacity-100 transition-opacity duration-700' />
                       </div>
-                      <p className='text-center text-xs sm:text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis group-hover:text-primary transition-colors duration-300 dark:font-semibold'>
+                      <p className='text-center text-sm sm:text-base font-semibold whitespace-nowrap overflow-hidden text-ellipsis group-hover/item:text-orange-600 dark:group-hover/item:text-orange-400 transition-colors duration-500 text-gray-700 dark:text-gray-200'>
                         {item.name}
                       </p>
                     </Link>
                   ))}
                 </div>
               </CardContent>
-
               {card.link && (
-                <CardFooter className='border-t pt-2 pb-3 px-3 sm:pt-3 sm:pb-4 sm:px-6'>
+                <CardFooter className='border-t-2 border-orange-100/50 dark:border-orange-800/30 pt-3 pb-4 px-4 sm:pt-4 sm:pb-5 sm:px-7 bg-gradient-to-r from-orange-25/30 to-yellow-25/30 dark:from-orange-950/20 dark:to-yellow-950/20'>
                   <Link
                     href={card.link.href}
-                    className='text-xs sm:text-sm font-semibold text-primary hover:text-emerald-500 dark:text-emerald-300 dark:hover:text-primary transition-colors duration-300 flex items-center group hover-arrow-animation'
+                    className='text-sm sm:text-base font-bold text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300 transition-all duration-500 flex items-center group/link w-full justify-center hover:scale-105 transform'
                   >
-                    {card.link.text}
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      width='16'
-                      height='16'
-                      viewBox='0 0 24 24'
-                      fill='none'
-                      stroke='currentColor'
-                      strokeWidth='2'
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      className='ml-1 h-3 w-3 sm:h-4 sm:w-4 transform transition-transform duration-300'
-                    >
-                      <path d='m9 18 6-6-6-6' />
-                    </svg>
+                    <span className='relative'>
+                      {card.link.text}
+                      <div className='absolute bottom-0 left-0 w-0 h-0.5 bg-current group-hover/link:w-full transition-all duration-500' />
+                    </span>
+                    <ChevronRightIcon className='ml-2 h-4 w-4 sm:h-5 sm:w-5 transform transition-transform duration-500 group-hover/link:translate-x-1' />
                   </Link>
                 </CardFooter>
               )}
@@ -358,19 +472,19 @@ export function HomeCard({ cards }: { cards: CardItem[] }) {
         </div>
       </div>
 
-      {/* Pagination indicators - mobile only */}
+      {/* Enhanced pagination indicators - mobile only */}
       <div
-        className='flex justify-center mt-4 gap-2'
+        className='flex justify-center mt-6 gap-3'
         role='tablist'
         aria-label='Card navigation'
       >
         {Array.from({ length: totalCards }).map((_, index) => (
           <button
             key={index}
-            className={`h-2 rounded-full transition-all ${
+            className={`h-3 rounded-full transition-all duration-500 ${
               currentCardIndex === index
-                ? 'w-6 bg-primary'
-                : 'w-2 bg-primary/30'
+                ? 'w-8 bg-gradient-to-r from-orange-500 to-yellow-500 shadow-lg shadow-orange-300/50'
+                : 'w-3 bg-orange-300/50 hover:bg-orange-400/70 hover:scale-110'
             }`}
             onClick={() => {
               setCurrentCardIndex(index)
