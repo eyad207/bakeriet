@@ -238,69 +238,169 @@ export default async function ProductDetails(props: {
               </Card>
 
               {/* Stock Status & Add to Cart */}
-              <Card className='border-orange-100 dark:border-orange-900/30 bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/20 dark:to-amber-950/20'>
-                <CardContent className='p-6 space-y-4'>
-                  {/* Stock Status */}
-                  <div className='flex items-center gap-2'>
-                    {getCountInStockForSelectedVariant() > 0 ? (
-                      <>
-                        <CheckCircle className='w-5 h-5 text-green-600' />
-                        <span className='text-green-700 font-semibold'>
-                          Available
-                        </span>
-                        {getCountInStockForSelectedVariant() <= 3 && (
-                          <Badge variant='destructive' className='ml-2'>
-                            Only {getCountInStockForSelectedVariant()} left!
-                          </Badge>
-                        )}
-                      </>
-                    ) : (
-                      <>
-                        <AlertTriangle className='w-5 h-5 text-red-600' />
-                        <span className='text-red-700 font-semibold'>
+              <Card className='border-orange-100 dark:border-orange-900/30 bg-white dark:bg-zinc-800 shadow-lg'>
+                <CardContent className='p-6'>
+                  <div className='space-y-6'>
+                    {/* Stock Status Header */}
+                    <div className='flex items-center justify-between'>
+                      <h3 className='text-lg font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2'>
+                        <ShoppingBag className='w-5 h-5 text-orange-600' />
+                        Availability
+                      </h3>
+                      {getCountInStockForSelectedVariant() > 0 ? (
+                        <Badge className='bg-green-100 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-300 dark:border-green-800'>
+                          <CheckCircle className='w-3 h-3 mr-1' />
+                          In Stock
+                        </Badge>
+                      ) : (
+                        <Badge
+                          variant='destructive'
+                          className='bg-red-100 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-300 dark:border-red-800'
+                        >
+                          <AlertTriangle className='w-3 h-3 mr-1' />
                           Out of Stock
-                        </span>
-                      </>
+                        </Badge>
+                      )}
+                    </div>
+
+                    {/* Stock Details */}
+                    <div className='bg-gradient-to-r from-gray-50 to-gray-100/50 dark:from-zinc-800 dark:to-zinc-700/50 rounded-xl p-4 border border-gray-200 dark:border-zinc-700'>
+                      {getCountInStockForSelectedVariant() > 0 ? (
+                        <div className='space-y-3'>
+                          <div className='flex items-center justify-between'>
+                            <span className='text-gray-700 dark:text-gray-300 font-medium'>
+                              Stock Level:
+                            </span>
+                            <div className='flex items-center gap-2'>
+                              <div
+                                className={`w-3 h-3 rounded-full ${
+                                  getCountInStockForSelectedVariant() > 10
+                                    ? 'bg-green-500'
+                                    : getCountInStockForSelectedVariant() > 3
+                                      ? 'bg-yellow-500'
+                                      : 'bg-red-500'
+                                }`}
+                              />
+                              <span className='font-semibold text-gray-900 dark:text-gray-100'>
+                                {getCountInStockForSelectedVariant()} available
+                              </span>
+                            </div>
+                          </div>
+
+                          {getCountInStockForSelectedVariant() <= 3 && (
+                            <div className='bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3'>
+                              <div className='flex items-center gap-2 text-amber-800 dark:text-amber-300'>
+                                <AlertTriangle className='w-4 h-4' />
+                                <span className='text-sm font-medium'>
+                                  Low stock - Only{' '}
+                                  {getCountInStockForSelectedVariant()} left!
+                                </span>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Order Benefits */}
+                          <div className='grid grid-cols-2 gap-3 mt-4'>
+                            <div className='flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400'>
+                              <div className='w-2 h-2 bg-green-500 rounded-full' />
+                              <span>Fresh ingredients</span>
+                            </div>
+                            <div className='flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400'>
+                              <div className='w-2 h-2 bg-blue-500 rounded-full' />
+                              <span>Made to order</span>
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className='text-center py-4'>
+                          <AlertTriangle className='w-8 h-8 text-red-500 mx-auto mb-2' />
+                          <p className='text-red-700 dark:text-red-400 font-medium'>
+                            This item is currently out of stock
+                          </p>
+                          <p className='text-sm text-gray-600 dark:text-gray-400 mt-1'>
+                            Check back soon or try another variant
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Add to Cart Section */}
+                    {getCountInStockForSelectedVariant() > 0 && (
+                      <div className='space-y-4'>
+                        <div className='bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/20 dark:to-amber-950/20 rounded-xl p-4 border border-orange-200 dark:border-orange-800'>
+                          <AddToCart
+                            item={{
+                              clientId: generateId(),
+                              product: product._id,
+                              name: product.name,
+                              slug: product.slug,
+                              category: product.category,
+                              price: round2(product.price),
+                              discountedPrice: product.discountedPrice
+                                ? round2(product.discountedPrice)
+                                : undefined,
+                              discount: product.discount || undefined,
+                              quantity: 1,
+                              image: product.images[0],
+                              size: selectedSize,
+                              color: selectedColor,
+                              colors: product.colors,
+                            }}
+                            selectedSize={selectedSize}
+                          />
+                        </div>
+
+                        {/* Order Information */}
+                        <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-gray-200 dark:border-zinc-700'>
+                          <div className='bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3 border border-blue-200 dark:border-blue-800'>
+                            <div className='flex items-center gap-2 text-blue-700 dark:text-blue-300'>
+                              <ShoppingBag className='w-4 h-4' />
+                              <span className='text-sm font-medium'>
+                                Free Delivery
+                              </span>
+                            </div>
+                            <p className='text-xs text-blue-600 dark:text-blue-400 mt-1'>
+                              On orders over Kr 350
+                            </p>
+                          </div>
+
+                          <div className='bg-green-50 dark:bg-green-900/20 rounded-lg p-3 border border-green-200 dark:border-green-800'>
+                            <div className='flex items-center gap-2 text-green-700 dark:text-green-300'>
+                              <Clock className='w-4 h-4' />
+                              <span className='text-sm font-medium'>
+                                Quick Preparation
+                              </span>
+                            </div>
+                            <p className='text-xs text-green-600 dark:text-green-400 mt-1'>
+                              Ready in 15-20 minutes
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Additional Features */}
+                        <div className='flex flex-wrap gap-2 pt-2'>
+                          <Badge
+                            variant='outline'
+                            className='text-xs border-orange-200 text-orange-700 dark:border-orange-800 dark:text-orange-300'
+                          >
+                            ✨ Freshly prepared
+                          </Badge>
+                          <Badge
+                            variant='outline'
+                            className='text-xs border-green-200 text-green-700 dark:border-green-800 dark:text-green-300'
+                          >
+                            🌱 Local ingredients
+                          </Badge>
+                          <Badge
+                            variant='outline'
+                            className='text-xs border-blue-200 text-blue-700 dark:border-blue-800 dark:text-blue-300'
+                          >
+                            🚚 Fast delivery
+                          </Badge>
+                        </div>
+                      </div>
                     )}
                   </div>
-
-                  {/* Add to Cart */}
-                  {getCountInStockForSelectedVariant() !== 0 && (
-                    <div className='space-y-3'>
-                      <AddToCart
-                        item={{
-                          clientId: generateId(),
-                          product: product._id,
-                          name: product.name,
-                          slug: product.slug,
-                          category: product.category,
-                          price: round2(product.price),
-                          discountedPrice: product.discountedPrice
-                            ? round2(product.discountedPrice)
-                            : undefined,
-                          discount: product.discount || undefined,
-                          quantity: 1,
-                          image: product.images[0],
-                          size: selectedSize,
-                          color: selectedColor,
-                          colors: product.colors,
-                        }}
-                        selectedSize={selectedSize}
-                      />
-
-                      {/* Quick Order Info */}
-                      <div className='flex items-center justify-center gap-6 text-sm text-gray-600 dark:text-gray-400 pt-2 border-t border-orange-200 dark:border-orange-800'>
-                        <span className='flex items-center gap-1'>
-                          <ShoppingBag className='w-4 h-4' />
-                          Free delivery over Kr 350
-                        </span>
-                        <span className='flex items-center gap-1'>
-                          <Clock className='w-4 h-4' />
-                          Ready in 15-20 min
-                        </span>
-                      </div>
-                    </div>
-                  )}
                 </CardContent>
               </Card>
 

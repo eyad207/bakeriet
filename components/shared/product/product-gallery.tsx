@@ -22,19 +22,19 @@ export default function ProductGallery({ images }: { images: string[] }) {
     <div className='space-y-4'>
       {/* Main Image */}
       <div className='relative group bg-gradient-to-br from-orange-50 to-amber-50 dark:from-zinc-800 dark:to-zinc-700 rounded-2xl overflow-hidden'>
-        <Zoom>
-          <div className='relative h-[400px] md:h-[500px] lg:h-[600px]'>
+        <div className='relative h-[400px] md:h-[500px] lg:h-[600px]'>
+          <Zoom>
             <Image
               src={images[selectedImage]}
               alt={`Product image ${selectedImage + 1}`}
               fill
               sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
-              className='object-cover transition-transform duration-700 group-hover:scale-105'
+              className='object-cover transition-transform duration-700 group-hover:scale-105 cursor-zoom-in'
               priority
             />
-            <div className='absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500' />
-          </div>
-        </Zoom>
+          </Zoom>
+          <div className='absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none' />
+        </div>
 
         {/* Navigation Arrows */}
         {images.length > 1 && (
@@ -59,10 +59,11 @@ export default function ProductGallery({ images }: { images: string[] }) {
         )}
 
         {/* Zoom Indicator */}
-        <div className='absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300'>
-          <div className='bg-black/60 text-white px-3 py-1 rounded-full text-sm flex items-center gap-1 backdrop-blur-sm'>
-            <ZoomIn className='w-3 h-3' />
-            Click to zoom
+        <div className='absolute bottom-4 right-4 transition-all duration-300 group-hover:scale-110'>
+          <div className='bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer'>
+            <ZoomIn className='w-4 h-4' />
+            <span className='hidden sm:inline'>Click to zoom</span>
+            <span className='sm:hidden'>Zoom</span>
           </div>
         </div>
 
