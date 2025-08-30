@@ -57,9 +57,8 @@ export function useHeaderScroll({
       }
 
       setLastScrollY(currentScrollY)
-    } catch (error) {
+    } catch {
       // Silently handle any errors to prevent breaking the UI
-      
     }
   }, [lastScrollY, threshold, hideOffset])
 
@@ -84,9 +83,7 @@ export function useHeaderScroll({
     try {
       setLastScrollY(window.scrollY)
       setIsAtTop(window.scrollY <= threshold)
-    } catch (error) {
-      
-    }
+    } catch {}
 
     window.addEventListener('scroll', throttledScrollHandler, {
       passive: true,

@@ -25,7 +25,7 @@ export function HomeCarousel({ items }: { items: ICarousel[] }) {
       <Carousel
         dir='ltr'
         plugins={[plugin.current]}
-        className='w-full rounded-3xl overflow-hidden shadow-2xl'
+        className='w-full rounded-b-3xl overflow-hidden shadow-2xl'
         onMouseEnter={plugin.current.stop}
         onMouseLeave={plugin.current.reset}
       >
