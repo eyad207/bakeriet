@@ -8,7 +8,7 @@ import { loadEnvConfig } from '@next/env'
 
 loadEnvConfig(cwd())
 
-// Additional products for the remaining images
+// Additional Persian products using the remaining images
 const additionalProducts: IProductInput[] = [
   {
     name: 'Executive Formal Shirt - Premium Cotton',

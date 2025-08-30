@@ -4,45 +4,104 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Zoom from 'react-medium-image-zoom'
 import 'react-medium-image-zoom/dist/styles.css'
+import { ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+
 export default function ProductGallery({ images }: { images: string[] }) {
   const [selectedImage, setSelectedImage] = useState(0)
-  return (
-    <div className='flex gap-2'>
-      <div className='flex flex-col gap-2 mt-8'>
-        {images.map((image, index) => (
-          <button
-            key={index}
-            onClick={() => {
-              setSelectedImage(index)
-            }}
-            onMouseOver={() => {
-              setSelectedImage(index)
-            }}
-            className={`bg-white rounded-lg overflow-hidden ${
-              selectedImage === index
-                ? 'ring-2 ring-blue-500'
-                : 'ring-1 ring-gray-300'
-            }`}
-          >
-            <Image src={image} alt={'product image'} width={80} height={80} />
-          </button>
-        ))}
-      </div>
 
-      <div className='w-full'>
+  const nextImage = () => {
+    setSelectedImage((prev) => (prev + 1) % images.length)
+  }
+
+  const prevImage = () => {
+    setSelectedImage((prev) => (prev - 1 + images.length) % images.length)
+  }
+
+  return (
+    <div className='space-y-4'>
+      {/* Main Image */}
+      <div className='relative group bg-gradient-to-br from-orange-50 to-amber-50 dark:from-zinc-800 dark:to-zinc-700 rounded-2xl overflow-hidden'>
         <Zoom>
-          <div className='relative h-[500px]'>
+          <div className='relative h-[400px] md:h-[500px] lg:h-[600px]'>
             <Image
               src={images[selectedImage]}
-              alt={'product image'}
+              alt={`Product image ${selectedImage + 1}`}
               fill
-              sizes='100vw'
-              className='object-contain '
+              sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+              className='object-cover transition-transform duration-700 group-hover:scale-105'
               priority
             />
+            <div className='absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500' />
           </div>
         </Zoom>
+
+        {/* Navigation Arrows */}
+        {images.length > 1 && (
+          <>
+            <Button
+              variant='secondary'
+              size='icon'
+              className='absolute left-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-white/90 hover:bg-white shadow-lg backdrop-blur-sm'
+              onClick={prevImage}
+            >
+              <ChevronLeft className='w-4 h-4' />
+            </Button>
+            <Button
+              variant='secondary'
+              size='icon'
+              className='absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-white/90 hover:bg-white shadow-lg backdrop-blur-sm'
+              onClick={nextImage}
+            >
+              <ChevronRight className='w-4 h-4' />
+            </Button>
+          </>
+        )}
+
+        {/* Zoom Indicator */}
+        <div className='absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300'>
+          <div className='bg-black/60 text-white px-3 py-1 rounded-full text-sm flex items-center gap-1 backdrop-blur-sm'>
+            <ZoomIn className='w-3 h-3' />
+            Click to zoom
+          </div>
+        </div>
+
+        {/* Image Counter */}
+        {images.length > 1 && (
+          <div className='absolute bottom-4 left-4 bg-black/60 text-white px-3 py-1 rounded-full text-sm backdrop-blur-sm'>
+            {selectedImage + 1} / {images.length}
+          </div>
+        )}
       </div>
+
+      {/* Thumbnail Strip */}
+      {images.length > 1 && (
+        <div className='flex gap-3 overflow-x-auto pb-2 scrollbar-hide'>
+          {images.map((image, index) => (
+            <button
+              key={index}
+              onClick={() => setSelectedImage(index)}
+              onMouseOver={() => setSelectedImage(index)}
+              className={`relative flex-shrink-0 w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden transition-all duration-300 ${
+                selectedImage === index
+                  ? 'ring-2 ring-orange-500 shadow-lg scale-105'
+                  : 'ring-1 ring-gray-200 dark:ring-gray-700 hover:ring-orange-300 hover:scale-102'
+              }`}
+            >
+              <Image
+                src={image}
+                alt={`Product thumbnail ${index + 1}`}
+                fill
+                sizes='96px'
+                className='object-cover'
+              />
+              {selectedImage === index && (
+                <div className='absolute inset-0 bg-orange-500/20' />
+              )}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

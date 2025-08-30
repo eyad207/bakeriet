@@ -5,13 +5,14 @@ import React from 'react'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { IProduct } from '@/lib/db/models/product.model'
 
-import Rating from './rating'
 import { formatNumber, generateId, round2, cn } from '@/lib/utils'
 import { formatPrice } from '@/lib/currency'
 import ProductPrice from './product-price'
 import ImageHover from './image-hover'
 import AddToCart from './add-to-cart'
 import { useTranslations } from 'next-intl'
+import { Clock, Users, Flame, Star, ChefHat } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
 
 const ProductCard = ({
   product,
@@ -35,78 +36,151 @@ const ProductCard = ({
   const ProductImage = () => (
     <div
       className={cn(
-        'relative transform transition-transform duration-700 ease-out hover:scale-105',
+        'relative group overflow-hidden rounded-xl bg-gradient-to-br from-orange-50 to-amber-50 dark:from-zinc-800 dark:to-zinc-700',
         {
-          'h-44 sm:h-60': isInInfiniteList, // Mobil: mindre høyde
-          'h-52': !isInInfiniteList,
+          'h-48 sm:h-64': isInInfiniteList,
+          'h-56 sm:h-72': !isInInfiniteList,
         }
       )}
     >
+      {/* Restaurant-style image presentation */}
+      <div className='absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 z-10' />
+
+      {/* Food type badge */}
+      <div className='absolute top-3 left-3 z-20'>
+        <Badge
+          variant='secondary'
+          className='bg-white/90 backdrop-blur-sm text-orange-600 font-medium text-xs px-2 py-1 shadow-sm border-orange-200'
+        >
+          <ChefHat className='w-3 h-3 mr-1' />
+          {product.category}
+        </Badge>
+      </div>
+
+      {/* Special indicators */}
+      <div className='absolute top-3 right-3 z-20 flex flex-col gap-1'>
+        {product.avgRating >= 4.5 && (
+          <Badge
+            variant='secondary'
+            className='bg-amber-500/90 text-white font-medium text-xs px-2 py-1 shadow-sm'
+          >
+            <Star className='w-3 h-3 mr-1 fill-current' />
+            Chef&apos;s Choice
+          </Badge>
+        )}
+        {product.tags?.includes('signature') && (
+          <Badge
+            variant='secondary'
+            className='bg-red-500/90 text-white font-medium text-xs px-2 py-1 shadow-sm'
+          >
+            <Flame className='w-3 h-3 mr-1' />
+            Signature
+          </Badge>
+        )}
+      </div>
+
       {product.images.length > 1 ? (
         <ImageHover
           src={product.images[0]}
           hoverSrc={product.images[1]}
-          alt={`${product.name} - ${product.brand} product image with hover view${product.description ? ', ' + product.description.substring(0, 50) + '...' : ''}`}
+          alt={`${product.name} - ${product.brand} dish with hover view${product.description ? ', ' + product.description.substring(0, 50) + '...' : ''}`}
         />
       ) : (
-        <div
-          className={cn('relative', {
-            'h-40': isInInfiniteList,
-            'h-52': !isInInfiniteList,
-          })}
-        >
+        <div className='relative w-full h-full'>
           <Image
             src={product.images[0]}
-            alt={`${product.name} - ${product.brand} product image${product.description ? ', ' + product.description.substring(0, 50) + '...' : ''}`}
+            alt={`${product.name} - ${product.brand} delicious dish${product.description ? ', ' + product.description.substring(0, 50) + '...' : ''}`}
             fill
-            sizes='80vw'
-            className='object-contain drop-shadow-md'
+            sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+            className='object-cover transition-transform duration-700 group-hover:scale-110'
+            priority={false}
           />
         </div>
       )}
+
+      {/* Serving size indicator */}
+      <div className='absolute bottom-3 left-3 z-20 opacity-0 group-hover:opacity-100 transition-all duration-500'>
+        <Badge
+          variant='secondary'
+          className='bg-white/90 backdrop-blur-sm text-gray-700 font-medium text-xs px-2 py-1 shadow-sm'
+        >
+          <Users className='w-3 h-3 mr-1' />
+          {product.colors[0]?.sizes[0]?.size || 'Single Serving'}
+        </Badge>
+      </div>
     </div>
   )
 
   const discountedPrice = product.discountedPrice ?? undefined
 
   const ProductDetails = () => {
-    const tags = product?.tags || [] // Ensure tags is always an array
+    const tags = product?.tags || []
 
     return (
-      <div className='flex-1 space-y-2 flex flex-col'>
+      <div className='space-y-3 flex flex-col h-full'>
+        {/* Restaurant/Brand name - smaller, elegant */}
         <p
-          className={cn('font-bold text-foreground dark:text-foreground/90', {
-            'hidden sm:block': hideBrandOnMobile,
-          })}
+          className={cn(
+            'text-sm font-medium text-orange-600 dark:text-orange-400 tracking-wide',
+            {
+              'hidden sm:block': hideBrandOnMobile,
+            }
+          )}
         >
           {product.brand}
         </p>
-        <p
-          className='overflow-hidden text-ellipsis font-medium hover:text-primary transition-colors duration-300 dark:text-foreground/80 dark:hover:text-primary'
+
+        {/* Dish name - prominent, appetizing */}
+        <h3
+          className='text-lg font-bold text-gray-900 dark:text-gray-100 leading-tight line-clamp-2 hover:text-orange-600 dark:hover:text-orange-400 transition-colors duration-300 cursor-pointer'
           style={{
             display: '-webkit-box',
             WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
           }}
         >
           {product.name}
-        </p>
+        </h3>
+
+        {/* Description for restaurant items */}
+        {product.description && (
+          <p className='text-sm text-gray-600 dark:text-gray-400 leading-relaxed line-clamp-2 flex-grow'>
+            {product.description}
+          </p>
+        )}
+
+        {/* Rating and reviews - restaurant style */}
         <div
-          className={cn('flex gap-2 justify-center', {
+          className={cn('flex items-center gap-3 justify-between', {
             'hidden sm:flex': isInInfiniteList,
           })}
         >
-          <Rating rating={product.avgRating} />
-          <span className='font-medium'>
-            ({formatNumber(product.numReviews)})
-          </span>
+          <div className='flex items-center gap-1'>
+            <div className='flex items-center'>
+              <Star className='w-4 h-4 fill-amber-400 text-amber-400' />
+              <span className='font-semibold text-gray-900 dark:text-gray-100 ml-1'>
+                {product.avgRating.toFixed(1)}
+              </span>
+            </div>
+            <span className='text-sm text-gray-500 dark:text-gray-400'>
+              ({formatNumber(product.numReviews)})
+            </span>
+          </div>
+
+          {/* Preparation time indicator */}
+          <div className='flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400'>
+            <Clock className='w-4 h-4' />
+            <span>15-20 min</span>
+          </div>
         </div>
 
-        <div className='mt-auto pt-2'>
+        {/* Price section - restaurant style */}
+        <div className='mt-auto pt-2 border-t border-gray-100 dark:border-gray-700'>
           <ProductPrice
             isDeal={tags.includes('todays-deal')}
             price={product.price}
-            discountedPrice={discountedPrice} // <--- add this
+            discountedPrice={discountedPrice}
             forListing
           />
         </div>
@@ -115,7 +189,8 @@ const ProductCard = ({
   }
 
   const AddButton = () => (
-    <div className='w-full text-center transform transition-all duration-300 hover:scale-105 pb-1 lg:block'>
+    <div className='w-full space-y-2'>
+      {/* Restaurant-style order button */}
       <AddToCart
         minimal
         item={{
@@ -137,6 +212,23 @@ const ProductCard = ({
         }}
         selectedSize={product.colors[0]?.sizes[0]?.size}
       />
+
+      {/* Quick order info */}
+      <div className='flex items-center justify-center gap-4 text-xs text-gray-500 dark:text-gray-400'>
+        <span className='flex items-center gap-1'>
+          <Clock className='w-3 h-3' />
+          Ready in 15-20 min
+        </span>
+        <span className='flex items-center gap-1'>
+          <Users className='w-3 h-3' />
+          Serves{' '}
+          {product.colors[0]?.sizes[0]?.size?.includes('Family')
+            ? '4-5'
+            : product.colors[0]?.sizes[0]?.size?.includes('Sharing')
+              ? '2-3'
+              : '1'}
+        </span>
+      </div>
     </div>
   )
 
@@ -147,29 +239,44 @@ const ProductCard = ({
     <Link
       href={`/product/${product.slug}`}
       className={cn(
-        'flex flex-col group card-professional h-full cursor-pointer',
+        'group flex flex-col h-full cursor-pointer bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 dark:border-zinc-800 hover:border-orange-200 dark:hover:border-orange-800',
         className,
         {
-          'hover:bg-gray-100 dark:hover:bg-gray-800': isInInfiniteList,
-          'hover:border-primary': isInInfiniteList,
+          'hover:bg-orange-50 dark:hover:bg-zinc-800': isInInfiniteList,
+          'hover:-translate-y-1': !isInInfiniteList,
         }
       )}
       aria-label={`View ${product.name} by ${product.brand} - ${formatPrice(product.discountedPrice ?? product.price)} ${product.discount ? `(${product.discount}% off)` : ''}`}
     >
-      {' '}
       <ProductImage />
       {!hideDetails && (
         <>
           <div
-            className={cn('flex-1 text-center', {
-              'p-2 sm:p-3 pt-3 sm:pt-4': isInInfiniteList, // More padding top for infinite list
-              'p-3': !isInInfiniteList,
+            className={cn('flex-1 p-4', {
+              'p-3 sm:p-4': isInInfiniteList,
+              'p-4 sm:p-6': !isInInfiniteList,
             })}
           >
             <ProductDetails />
           </div>
-          {!hideAddToCart && !hideAddToCartButton && <AddButton />}
+          {!hideAddToCart && !hideAddToCartButton && (
+            <div className='p-4 pt-0 sm:p-6 sm:pt-0'>
+              <AddButton />
+            </div>
+          )}
         </>
+      )}
+
+      {/* Enhanced discount badge for restaurants */}
+      {discountPercent && (
+        <div className='absolute top-4 right-4 z-30'>
+          <div className='bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1.5 rounded-full text-sm font-bold shadow-lg'>
+            <span className='flex items-center gap-1'>
+              <Flame className='w-3 h-3' />
+              {discountPercent}% OFF
+            </span>
+          </div>
+        </div>
       )}
     </Link>
   ) : (
@@ -179,40 +286,52 @@ const ProductCard = ({
     >
       <Card
         className={cn(
-          'flex flex-col group card-professional h-full border-2 border-border/50 hover:border-primary/40 dark:bg-zinc-900 dark:hover:bg-zinc-900 dark:border-zinc-700 dark:hover:border-primary/60 overflow-hidden cursor-pointer',
+          'group flex flex-col h-full overflow-hidden bg-white dark:bg-zinc-900 hover:shadow-xl transition-all duration-500 border-2 border-gray-100 dark:border-zinc-800 hover:border-orange-200 dark:hover:border-orange-800 rounded-2xl',
           className,
           {
-            'hover:bg-gray-100 dark:hover:bg-gray-800': isInInfiniteList,
-            'hover:border-primary': isInInfiniteList,
+            'hover:bg-orange-50 dark:hover:bg-zinc-800': isInInfiniteList,
+            'hover:-translate-y-1 hover:shadow-2xl': !isInInfiniteList,
           }
         )}
       >
-        <CardHeader className='p-2 sm:p-3 flex-shrink-0'>
+        <CardHeader className='p-0 relative'>
           <ProductImage />
         </CardHeader>
         {!hideDetails && (
           <>
-            <CardContent className='p-2 sm:p-1 flex-1 text-center overflow-y-auto'>
+            <CardContent
+              className={cn('flex-1', {
+                'p-3 sm:p-4': isInInfiniteList,
+                'p-4 sm:p-6': !isInInfiniteList,
+              })}
+            >
               <ProductDetails />
-            </CardContent>{' '}
-            <CardFooter className='p-2 pt-1 pb-2 sm:p-3 sm:pt-2 sm:pb-3 flex-shrink-0 mt-auto border-t border-border/10 dark:border-zinc-800'>
-              {!hideAddToCart && !hideAddToCartButton && <AddButton />}
-            </CardFooter>
+            </CardContent>
+            {!hideAddToCart && !hideAddToCartButton && (
+              <CardFooter
+                className={cn(
+                  'border-t border-gray-100 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-800/50 group-hover:border-orange-100 dark:group-hover:border-orange-900/50 transition-colors duration-500',
+                  {
+                    'p-3 sm:p-4': isInInfiniteList,
+                    'p-4 sm:p-6': !isInInfiniteList,
+                  }
+                )}
+              >
+                <AddButton />
+              </CardFooter>
+            )}
           </>
         )}
-        {/* Discount Badge */}
+
+        {/* Enhanced discount badge for restaurants */}
         {discountPercent && (
-          <div
-            className={cn(
-              'absolute top-3 left-3 opacity-80 px-2 py-1.5 text-sm font-extrabold text-white rounded-full bg-gradient-to-r from-red-700 to-red-600 shadow-lg',
-              'animate-fadeInScale transition-transform duration-300 ease-out group-hover:scale-110'
-            )}
-            style={{
-              animation: 'fadeInScale 0.4s ease-out forwards',
-              letterSpacing: '0.02em',
-            }}
-          >
-            {discountPercent}% {t('Product.OFF')}
+          <div className='absolute top-4 right-4 z-30'>
+            <div className='bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1.5 rounded-full text-sm font-bold shadow-lg animate-pulse'>
+              <span className='flex items-center gap-1'>
+                <Flame className='w-3 h-3' />
+                {discountPercent}% {t('Product.OFF')}
+              </span>
+            </div>
           </div>
         )}
       </Card>

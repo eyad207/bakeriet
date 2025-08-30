@@ -88,13 +88,15 @@ const ProductSlider: React.FC<ProductSliderProps> = ({
             {products.map((product) => (
               <div
                 key={product._id}
-                className='w-[75vw] max-w-[280px] sm:w-[45vw] md:w-[30vw] lg:w-[22vw] flex-shrink-0 px-1 sm:px-2'
+                className='w-[80vw] max-w-[320px] sm:w-[48vw] md:w-[35vw] lg:w-[28vw] xl:w-[24vw] flex-shrink-0 px-1 sm:px-2'
                 role='listitem'
               >
+                {/* Pass isInInfiniteList to slightly reduce image and spacing for sliders */}
                 <ProductCard
                   product={product}
                   hideDetails={hideDetails}
                   hideBorder={false}
+                  isInInfiniteList={true}
                   className='h-full flex flex-col'
                 />
               </div>

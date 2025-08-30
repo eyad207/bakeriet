@@ -8,306 +8,141 @@ import { loadEnvConfig } from '@next/env'
 
 loadEnvConfig(cwd())
 
-// Products to add based on available images
+// Products to add based on available images from the Persian bakery
 const newProducts: IProductInput[] = [
-  // Jeans Category
+  // Persian Breads
   {
-    name: 'Premium Denim Jeans - Classic Fit',
-    slug: toSlug('Premium Denim Jeans Classic Fit'),
-    category: 'Jeans',
-    images: ['/img/jeans.jpg'],
-    tags: ['new-arrival', 'featured'],
+    name: 'Barbari Bread - Traditional Persian Flatbread',
+    slug: toSlug('Barbari Bread Traditional Persian Flatbread'),
+    category: 'Breads',
+    images: ['/images/products/Barbari-2.1200px.jpg'],
+    tags: ['featured', 'traditional'],
     isPublished: true,
-    price: 89.99,
-    brand: 'DenimCraft',
-    avgRating: 4.5,
-    numReviews: 25,
+    price: 4.99,
+    brand: 'Bakeriet',
+    avgRating: 4.8,
+    numReviews: 45,
     ratingDistribution: [
       { rating: 1, count: 1 },
+      { rating: 2, count: 1 },
+      { rating: 3, count: 3 },
+      { rating: 4, count: 12 },
+      { rating: 5, count: 28 },
+    ],
+    numSales: 156,
+    description:
+      'Authentic Persian Barbari bread, baked fresh daily. This traditional flatbread features a crispy crust and soft interior, perfect for any meal.',
+    colors: [
+      {
+        color: 'Fresh Baked',
+        sizes: [
+          { size: 'Single Loaf', countInStock: 25 },
+          { size: 'Pack of 3', countInStock: 15 },
+          { size: 'Pack of 6', countInStock: 8 },
+        ],
+      },
+    ],
+    reviews: [],
+  },
+
+  {
+    name: 'Artisan Mixed Breads Collection',
+    slug: toSlug('Artisan Mixed Breads Collection'),
+    category: 'Breads',
+    images: ['/images/products/Breadds.jpg'],
+    tags: ['featured', 'artisan'],
+    isPublished: true,
+    price: 12.99,
+    brand: 'Bakeriet',
+    avgRating: 4.7,
+    numReviews: 32,
+    ratingDistribution: [
+      { rating: 1, count: 0 },
       { rating: 2, count: 2 },
       { rating: 3, count: 3 },
-      { rating: 4, count: 8 },
-      { rating: 5, count: 11 },
+      { rating: 4, count: 11 },
+      { rating: 5, count: 16 },
     ],
-    numSales: 45,
+    numSales: 89,
     description:
-      'High-quality denim jeans with classic fit and comfortable wear. Made from premium cotton blend for durability and style.',
+      'A delightful collection of our finest artisan breads, featuring traditional Persian and international varieties. Perfect for bread lovers.',
     colors: [
       {
-        color: 'Blue',
+        color: 'Mixed Variety',
         sizes: [
-          { size: '30', countInStock: 5 },
-          { size: '32', countInStock: 8 },
-          { size: '34', countInStock: 6 },
-          { size: '36', countInStock: 4 },
-        ],
-      },
-      {
-        color: 'Black',
-        sizes: [
-          { size: '30', countInStock: 3 },
-          { size: '32', countInStock: 5 },
-          { size: '34', countInStock: 4 },
-          { size: '36', countInStock: 2 },
+          { size: 'Small Box (4 pieces)', countInStock: 12 },
+          { size: 'Medium Box (6 pieces)', countInStock: 8 },
+          { size: 'Large Box (8 pieces)', countInStock: 5 },
         ],
       },
     ],
     reviews: [],
   },
 
-  // Shoes Category
+  // Persian Main Dishes
   {
-    name: 'Athletic Running Shoes - Performance Series',
-    slug: toSlug('Athletic Running Shoes Performance Series'),
-    category: 'Shoes',
-    images: ['/img/shoes.jpg'],
-    tags: ['best-seller', 'featured'],
+    name: 'Persian Beef & Lamb Kabob Platter',
+    slug: toSlug('Persian Beef Lamb Kabob Platter'),
+    category: 'Main Dishes',
+    images: ['/images/products/Close-Up-persian-beef-and-lamb-kabob.jpg'],
+    tags: ['signature', 'grilled'],
     isPublished: true,
-    price: 129.99,
-    brand: 'SportMax',
-    avgRating: 4.7,
-    numReviews: 42,
+    price: 24.99,
+    brand: 'Bakeriet Kitchen',
+    avgRating: 4.9,
+    numReviews: 67,
+    ratingDistribution: [
+      { rating: 1, count: 0 },
+      { rating: 2, count: 1 },
+      { rating: 3, count: 2 },
+      { rating: 4, count: 8 },
+      { rating: 5, count: 56 },
+    ],
+    numSales: 234,
+    description:
+      'Succulent Persian kabobs featuring tender marinated beef and lamb, grilled to perfection. Served with saffron rice and grilled vegetables.',
+    colors: [
+      {
+        color: 'Full Portion',
+        sizes: [
+          { size: 'Single Serving', countInStock: 18 },
+          { size: 'Double Portion', countInStock: 12 },
+          { size: 'Family Size (4 servings)', countInStock: 6 },
+        ],
+      },
+    ],
+    reviews: [],
+  },
+
+  {
+    name: 'Dizi Sofali - Traditional Persian Lamb Stew',
+    slug: toSlug('Dizi Sofali Traditional Persian Lamb Stew'),
+    category: 'Stews',
+    images: [
+      '/images/products/Dizi-Sofali-–-Persischer-Lammeintopf-im-Tontopf.jpeg',
+    ],
+    tags: ['traditional', 'hearty'],
+    isPublished: true,
+    price: 18.99,
+    brand: 'Bakeriet Kitchen',
+    avgRating: 4.6,
+    numReviews: 41,
     ratingDistribution: [
       { rating: 1, count: 1 },
       { rating: 2, count: 1 },
-      { rating: 3, count: 2 },
-      { rating: 4, count: 12 },
-      { rating: 5, count: 26 },
-    ],
-    numSales: 78,
-    description:
-      'Professional athletic running shoes designed for performance and comfort. Features advanced cushioning technology and breathable mesh upper.',
-    colors: [
-      {
-        color: 'White',
-        sizes: [
-          { size: '8', countInStock: 4 },
-          { size: '9', countInStock: 6 },
-          { size: '10', countInStock: 8 },
-          { size: '11', countInStock: 5 },
-          { size: '12', countInStock: 3 },
-        ],
-      },
-      {
-        color: 'Black',
-        sizes: [
-          { size: '8', countInStock: 3 },
-          { size: '9', countInStock: 5 },
-          { size: '10', countInStock: 6 },
-          { size: '11', countInStock: 4 },
-          { size: '12', countInStock: 2 },
-        ],
-      },
-    ],
-    reviews: [],
-  },
-
-  // Wrist Watches Category
-  {
-    name: 'Luxury Stainless Steel Watch - Executive Collection',
-    slug: toSlug('Luxury Stainless Steel Watch Executive Collection'),
-    category: 'Watches',
-    images: ['/img/wrist-watches.jpg'],
-    tags: ['featured', 'todays-deal'],
-    isPublished: true,
-    price: 299.99,
-    brand: 'TimeKeeper',
-    avgRating: 4.8,
-    numReviews: 18,
-    ratingDistribution: [
-      { rating: 1, count: 0 },
-      { rating: 2, count: 0 },
-      { rating: 3, count: 1 },
-      { rating: 4, count: 3 },
-      { rating: 5, count: 14 },
-    ],
-    numSales: 32,
-    description:
-      'Elegant stainless steel watch with precision movement. Perfect for business and formal occasions. Water resistant up to 100m.',
-    colors: [
-      {
-        color: 'Silver',
-        sizes: [{ size: 'One Size', countInStock: 8 }],
-      },
-      {
-        color: 'Gold',
-        sizes: [{ size: 'One Size', countInStock: 5 }],
-      },
-    ],
-    reviews: [],
-  },
-
-  // Additional T-Shirt Products using numbered images
-  {
-    name: 'Cotton Blend Casual T-Shirt - Summer Collection',
-    slug: toSlug('Cotton Blend Casual T-Shirt Summer Collection'),
-    category: 'T-Shirts',
-    images: ['/img/p21-1.jpg', '/img/p21-2.jpg'],
-    tags: ['new-arrival'],
-    isPublished: true,
-    price: 19.99,
-    brand: 'CasualWear',
-    avgRating: 4.3,
-    numReviews: 15,
-    ratingDistribution: [
-      { rating: 1, count: 0 },
-      { rating: 2, count: 1 },
-      { rating: 3, count: 2 },
-      { rating: 4, count: 6 },
-      { rating: 5, count: 6 },
-    ],
-    numSales: 28,
-    description:
-      'Comfortable cotton blend t-shirt perfect for everyday wear. Soft fabric with excellent breathability.',
-    colors: [
-      {
-        color: 'Blue',
-        sizes: [
-          { size: 'S', countInStock: 4 },
-          { size: 'M', countInStock: 6 },
-          { size: 'L', countInStock: 5 },
-          { size: 'XL', countInStock: 3 },
-        ],
-      },
-      {
-        color: 'White',
-        sizes: [
-          { size: 'S', countInStock: 3 },
-          { size: 'M', countInStock: 5 },
-          { size: 'L', countInStock: 4 },
-          { size: 'XL', countInStock: 2 },
-        ],
-      },
-    ],
-    reviews: [],
-  },
-
-  {
-    name: 'Premium Graphic T-Shirt - Designer Series',
-    slug: toSlug('Premium Graphic T-Shirt Designer Series'),
-    category: 'T-Shirts',
-    images: ['/img/p22-1.jpg', '/img/p22-2.jpg'],
-    tags: ['featured'],
-    isPublished: true,
-    price: 24.99,
-    brand: 'DesignCraft',
-    avgRating: 4.6,
-    numReviews: 22,
-    ratingDistribution: [
-      { rating: 1, count: 0 },
-      { rating: 2, count: 1 },
-      { rating: 3, count: 1 },
-      { rating: 4, count: 7 },
-      { rating: 5, count: 13 },
-    ],
-    numSales: 41,
-    description:
-      'Stylish graphic t-shirt with unique design. Made from high-quality cotton for comfort and durability.',
-    colors: [
-      {
-        color: 'Black',
-        sizes: [
-          { size: 'S', countInStock: 5 },
-          { size: 'M', countInStock: 7 },
-          { size: 'L', countInStock: 6 },
-          { size: 'XL', countInStock: 4 },
-        ],
-      },
-      {
-        color: 'Gray',
-        sizes: [
-          { size: 'S', countInStock: 3 },
-          { size: 'M', countInStock: 4 },
-          { size: 'L', countInStock: 3 },
-          { size: 'XL', countInStock: 2 },
-        ],
-      },
-    ],
-    reviews: [],
-  },
-
-  {
-    name: 'Vintage Style T-Shirt - Retro Collection',
-    slug: toSlug('Vintage Style T-Shirt Retro Collection'),
-    category: 'T-Shirts',
-    images: ['/img/p23-1.jpg', '/img/p23-2.jpg'],
-    tags: ['best-seller'],
-    isPublished: true,
-    price: 22.5,
-    brand: 'RetroStyle',
-    avgRating: 4.4,
-    numReviews: 19,
-    ratingDistribution: [
-      { rating: 1, count: 0 },
-      { rating: 2, count: 0 },
-      { rating: 3, count: 3 },
-      { rating: 4, count: 8 },
-      { rating: 5, count: 8 },
-    ],
-    numSales: 35,
-    description:
-      'Vintage-inspired t-shirt with retro design elements. Comfortable fit with classic styling.',
-    colors: [
-      {
-        color: 'Navy',
-        sizes: [
-          { size: 'S', countInStock: 4 },
-          { size: 'M', countInStock: 6 },
-          { size: 'L', countInStock: 5 },
-          { size: 'XL', countInStock: 3 },
-        ],
-      },
-      {
-        color: 'Maroon',
-        sizes: [
-          { size: 'S', countInStock: 2 },
-          { size: 'M', countInStock: 4 },
-          { size: 'L', countInStock: 3 },
-          { size: 'XL', countInStock: 1 },
-        ],
-      },
-    ],
-    reviews: [],
-  },
-
-  {
-    name: 'Sports Performance T-Shirt - Active Wear',
-    slug: toSlug('Sports Performance T-Shirt Active Wear'),
-    category: 'T-Shirts',
-    images: ['/img/p24-1.jpg', '/img/p24-2.jpg'],
-    tags: ['new-arrival', 'featured'],
-    isPublished: true,
-    price: 29.99,
-    brand: 'ActiveFit',
-    avgRating: 4.7,
-    numReviews: 31,
-    ratingDistribution: [
-      { rating: 1, count: 0 },
-      { rating: 2, count: 1 },
-      { rating: 3, count: 2 },
-      { rating: 4, count: 8 },
+      { rating: 3, count: 4 },
+      { rating: 4, count: 15 },
       { rating: 5, count: 20 },
     ],
-    numSales: 52,
+    numSales: 127,
     description:
-      'High-performance athletic t-shirt with moisture-wicking technology. Perfect for workouts and sports activities.',
+      'Authentic Dizi served in traditional clay pot. Slow-cooked lamb with chickpeas, white beans, and aromatic spices. A true Persian comfort food.',
     colors: [
       {
-        color: 'Red',
+        color: 'Traditional Serving',
         sizes: [
-          { size: 'S', countInStock: 6 },
-          { size: 'M', countInStock: 8 },
-          { size: 'L', countInStock: 7 },
-          { size: 'XL', countInStock: 5 },
-        ],
-      },
-      {
-        color: 'Blue',
-        sizes: [
-          { size: 'S', countInStock: 4 },
-          { size: 'M', countInStock: 6 },
-          { size: 'L', countInStock: 5 },
-          { size: 'XL', countInStock: 3 },
+          { size: 'Individual Pot', countInStock: 15 },
+          { size: 'Sharing Pot (2-3 people)', countInStock: 8 },
         ],
       },
     ],
@@ -315,43 +150,72 @@ const newProducts: IProductInput[] = [
   },
 
   {
-    name: 'Casual Button-Up Shirt - Business Casual',
-    slug: toSlug('Casual Button-Up Shirt Business Casual'),
-    category: 'Shirts',
-    images: ['/img/p25-1.jpg', '/img/p25-2.jpg'],
-    tags: ['todays-deal'],
+    name: 'Khoresh Bademjan - Persian Eggplant Stew',
+    slug: toSlug('Khoresh Bademjan Persian Eggplant Stew'),
+    category: 'Stews',
+    images: ['/images/products/Khoresh-Bademjan.jpg'],
+    tags: ['vegetarian-friendly', 'traditional'],
     isPublished: true,
-    price: 39.99,
-    brand: 'BusinessWear',
+    price: 16.99,
+    brand: 'Bakeriet Kitchen',
     avgRating: 4.5,
-    numReviews: 16,
+    numReviews: 38,
+    ratingDistribution: [
+      { rating: 1, count: 2 },
+      { rating: 2, count: 1 },
+      { rating: 3, count: 4 },
+      { rating: 4, count: 13 },
+      { rating: 5, count: 18 },
+    ],
+    numSales: 95,
+    description:
+      'Rich and flavorful Persian eggplant stew with tender lamb (or vegetarian option), tomatoes, and aromatic herbs. Served with basmati rice.',
+    colors: [
+      {
+        color: 'With Lamb',
+        sizes: [
+          { size: 'Single Serving', countInStock: 12 },
+          { size: 'Family Size', countInStock: 6 },
+        ],
+      },
+      {
+        color: 'Vegetarian',
+        sizes: [
+          { size: 'Single Serving', countInStock: 10 },
+          { size: 'Family Size', countInStock: 5 },
+        ],
+      },
+    ],
+    reviews: [],
+  },
+
+  {
+    name: 'Braised Lamb Shanks - Persian Style',
+    slug: toSlug('Braised Lamb Shanks Persian Style'),
+    category: 'Main Dishes',
+    images: ['/images/products/Lamb-Shanks-2.jpg'],
+    tags: ['signature', 'slow-cooked'],
+    isPublished: true,
+    price: 28.99,
+    brand: 'Bakeriet Kitchen',
+    avgRating: 4.8,
+    numReviews: 52,
     ratingDistribution: [
       { rating: 1, count: 0 },
       { rating: 2, count: 1 },
-      { rating: 3, count: 1 },
-      { rating: 4, count: 6 },
-      { rating: 5, count: 8 },
+      { rating: 3, count: 3 },
+      { rating: 4, count: 12 },
+      { rating: 5, count: 36 },
     ],
-    numSales: 23,
+    numSales: 178,
     description:
-      'Versatile button-up shirt perfect for business casual settings. Wrinkle-resistant fabric with comfortable fit.',
+      'Tender lamb shanks slow-braised in Persian spices, saffron, and aromatic herbs. Fall-off-the-bone tender and full of flavor.',
     colors: [
       {
-        color: 'White',
+        color: 'Classic Preparation',
         sizes: [
-          { size: 'S', countInStock: 3 },
-          { size: 'M', countInStock: 5 },
-          { size: 'L', countInStock: 4 },
-          { size: 'XL', countInStock: 2 },
-        ],
-      },
-      {
-        color: 'Light Blue',
-        sizes: [
-          { size: 'S', countInStock: 2 },
-          { size: 'M', countInStock: 4 },
-          { size: 'L', countInStock: 3 },
-          { size: 'XL', countInStock: 1 },
+          { size: 'Single Shank', countInStock: 14 },
+          { size: 'Double Shank', countInStock: 8 },
         ],
       },
     ],
@@ -359,43 +223,176 @@ const newProducts: IProductInput[] = [
   },
 
   {
-    name: 'Polo Shirt - Classic Fit',
-    slug: toSlug('Polo Shirt Classic Fit'),
-    category: 'Shirts',
-    images: ['/img/p26-1.jpg', '/img/p26-2.jpg'],
-    tags: ['best-seller'],
+    name: 'Slow Cooker Persian Lamb',
+    slug: toSlug('Slow Cooker Persian Lamb'),
+    category: 'Main Dishes',
+    images: ['/images/products/slow-cooker-persian-lamb-139103-1.jpg'],
+    tags: ['comfort-food', 'slow-cooked'],
     isPublished: true,
-    price: 34.99,
-    brand: 'PoloClassic',
-    avgRating: 4.6,
-    numReviews: 27,
+    price: 22.99,
+    brand: 'Bakeriet Kitchen',
+    avgRating: 4.7,
+    numReviews: 29,
     ratingDistribution: [
       { rating: 1, count: 0 },
       { rating: 2, count: 1 },
       { rating: 3, count: 2 },
       { rating: 4, count: 9 },
-      { rating: 5, count: 15 },
+      { rating: 5, count: 17 },
     ],
-    numSales: 46,
+    numSales: 86,
     description:
-      'Classic polo shirt with timeless design. Made from premium cotton pique for comfort and style.',
+      'Tender Persian lamb slow-cooked with traditional spices, dried fruits, and aromatic herbs. A warming and satisfying meal.',
     colors: [
       {
-        color: 'Navy',
+        color: 'Traditional Style',
         sizes: [
-          { size: 'S', countInStock: 5 },
-          { size: 'M', countInStock: 7 },
-          { size: 'L', countInStock: 6 },
-          { size: 'XL', countInStock: 4 },
+          { size: 'Single Portion', countInStock: 16 },
+          { size: 'Double Portion', countInStock: 10 },
+        ],
+      },
+    ],
+    reviews: [],
+  },
+
+  {
+    name: 'Moroccan-Style Tagine',
+    slug: toSlug('Moroccan Style Tagine'),
+    category: 'International',
+    images: ['/images/products/tagine-ff6dcc0.jpg'],
+    tags: ['international', 'aromatic'],
+    isPublished: true,
+    price: 21.99,
+    brand: 'Bakeriet Kitchen',
+    avgRating: 4.6,
+    numReviews: 35,
+    ratingDistribution: [
+      { rating: 1, count: 1 },
+      { rating: 2, count: 1 },
+      { rating: 3, count: 3 },
+      { rating: 4, count: 12 },
+      { rating: 5, count: 18 },
+    ],
+    numSales: 102,
+    description:
+      'Authentic Moroccan tagine with tender meat, vegetables, and exotic spices. Slow-cooked in traditional clay pot for maximum flavor.',
+    colors: [
+      {
+        color: 'Chicken Tagine',
+        sizes: [
+          { size: 'Individual Serving', countInStock: 12 },
+          { size: 'Sharing Size', countInStock: 7 },
         ],
       },
       {
-        color: 'Green',
+        color: 'Lamb Tagine',
         sizes: [
-          { size: 'S', countInStock: 3 },
-          { size: 'M', countInStock: 5 },
-          { size: 'L', countInStock: 4 },
-          { size: 'XL', countInStock: 2 },
+          { size: 'Individual Serving', countInStock: 10 },
+          { size: 'Sharing Size', countInStock: 5 },
+        ],
+      },
+    ],
+    reviews: [],
+  },
+
+  // Desserts
+  {
+    name: 'Traditional Iranian Dessert Platter',
+    slug: toSlug('Traditional Iranian Dessert Platter'),
+    category: 'Desserts',
+    images: ['/images/products/The-Rich-History-of-Iranian-Desserts.jpg'],
+    tags: ['dessert', 'traditional', 'sweet'],
+    isPublished: true,
+    price: 15.99,
+    brand: 'Bakeriet Sweets',
+    avgRating: 4.9,
+    numReviews: 48,
+    ratingDistribution: [
+      { rating: 1, count: 0 },
+      { rating: 2, count: 0 },
+      { rating: 3, count: 2 },
+      { rating: 4, count: 6 },
+      { rating: 5, count: 40 },
+    ],
+    numSales: 167,
+    description:
+      'A beautiful selection of traditional Iranian sweets including baklava, rosewater cookies, saffron ice cream, and Persian nougat.',
+    colors: [
+      {
+        color: 'Assorted Selection',
+        sizes: [
+          { size: 'Small Platter (6 pieces)', countInStock: 20 },
+          { size: 'Medium Platter (12 pieces)', countInStock: 15 },
+          { size: 'Large Platter (18 pieces)', countInStock: 8 },
+        ],
+      },
+    ],
+    reviews: [],
+  },
+
+  // Specialty Items
+  {
+    name: 'Premium Iranian Saffron Rice',
+    slug: toSlug('Premium Iranian Saffron Rice'),
+    category: 'Sides',
+    images: ['/images/products/wcdqRsG9ntATYZgZGXPO8_1000x.webp'],
+    tags: ['premium', 'saffron', 'side-dish'],
+    isPublished: true,
+    price: 8.99,
+    brand: 'Bakeriet Kitchen',
+    avgRating: 4.8,
+    numReviews: 73,
+    ratingDistribution: [
+      { rating: 1, count: 1 },
+      { rating: 2, count: 1 },
+      { rating: 3, count: 2 },
+      { rating: 4, count: 15 },
+      { rating: 5, count: 54 },
+    ],
+    numSales: 245,
+    description:
+      'Aromatic basmati rice cooked with premium Iranian saffron, creating a golden and fragrant side dish perfect with any Persian meal.',
+    colors: [
+      {
+        color: 'Saffron Golden',
+        sizes: [
+          { size: 'Small (2 servings)', countInStock: 25 },
+          { size: 'Medium (4 servings)', countInStock: 18 },
+          { size: 'Large (6 servings)', countInStock: 12 },
+        ],
+      },
+    ],
+    reviews: [],
+  },
+
+  {
+    name: 'Persian Lamb Biryani',
+    slug: toSlug('Persian Lamb Biryani'),
+    category: 'Rice Dishes',
+    images: ['/images/products/web_lambiranian.webp'],
+    tags: ['signature', 'rice-dish', 'lamb'],
+    isPublished: true,
+    price: 26.99,
+    brand: 'Bakeriet Kitchen',
+    avgRating: 4.7,
+    numReviews: 44,
+    ratingDistribution: [
+      { rating: 1, count: 1 },
+      { rating: 2, count: 1 },
+      { rating: 3, count: 3 },
+      { rating: 4, count: 13 },
+      { rating: 5, count: 26 },
+    ],
+    numSales: 134,
+    description:
+      'Exquisite Persian-style lamb biryani with fragrant basmati rice, tender lamb, and traditional Persian spices. A royal feast.',
+    colors: [
+      {
+        color: 'Traditional Style',
+        sizes: [
+          { size: 'Individual Portion', countInStock: 15 },
+          { size: 'Sharing Portion (2-3 people)', countInStock: 8 },
+          { size: 'Family Size (4-5 people)', countInStock: 4 },
         ],
       },
     ],
@@ -411,10 +408,24 @@ async function addProducts() {
     // Ensure tags exist
     console.log('Ensuring tags exist...')
     const requiredTags = [
-      { name: 'new-arrival', _id: '1' },
-      { name: 'featured', _id: '2' },
-      { name: 'best-seller', _id: '3' },
-      { name: 'todays-deal', _id: '4' },
+      { name: 'featured', _id: '1' },
+      { name: 'traditional', _id: '2' },
+      { name: 'artisan', _id: '3' },
+      { name: 'signature', _id: '4' },
+      { name: 'grilled', _id: '5' },
+      { name: 'hearty', _id: '6' },
+      { name: 'vegetarian-friendly', _id: '7' },
+      { name: 'slow-cooked', _id: '8' },
+      { name: 'comfort-food', _id: '9' },
+      { name: 'international', _id: '10' },
+      { name: 'aromatic', _id: '11' },
+      { name: 'dessert', _id: '12' },
+      { name: 'sweet', _id: '13' },
+      { name: 'premium', _id: '14' },
+      { name: 'saffron', _id: '15' },
+      { name: 'side-dish', _id: '16' },
+      { name: 'rice-dish', _id: '17' },
+      { name: 'lamb', _id: '18' },
     ]
 
     for (const tagData of requiredTags) {

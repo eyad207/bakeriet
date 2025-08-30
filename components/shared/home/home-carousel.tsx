@@ -13,7 +13,7 @@ import {
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ICarousel } from '@/types'
-import { ChefHat, Clock, Star } from 'lucide-react'
+import { ChefHat, Star } from 'lucide-react'
 
 export function HomeCarousel({ items }: { items: ICarousel[] }) {
   const plugin = React.useRef(
@@ -33,7 +33,7 @@ export function HomeCarousel({ items }: { items: ICarousel[] }) {
           {items.map((item, index) => (
             <CarouselItem key={`${item.title}-${index}`}>
               <Link href={item.url} className='block relative group'>
-                <div className='relative aspect-[16/9] sm:aspect-[16/8] md:aspect-[16/7] overflow-hidden'>
+                <div className='relative aspect-[10/9] sm:aspect-[16/8] md:aspect-[16/7] overflow-hidden'>
                   {/* Background Image with Overlay */}
                   <Image
                     src={item.image}
@@ -42,7 +42,6 @@ export function HomeCarousel({ items }: { items: ICarousel[] }) {
                     className='object-cover transition-transform duration-700 group-hover:scale-105'
                     priority
                   />
-
                   {/* Gradient Overlay for Better Text Readability */}
                   <div className='absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent' />
 
@@ -62,15 +61,9 @@ export function HomeCarousel({ items }: { items: ICarousel[] }) {
                       </div>
 
                       {/* Main Title */}
-                      <h2 className='text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-3 sm:mb-4 md:mb-6 text-white leading-tight drop-shadow-2xl'>
+                      <h2 className=' sm:w-50 text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-3 sm:mb-4 md:mb-6 text-white leading-tight drop-shadow-2xl'>
                         {item.title}
                       </h2>
-
-                      {/* Description */}
-                      <p className='text-sm sm:text-base md:text-lg lg:text-xl text-white/90 mb-4 sm:mb-6 md:mb-8 max-w-lg leading-relaxed drop-shadow-lg'>
-                        Experience authentic flavors crafted with love and the
-                        finest ingredients
-                      </p>
 
                       {/* Call-to-Action Button */}
                       <div className='flex items-center gap-3 sm:gap-4'>
@@ -80,12 +73,6 @@ export function HomeCarousel({ items }: { items: ICarousel[] }) {
                         >
                           {item.buttonCaption}
                         </Button>
-
-                        {/* Quick Info */}
-                        <div className='hidden sm:flex items-center gap-1 text-white/80 text-sm'>
-                          <Clock className='h-4 w-4' />
-                          <span>Ready in 15-20 min</span>
-                        </div>
                       </div>
                     </div>
                   </div>

@@ -363,22 +363,11 @@ export async function getAllProducts({
 }
 
 export async function getAllTags() {
-  const tags = await Product.aggregate([
-    { $unwind: '$tags' },
-    { $group: { _id: null, uniqueTags: { $addToSet: '$tags' } } },
-    { $project: { _id: 0, uniqueTags: 1 } },
-  ])
-  return (
-    (tags[0]?.uniqueTags
-      .filter((tag: unknown) => typeof tag === 'string') // Ensure only strings are processed
-      .sort((a: string, b: string) => a.localeCompare(b))
-      .map((x: string) =>
-        x
-          .split('-')
-          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-          .join(' ')
-      ) as string[]) || []
-  )
+  await connectToDatabase()
+  const tags = await Tag.find({}, { name: 1, _id: 0 }).lean()
+  return tags
+    .map((tag: { name: string }) => tag.name)
+    .sort((a, b) => a.localeCompare(b))
 }
 
 export async function addItem(

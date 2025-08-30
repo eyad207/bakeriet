@@ -8,18 +8,39 @@ import { Card, CardContent } from '../ui/card'
 export default function BrowsingHistoryList({}: { className?: string }) {
   const { products = [] } = useBrowsingHistory() // Ensure products is always an array
   const t = useTranslations('Home')
+  const [relatedCount, setRelatedCount] = React.useState(0)
+  const [historyCount, setHistoryCount] = React.useState(0)
+  React.useEffect(() => {
+    // Fetch both related and history lists to determine if anything should be shown
+    const fetchCounts = async () => {
+      const base = '/api/products/browsing-history'
+      const params = `?excludeId=&categories=${products.map((p) => p.category).join(',')}&ids=${products.map((p) => p.id).join(',')}`
+      const [relatedRes, historyRes] = await Promise.all([
+        fetch(`${base}?type=related${params}`),
+        fetch(`${base}?type=history${params}`),
+      ])
+      const relatedData = await relatedRes.json()
+      const historyData = await historyRes.json()
+      setRelatedCount(Array.isArray(relatedData) ? relatedData.length : 0)
+      setHistoryCount(Array.isArray(historyData) ? historyData.length : 0)
+    }
+    fetchCounts()
+  }, [products])
+
+  if (relatedCount === 0 && historyCount === 0) return null
 
   return (
-    products.length !== 0 && (
-      <div className='mt-3 sm:mt-5 md:mt-10'>
-        <Card className='w-full'>
-          <CardContent className='p-3 sm:p-4 md:p-6'>
-            <div className='space-y-6 md:space-y-10'>
+    <div className='mt-3 sm:mt-5 md:mt-10'>
+      <Card className='w-full'>
+        <CardContent className='p-3 sm:p-4 md:p-6'>
+          <div className='space-y-6 md:space-y-10'>
+            {relatedCount > 0 && (
               <ProductList
                 title={t("Related to items that you've viewed")}
                 type='related'
               />
-
+            )}
+            {historyCount > 0 && (
               <div className='border-t border-border/50 dark:border-zinc-700 pt-4 mt-4'>
                 <ProductList
                   title={t('Your browsing history')}
@@ -27,11 +48,11 @@ export default function BrowsingHistoryList({}: { className?: string }) {
                   type='history'
                 />
               </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    )
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   )
 }
 
