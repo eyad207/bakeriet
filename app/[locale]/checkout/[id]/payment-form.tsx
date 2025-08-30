@@ -76,9 +76,6 @@ export default function OrderDetailsForm({
   })
 
   if (isPaid) {
-    // Server-side redirect: params include locale via parent route, use router redirect preserving locale
-    // On server components, `redirect` will respect current route if we include locale from pathname via headers is complex,
-    // but this page is under /[locale]/checkout so calling redirect without prefix should work. Keep existing behavior.
     redirect(`/account/orders/${order._id}`)
   }
   function PrintLoadingState() {
@@ -109,12 +106,7 @@ export default function OrderDetailsForm({
         description: res.message,
         variant: res.success ? 'default' : 'destructive',
       })
-      // Preserve locale when pushing client-side
-      const parts = window.location.pathname.split('/')
-      const maybeLocale = parts[1]
-      const prefix =
-        maybeLocale && maybeLocale.length > 0 ? `/${maybeLocale}` : ''
-      router.push(`${prefix}/account/orders/${order._id}?payment=paypal`)
+      router.push(`/account/orders/${order._id}?payment=paypal`)
     }
   }
 
@@ -313,15 +305,7 @@ export default function OrderDetailsForm({
                 <div className='bg-gradient-to-r from-green-50 to-green-100 dark:from-green-950 dark:to-green-900 border border-green-200 dark:border-green-800 rounded-lg p-3'>
                   <Button
                     className='w-full h-10 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors'
-                    onClick={() => {
-                      const parts = window.location.pathname.split('/')
-                      const maybeLocale = parts[1]
-                      const prefix =
-                        maybeLocale && maybeLocale.length > 0
-                          ? `/${maybeLocale}`
-                          : ''
-                      router.push(`${prefix}/account/orders/${order._id}`)
-                    }}
+                    onClick={() => router.push(`/account/orders/${order._id}`)}
                   >
                     {t('viewOrderDetails')}
                   </Button>

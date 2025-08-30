@@ -11,13 +11,12 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
 export default async function SuccessPage(props: {
   params: Promise<{
     id: string
-    locale?: string
   }>
   searchParams: Promise<{ payment_intent: string }>
 }) {
   const params = await props.params
 
-  const { id, locale } = params as unknown as { id: string; locale?: string }
+  const { id } = params
 
   const searchParams = await props.searchParams
   const order = await getOrderById(id)
@@ -43,11 +42,7 @@ export default async function SuccessPage(props: {
         </h1>
         <div>We are now processing your order.</div>
         <Button asChild>
-          <Link
-            href={`${locale && locale.length > 0 ? `/${locale}` : ''}/account/orders/${id}`}
-          >
-            View order
-          </Link>
+          <Link href={`/account/orders/${id}`}>View order</Link>
         </Button>
       </div>
     </div>

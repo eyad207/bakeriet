@@ -15,7 +15,7 @@ const CheckoutPaymentPage = async (props: {
   }>
 }) => {
   const params = await props.params
-  const { id, locale } = params as unknown as { id: string; locale?: string }
+  const { id } = params
 
   const order = await getOrderById(id)
   if (!order) notFound()
@@ -26,9 +26,7 @@ const CheckoutPaymentPage = async (props: {
   if (order.paymentMethod === 'Vipps' && !order.isPaid) {
     const res = await approveVippsOrder(order._id)
     if (res.success) {
-      // Include locale in redirect so user lands on localized account page
-      const prefix = locale && locale.length > 0 ? `/${locale}` : ''
-      redirect(`${prefix}/account/orders/${order._id}?payment=vipps`)
+      redirect(`/account/orders/${order._id}?payment=vipps`)
     }
   }
 
