@@ -39,7 +39,7 @@ export default async function Header() {
             <div className='flex items-center gap-4'>
               <div className='flex items-center gap-1'>
                 <Phone className='h-4 w-4' />
-                <span>+47 123 45 678</span>
+                <span>{site.phone}</span>
               </div>
               <div className='flex items-center gap-1'>
                 <Clock className='h-4 w-4' />
@@ -47,13 +47,11 @@ export default async function Header() {
               </div>
               <div className='flex items-center gap-1'>
                 <MapPin className='h-4 w-4' />
-                <span>Downtown Oslo</span>
+                <span>{site.address}</span>
               </div>
             </div>
             <div className='hidden sm:block'>
-              <span className='font-medium'>
-                🎉 Free delivery on orders over 500 NOK!
-              </span>
+              <span className='font-medium'>{site.keywords}</span>
             </div>
           </div>
         </div>
@@ -65,14 +63,14 @@ export default async function Header() {
             <div className='flex items-center shrink-0'>
               <Link
                 href='/'
-                className='flex items-center gap-3 rounded-2xl bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-all duration-300 px-4 py-2 shadow-lg hover:shadow-xl transform hover:scale-105'
+                className='flex items-center gap-3 rounded-2xl bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-all duration-300 px-4 py-2 shadow-lg hover:shadow-xl transform hover:scale-105'
               >
                 <Image
                   src={site.logo}
-                  width={48}
+                  width={60}
                   height={48}
                   alt={`${site.name} logo`}
-                  className='h-12 w-12 rounded-full border-3 border-white shadow-md'
+                  className='h-12 w-22 rounded-full border-3 border-white shadow-md'
                   priority
                 />
                 <div className='flex flex-col'>
