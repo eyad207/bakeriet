@@ -12,6 +12,8 @@ import { Phone, Clock, MapPin } from 'lucide-react'
 
 // Dynamically import SearchToggle for client-side rendering
 import HeaderSearchToggle from './header-search-toggle'
+import CurrencySwitcher from './currency-switcher'
+import ThemeSwitcher from './theme-switcher'
 
 // Cached fetchers (will only hit DB once per build/revalidate period)
 const getCachedSettings = cache(getSetting)
@@ -125,6 +127,8 @@ export default async function Header() {
                   <HeaderSearchToggle categories={categories} />
                   <UserButton />
                   <CartButton />
+                  <CurrencySwitcher />
+                  <ThemeSwitcher />
                 </div>
               </nav>
 

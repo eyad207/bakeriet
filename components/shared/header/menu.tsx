@@ -30,6 +30,8 @@ import { Button } from '@/components/ui/button'
 import { SignOut } from '@/lib/actions/user.actions'
 import { NavigationButton } from './navigation-button'
 import { getAllTags } from '@/lib/actions/product.actions'
+import CurrencySwitcher from './currency-switcher'
+import ThemeSwitcher from './theme-switcher'
 
 const Menu = async ({}: { forAdmin?: boolean }) => {
   // fetch current user session for mobile menu actions
@@ -138,6 +140,8 @@ const Menu = async ({}: { forAdmin?: boolean }) => {
                 Restaurant
               </h3>
               <div className='space-y-2'>
+                <CurrencySwitcher />
+                <ThemeSwitcher />
                 {/* Featured navigation items */}
                 <SheetClose asChild>
                   <Link

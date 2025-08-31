@@ -151,7 +151,6 @@ export default function CarouselForm({
                 title: '',
                 image: '',
                 buttonCaption: '',
-                isPublished: true,
               })
             }
           >
