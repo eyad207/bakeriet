@@ -57,28 +57,6 @@ const ProductCard = ({
         </Badge>
       </div>
 
-      {/* Special indicators */}
-      <div className='absolute top-3 right-3 z-20 flex flex-col gap-1'>
-        {product.avgRating >= 4.5 && (
-          <Badge
-            variant='secondary'
-            className='bg-amber-500/90 text-white font-medium text-xs px-2 py-1 shadow-sm'
-          >
-            <Star className='w-3 h-3 mr-1 fill-current' />
-            Chef&apos;s Choice
-          </Badge>
-        )}
-        {product.tags?.includes('signature') && (
-          <Badge
-            variant='secondary'
-            className='bg-red-500/90 text-white font-medium text-xs px-2 py-1 shadow-sm'
-          >
-            <Flame className='w-3 h-3 mr-1' />
-            Signature
-          </Badge>
-        )}
-      </div>
-
       {product.images.length > 1 ? (
         <ImageHover
           src={product.images[0]}

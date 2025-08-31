@@ -31,12 +31,12 @@ export default function HeaderSearchToggle({}: { categories?: string[] }) {
   return (
     <div className='relative'>
       <button
-        className='flex items-center justify-center rounded-full p-2 bg-white/30 hover:bg-white/60 transition-colors duration-200 text-orange-700 shadow-md focus:outline-none focus:ring-2 focus:ring-orange-400'
+        className='flex items-center justify-center rounded-full p-1.5 sm:p-2 bg-white/30 hover:bg-white/60 transition-colors duration-200 text-orange-700 shadow-md focus:outline-none focus:ring-2 focus:ring-orange-400'
         aria-label='Open search bar'
         onClick={() => setOpen((v) => !v)}
         type='button'
       >
-        <Search className='w-6 h-6' />
+        <Search className='w-5 h-5 sm:w-6 sm:h-6' />
       </button>
       {open &&
         typeof window !== 'undefined' &&

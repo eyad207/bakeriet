@@ -5,6 +5,7 @@ import Menu from './menu'
 import HeaderWrapper from './header-wrapper'
 import UserButton from './user-button'
 import CartButton from './cart-button'
+import PreferencesButton from './preferences-button'
 import { getSetting } from '@/lib/actions/setting.actions'
 import { getAllCategories, getAllTags } from '@/lib/actions/product.actions'
 import 'server-only'
@@ -48,30 +49,30 @@ export default async function Header() {
 
         {/* Main header - Clean and modern */}
         <div className='w-full'>
-          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-            <div className='flex items-center justify-between h-16 lg:h-20'>
-              {/* Logo & Brand - Horizontal layout for modern look */}
-              <div className='flex items-center shrink-0'>
+          <div className='max-w-7xl mx-auto px-3 sm:px-4 lg:px-8'>
+            <div className='flex items-center justify-between h-14 sm:h-16 lg:h-20'>
+              {/* Logo & Brand - Responsive layout */}
+              <div className='flex items-center shrink-0 min-w-0'>
                 <Link
                   href='/'
-                  className='flex items-center gap-3 group transition-all duration-300 hover:opacity-80'
+                  className='flex items-center gap-2 sm:gap-3 group transition-all duration-300 hover:opacity-80'
                 >
-                  <div className='relative'>
+                  <div className='relative shrink-0'>
                     <Image
                       src={site.logo}
                       width={48}
                       height={48}
                       alt={`${site.name} logo`}
-                      className='h-10 w-10 lg:h-12 lg:w-12 rounded-full border-2 border-orange-200 dark:border-orange-800 shadow-sm object-cover transition-all duration-300 group-hover:shadow-md'
+                      className='h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 rounded-full border-2 border-orange-200 dark:border-orange-800 shadow-sm object-cover transition-all duration-300 group-hover:shadow-md'
                       priority
                     />
                     <div className='absolute inset-0 rounded-full bg-gradient-to-tr from-orange-500/20 to-amber-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
                   </div>
-                  <div className='flex flex-col'>
-                    <span className='font-bold text-xl lg:text-2xl text-gray-900 dark:text-white leading-none'>
+                  <div className='flex flex-col min-w-0'>
+                    <span className='font-bold text-lg sm:text-xl lg:text-2xl text-gray-900 dark:text-white leading-none truncate'>
                       {site.name}
                     </span>
-                    <span className='text-xs lg:text-sm text-orange-600 dark:text-orange-400 font-medium leading-none mt-0.5'>
+                    <span className='hidden sm:block text-xs lg:text-sm text-orange-600 dark:text-orange-400 font-medium leading-none mt-0.5 truncate'>
                       Authentic Norwegian Cuisine
                     </span>
                   </div>
@@ -121,14 +122,18 @@ export default async function Header() {
                 {/* User Actions - Clean separation */}
                 <div className='flex items-center gap-2 ml-6 pl-6 border-l border-gray-200 dark:border-zinc-700'>
                   <HeaderSearchToggle categories={categories} />
+                  <PreferencesButton />
                   <UserButton />
                   <CartButton />
                 </div>
               </nav>
 
-              {/* Mobile Navigation - Clean and compact */}
-              <div className='flex lg:hidden items-center gap-3'>
+              {/* Mobile Navigation - Optimized for small screens */}
+              <div className='flex lg:hidden items-center gap-1 sm:gap-2'>
                 <HeaderSearchToggle categories={categories} />
+                <div className='hidden xs:block'>
+                  <PreferencesButton />
+                </div>
                 <UserButton />
                 <Menu />
               </div>

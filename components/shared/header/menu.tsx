@@ -25,6 +25,7 @@ import {
 } from '@/components/ui/sheet'
 import UserButton from './user-button'
 import CartButton from './cart-button'
+import PreferencesInline from './preferences-inline'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { SignOut } from '@/lib/actions/user.actions'
@@ -50,8 +51,11 @@ const Menu = async ({}: { forAdmin?: boolean }) => {
       <nav className='flex items-center nav:hidden gap-2'>
         <CartButton />
         <Sheet>
-          <SheetTrigger className='p-3 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 shadow-md hover:shadow-lg text-white transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50'>
-            <MenuIcon className='h-5 w-5' />
+          <SheetTrigger className='flex items-center justify-center h-10 w-10 sm:h-12 sm:w-auto sm:px-4 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 shadow-md hover:shadow-lg text-white transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50'>
+            <MenuIcon className='h-5 w-5 text-white' />
+            <span className='font-semibold text-sm ml-2 hidden sm:inline text-white'>
+              Menu
+            </span>
           </SheetTrigger>
 
           <SheetContent
@@ -128,6 +132,17 @@ const Menu = async ({}: { forAdmin?: boolean }) => {
                     </Link>
                   </SheetClose>
                 )}
+              </div>
+            </div>
+
+            {/* Preferences Section - For very small screens */}
+            <div className='space-y-4 py-6 border-t border-gray-100 dark:border-zinc-800 xs:hidden'>
+              <h3 className='text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2'>
+                <Settings className='h-5 w-5 text-orange-500' />
+                Preferences
+              </h3>
+              <div className='px-4 flex justify-center'>
+                <PreferencesInline />
               </div>
             </div>
 
