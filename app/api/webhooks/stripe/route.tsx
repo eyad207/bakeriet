@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
       process.env.STRIPE_WEBHOOK_SECRET
     )
 
-    console.log('Stripe webhook event:', event.type)
+    console.log('Stripe webhook event received:', event.type, 'ID:', event.id)
 
     // Handle both charge.succeeded and payment_intent.succeeded events
     if (
@@ -47,31 +47,34 @@ export async function POST(req: NextRequest) {
         orderId = charge.metadata.orderId
         email = charge.billing_details.email
         pricePaidInCents = charge.amount
+        console.log('Processing charge.succeeded for order:', orderId)
       } else {
         // payment_intent.succeeded
         const paymentIntent = event.data.object as Stripe.PaymentIntent
         orderId = paymentIntent.metadata.orderId
         email = paymentIntent.receipt_email
         pricePaidInCents = paymentIntent.amount
+        console.log('Processing payment_intent.succeeded for order:', orderId)
       }
 
       if (!orderId) {
-        console.error('No orderId found in metadata')
+        console.error('No orderId found in metadata for event:', event.id)
         return new NextResponse('Invalid metadata', { status: 400 })
       }
 
       const order = await Order.findById(orderId).populate('user', 'email')
       if (!order) {
-        console.error('Order not found:', orderId)
+        console.error('Order not found:', orderId, 'for event:', event.id)
         return new NextResponse('Order not found', { status: 404 })
       }
 
       // Prevent duplicate processing
       if (order.isPaid) {
-        console.log('Order already paid:', orderId)
+        console.log('Order already paid:', orderId, '- skipping processing')
         return NextResponse.json({ message: 'Order already processed' })
       }
 
+      console.log('Marking order as paid:', orderId)
       order.isPaid = true
       order.paidAt = new Date()
       order.paymentResult = {
@@ -85,19 +88,29 @@ export async function POST(req: NextRequest) {
       }
       await order.save()
 
+      console.log('Order saved successfully:', orderId)
+
       try {
         await sendPurchaseReceipt({ order })
-        await updateProductStock(orderId)
+        console.log('Purchase receipt sent for order:', orderId)
       } catch (error) {
-        console.error('Error sending receipt or updating stock:', error)
-        // Don't fail the webhook for email/stock errors
+        console.error('Error sending receipt for order:', orderId, error)
+      }
+
+      try {
+        await updateProductStock(orderId)
+        console.log('Product stock updated for order:', orderId)
+      } catch (error) {
+        console.error('Error updating stock for order:', orderId, error)
       }
 
       return NextResponse.json({
         message: 'Payment processed successfully',
+        orderId: orderId,
       })
     }
 
+    console.log('Unhandled event type:', event.type)
     return NextResponse.json({ message: 'Event not handled' })
   } catch (error) {
     console.error('Stripe webhook error:', error)

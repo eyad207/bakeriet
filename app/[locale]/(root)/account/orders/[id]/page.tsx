@@ -3,6 +3,7 @@ import React from 'react'
 import { auth } from '@/auth'
 import { getOrderById } from '@/lib/actions/order.actions'
 import OrderDetailsForm from '@/components/shared/order/order-details-form'
+import PaymentStatusPoller from '@/components/shared/payment-status-poller'
 import Link from 'next/link'
 import { formatId } from '@/lib/utils'
 import { Card, CardContent } from '@/components/ui/card'
@@ -30,14 +31,29 @@ export default async function OrderDetailsPage(props: {
 
   const t = await getTranslations()
   const order = await getOrderById(id)
-  if (!order || (!order.isPaid && order.paymentMethod !== 'Cash On Delivery')) {
-    notFound() // Redirect if order is not paid and not COD
+
+  // Handle different order states
+  if (!order) {
+    notFound()
+  }
+
+  // Allow access to:
+  // 1. Paid orders
+  // 2. Cash on Delivery orders
+  // 3. Stripe orders that might be processing (even if not marked as paid yet)
+  const isAccessible =
+    order.isPaid ||
+    order.paymentMethod === 'Cash On Delivery' ||
+    order.paymentMethod === 'Stripe'
+
+  if (!isAccessible) {
+    notFound()
   }
 
   const session = await auth()
 
   return (
-    <>
+    <PaymentStatusPoller initialOrder={order}>
       {/* Enhanced breadcrumb navigation */}
       <div className='flex items-center gap-2 text-sm text-muted-foreground mb-6'>
         <Link
@@ -150,6 +166,6 @@ export default async function OrderDetailsPage(props: {
           isAdmin={session?.user?.role === 'Admin' || false}
         />
       </div>
-    </>
+    </PaymentStatusPoller>
   )
 }
