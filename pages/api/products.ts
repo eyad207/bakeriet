@@ -21,7 +21,25 @@ export default async function handler(
     let queryFilter: Record<string, unknown> = {}
 
     if (tag) {
-      queryFilter = { tags: { $in: [tag] } }
+      // try to resolve tag name to id
+      const tagValue = Array.isArray(tag) ? tag[0] : (tag as string)
+      let tagId: string | null = null
+      try {
+        const mongoose = await import('mongoose')
+        if (mongoose.Types.ObjectId.isValid(tagValue)) {
+          tagId = tagValue
+        } else {
+          const Tag = (await import('@/lib/db/models/tag.model')).default
+          const found = await Tag.findOne({
+            name: new RegExp(`^${tagValue}$`, 'i'),
+          }).lean()
+          tagId = found ? found._id.toString() : null
+        }
+      } catch {
+        tagId = null
+      }
+
+      queryFilter = { tags: { $in: tagId ? [tagId] : [] } }
     } else if (query && query !== '') {
       try {
         // Detect the language of the query

@@ -66,6 +66,25 @@ export async function deleteProduct(id: string) {
   }
 }
 
+// BULK DELETE
+export async function deleteProducts(ids: string[]) {
+  try {
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return { success: false, message: 'No product ids provided' }
+    }
+    await connectToDatabase()
+    const res = await Product.deleteMany({ _id: { $in: ids } })
+    // res.deletedCount could be used to report how many removed
+    revalidatePath('/admin/products')
+    return {
+      success: true,
+      message: `Deleted ${res.deletedCount || 0} products`,
+    }
+  } catch {
+    return { success: false, message: 'Operation failed' }
+  }
+}
+
 // GET ONE PRODUCT BY ID
 export async function getProductById(productId: string) {
   await connectToDatabase()
@@ -180,8 +199,19 @@ export async function getProductsForCard({
   limit?: number
 }) {
   await connectToDatabase()
+  // Resolve tag to object id when possible
+  let tagId: string | null = null
+  if (mongoose.Types.ObjectId.isValid(tag)) {
+    tagId = tag
+  } else {
+    const found = await Tag.findOne({
+      name: new RegExp(`^${tag}$`, 'i'),
+    }).lean()
+    tagId = found ? found._id.toString() : null
+  }
+
   const products = await Product.find(
-    { tags: { $in: [tag] }, isPublished: true },
+    { tags: { $in: tagId ? [tagId] : [] }, isPublished: true },
     {
       name: 1,
       href: { $concat: ['/product/', '$slug'] },
@@ -206,8 +236,19 @@ export async function getProductsByTag({
   limit?: number
 }) {
   await connectToDatabase()
+  // Resolve tag param to tag id if it's a name
+  let tagId: string | null = null
+  if (mongoose.Types.ObjectId.isValid(tag)) {
+    tagId = tag
+  } else {
+    const found = await Tag.findOne({
+      name: new RegExp(`^${tag}$`, 'i'),
+    }).lean()
+    tagId = found ? found._id.toString() : null
+  }
+
   const products = await Product.find({
-    tags: { $in: [tag] },
+    tags: { $in: tagId ? [tagId] : [] },
     isPublished: true,
   })
     .sort({ createdAt: 'desc' })
@@ -297,7 +338,24 @@ export async function getAllProducts({
   const multilingualFilter = await createMultilingualSearchFilter(searchTerms)
 
   // Traditional filters (non-multilingual)
-  const tagFilter = tag && tag !== 'all' ? { tags: tag } : {}
+  let tagFilter: Record<string, unknown> = {}
+  if (tag && tag !== 'all') {
+    // If it's already an ObjectId string, use it directly
+    if (mongoose.Types.ObjectId.isValid(tag)) {
+      tagFilter = { tags: tag }
+    } else {
+      // Otherwise try to resolve tag name (case-insensitive)
+      const foundTag = await Tag.findOne({
+        name: new RegExp(`^${tag}$`, 'i'),
+      }).lean()
+      if (foundTag) {
+        tagFilter = { tags: foundTag._id.toString() }
+      } else {
+        // No matching tag - make filter match nothing
+        tagFilter = { tags: { $in: [] } }
+      }
+    }
+  }
 
   const ratingFilter =
     rating && rating !== 'all'

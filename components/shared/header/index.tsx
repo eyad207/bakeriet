@@ -84,19 +84,19 @@ export default async function Header() {
                 {/* Main navigation links */}
                 <div className='flex items-center gap-1 bg-gray-50 dark:bg-zinc-800 rounded-full p-1'>
                   <Link
-                    href='/menu'
+                    href='/search?q=all&category=all&tag=all&price=all&rating=all&sort=best-selling&page=1'
                     className='relative group px-5 py-2.5 rounded-full text-sm font-bold bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50'
                   >
                     Menu
                   </Link>
                   <Link
-                    href='/about'
+                    href='/page/about-us'
                     className='relative group px-4 py-2 rounded-full text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-white dark:hover:bg-zinc-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50'
                   >
                     About
                   </Link>
                   <Link
-                    href='/contact'
+                    href='/page/contact-us'
                     className='relative group px-4 py-2 rounded-full text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-white dark:hover:bg-zinc-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50'
                   >
                     Contact
@@ -109,7 +109,9 @@ export default async function Header() {
                     {tags.slice(0, 3).map((tag: string) => (
                       <a
                         key={tag}
-                        href={`/?tag=${encodeURIComponent(tag)}`}
+                        href={`/search?q=all&category=all&tag=${encodeURIComponent(
+                          tag
+                        )}&price=all&rating=all&sort=best-selling&page=1`}
                         className='inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 hover:bg-orange-200 dark:bg-orange-900/30 dark:text-orange-300 dark:hover:bg-orange-900/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50'
                         aria-label={`Filter by ${tag}`}
                       >

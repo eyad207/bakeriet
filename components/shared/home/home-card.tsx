@@ -24,6 +24,7 @@ export function HomeCard({ cards }: { cards: CardItem[] }) {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [currentCardIndex, setCurrentCardIndex] = useState(0)
   const autoScrollIntervalRef = useRef<NodeJS.Timeout | null>(null)
+  const currentCardIndexRef = useRef<number>(0)
   const [isMobile, setIsMobile] = useState(false)
 
   // Add CSS for gradient animation
@@ -62,6 +63,7 @@ export function HomeCard({ cards }: { cards: CardItem[] }) {
 
     const newIndex = Math.max(0, currentCardIndex - 1)
     setCurrentCardIndex(newIndex)
+    currentCardIndexRef.current = newIndex
 
     // Calculate the exact position to scroll to
     const cardElements =
@@ -79,6 +81,7 @@ export function HomeCard({ cards }: { cards: CardItem[] }) {
 
     const newIndex = Math.min(totalCards - 1, currentCardIndex + 1)
     setCurrentCardIndex(newIndex)
+    currentCardIndexRef.current = newIndex
 
     // Calculate the exact position to scroll to
     const cardElements =
@@ -92,46 +95,68 @@ export function HomeCard({ cards }: { cards: CardItem[] }) {
   }
 
   // Auto-scroll functionality - only for mobile
+  // Use a ref to avoid recreating intervals on every currentCardIndex change
+  const startAutoScroll = () => {
+    // Clear any existing interval first
+    if (autoScrollIntervalRef.current) {
+      clearInterval(autoScrollIntervalRef.current)
+    }
+
+    autoScrollIntervalRef.current = setInterval(() => {
+      if (!scrollContainerRef.current) return
+
+      const newIndex = (currentCardIndexRef.current + 1) % totalCards
+      currentCardIndexRef.current = newIndex
+      setCurrentCardIndex(newIndex)
+
+      // Decide selector based on mode
+      const selector = isMobile ? '.card-item' : '.card-desktop'
+      const cardElements = scrollContainerRef.current.querySelectorAll(selector)
+
+      if (cardElements[newIndex]) {
+        scrollContainerRef.current.scrollTo({
+          left:
+            cardElements[newIndex].getBoundingClientRect().left +
+            scrollContainerRef.current.scrollLeft -
+            scrollContainerRef.current.getBoundingClientRect().left,
+          behavior: 'smooth',
+        })
+      } else if (!isMobile) {
+        // Fallback: on desktop, if no matching element, scroll by a step (card width)
+        const c = scrollContainerRef.current
+        const cardEl = c.querySelector('.card-desktop') as HTMLElement | null
+        const style = window.getComputedStyle(c)
+        const gap = parseFloat(style.gap || style.columnGap || '24') || 24
+        const step = cardEl
+          ? cardEl.getBoundingClientRect().width + gap
+          : c.clientWidth * 0.8
+        c.scrollBy({ left: step, behavior: 'smooth' })
+      }
+    }, 3000)
+  }
+
   useEffect(() => {
-    if (!isMobile) {
-      // Make sure to clear any autoScroll if we switch to desktop
+    // Start auto-scroll when on mobile OR when on desktop with many cards (>4)
+    const shouldAuto = isMobile || (!isMobile && totalCards > 4)
+    if (!shouldAuto) {
       if (autoScrollIntervalRef.current) {
         clearInterval(autoScrollIntervalRef.current)
+        autoScrollIntervalRef.current = null
       }
       return
     }
 
-    const startAutoScroll = () => {
-      autoScrollIntervalRef.current = setInterval(() => {
-        if (scrollContainerRef.current) {
-          const newIndex = (currentCardIndex + 1) % totalCards
-          setCurrentCardIndex(newIndex)
-
-          // Scroll to the exact card
-          const cardElements =
-            scrollContainerRef.current.querySelectorAll('.card-item')
-          if (cardElements[newIndex]) {
-            scrollContainerRef.current.scrollTo({
-              left:
-                cardElements[newIndex].getBoundingClientRect().left +
-                scrollContainerRef.current.scrollLeft -
-                scrollContainerRef.current.getBoundingClientRect().left,
-              behavior: 'smooth',
-            })
-          }
-        }
-      }, 3000)
-    }
-
+    // start auto scroll when entering the appropriate mode
     startAutoScroll()
 
-    // Cleanup interval on unmount
     return () => {
       if (autoScrollIntervalRef.current) {
         clearInterval(autoScrollIntervalRef.current)
+        autoScrollIntervalRef.current = null
       }
     }
-  }, [currentCardIndex, totalCards, isMobile])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMobile, totalCards])
 
   // Handle manual scroll - only for mobile
   const handleManualScroll = () => {
@@ -161,35 +186,28 @@ export function HomeCard({ cards }: { cards: CardItem[] }) {
       })
 
       setCurrentCardIndex(closestIndex)
+      currentCardIndexRef.current = closestIndex
     }
 
     // Restart auto-scroll after a pause
     setTimeout(() => {
-      if (autoScrollIntervalRef.current) {
-        clearInterval(autoScrollIntervalRef.current)
-      }
-      autoScrollIntervalRef.current = setInterval(() => {
-        if (scrollContainerRef.current) {
-          const newIndex = (currentCardIndex + 1) % totalCards
-          setCurrentCardIndex(newIndex)
-
-          const cardElements =
-            scrollContainerRef.current.querySelectorAll('.card-item')
-          if (cardElements[newIndex]) {
-            scrollContainerRef.current.scrollTo({
-              left:
-                cardElements[newIndex].getBoundingClientRect().left +
-                scrollContainerRef.current.scrollLeft -
-                scrollContainerRef.current.getBoundingClientRect().left,
-              behavior: 'smooth',
-            })
-          }
-        }
-      }, 3000)
+      // Use the same start helper to ensure a single interval
+      startAutoScroll()
     }, 5000)
   }
 
   // Desktop scroll helpers for when we render a horizontal row (>4 cards)
+  const pauseAndRestartAutoScroll = () => {
+    if (autoScrollIntervalRef.current) {
+      clearInterval(autoScrollIntervalRef.current)
+      autoScrollIntervalRef.current = null
+    }
+    // Restart after 5s
+    setTimeout(() => {
+      startAutoScroll()
+    }, 5000)
+  }
+
   const scrollPrevDesktop = () => {
     const c = scrollContainerRef.current
     if (!c) return
@@ -202,6 +220,8 @@ export function HomeCard({ cards }: { cards: CardItem[] }) {
       : c.clientWidth * 0.8
 
     c.scrollBy({ left: -step, behavior: 'smooth' })
+    // pause auto scroll when user manually navigates
+    pauseAndRestartAutoScroll()
   }
 
   const scrollNextDesktop = () => {
@@ -216,6 +236,8 @@ export function HomeCard({ cards }: { cards: CardItem[] }) {
       : c.clientWidth * 0.8
 
     c.scrollBy({ left: step, behavior: 'smooth' })
+    // pause auto scroll when user manually navigates
+    pauseAndRestartAutoScroll()
   }
 
   // Process items to ensure we only show 4 per card
