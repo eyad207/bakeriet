@@ -131,8 +131,8 @@ export default function HeaderSearch({
 
   // Form classes for header integration
   const formClasses = cn(
-    'flex items-stretch shadow-md rounded-md overflow-hidden',
-    compact ? 'h-9 nav:h-10' : 'h-10',
+    'group flex items-stretch overflow-hidden rounded-2xl bg-white dark:bg-zinc-800/50 backdrop-blur-sm border border-gray-200/50 dark:border-zinc-700/50 shadow-lg hover:shadow-xl transition-all duration-300 focus-within:ring-2 focus-within:ring-orange-500/20 focus-within:border-orange-300 dark:focus-within:border-orange-600',
+    compact ? 'h-10 nav:h-11' : 'h-12',
     className
   )
 
@@ -149,16 +149,14 @@ export default function HeaderSearch({
           handleSearch()
         }}
       >
-        {/* Modern Search Bar - No Category Select */}
-
         {/* Search Input */}
         <div className='relative flex-1'>
           <Input
             ref={inputRef}
             className={cn(
-              'rounded-none dark:border-gray-300 bg-gray-100 text-black border-0 focus-visible:ring-0 focus-visible:ring-offset-0 min-w-0 pr-12',
+              'border-0 bg-transparent text-gray-700 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus-visible:ring-0 focus-visible:ring-offset-0 rounded-none min-w-0 pr-12',
               heightClass,
-              compact ? 'text-xs xs:text-sm' : 'text-sm xs:text-base'
+              compact ? 'text-sm px-3' : 'text-base px-4'
             )}
             placeholder={
               compact ? 'Search menu...' : 'Search our restaurant menu...'
@@ -191,13 +189,18 @@ export default function HeaderSearch({
         <button
           type='submit'
           className={cn(
-            'bg-primary hover:bg-primary/90 active:bg-primary/80 text-primary-foreground text-black rounded-s-none rounded-e-md transition-colors duration-200 flex items-center justify-center',
+            'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 active:from-orange-700 active:to-orange-800 text-white rounded-r-2xl transition-all duration-200 flex items-center justify-center group-hover:shadow-md transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:ring-offset-2',
             heightClass,
-            compact ? 'px-1.5 sm:px-2' : 'px-3 sm:px-4'
+            compact ? 'px-3 sm:px-4' : 'px-5 sm:px-6'
           )}
           aria-label='Search for products'
         >
-          <Search className='w-3 h-3 xs:w-4 xs:h-4' />
+          <Search
+            className={cn(
+              'transition-transform duration-200 group-hover:scale-110',
+              compact ? 'w-4 h-4' : 'w-5 h-5'
+            )}
+          />
         </button>
       </form>
 
@@ -205,36 +208,42 @@ export default function HeaderSearch({
       {showSuggestions && suggestions.length > 0 && (
         <div
           ref={suggestionsRef}
-          className='absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-50 max-h-64 overflow-y-auto'
+          className='absolute top-full left-0 right-0 mt-2 bg-white dark:bg-zinc-800 border border-gray-200/50 dark:border-zinc-700/50 rounded-2xl shadow-xl backdrop-blur-sm z-50 max-h-64 overflow-hidden'
           role='listbox'
           aria-label='Search suggestions'
         >
           <div className='py-2'>
-            <div className='px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider'>
-              Suggestions
+            <div className='px-4 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-100 dark:border-zinc-700'>
+              Quick Suggestions
             </div>
-            {suggestions.map((suggestion, index) => (
-              <button
-                key={suggestion}
-                onClick={() => handleSuggestionClick(suggestion)}
-                className={cn(
-                  'w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors',
-                  index === selectedIndex &&
-                    'bg-blue-50 border-r-2 border-blue-500'
-                )}
-                role='option'
-                aria-selected={index === selectedIndex}
-                tabIndex={-1}
-              >
-                <div className='flex items-center gap-2'>
-                  <Search
-                    className='h-3 w-3 text-gray-400'
-                    aria-hidden='true'
-                  />
-                  <span className='text-sm text-gray-900'>{suggestion}</span>
-                </div>
-              </button>
-            ))}
+            <div className='overflow-y-auto max-h-48'>
+              {suggestions.map((suggestion, index) => (
+                <button
+                  key={suggestion}
+                  onClick={() => handleSuggestionClick(suggestion)}
+                  className={cn(
+                    'w-full text-left px-4 py-3 hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-all duration-200 group',
+                    index === selectedIndex &&
+                      'bg-orange-50 dark:bg-orange-900/30 border-r-4 border-orange-500'
+                  )}
+                  role='option'
+                  aria-selected={index === selectedIndex}
+                  tabIndex={-1}
+                >
+                  <div className='flex items-center gap-3'>
+                    <div className='flex items-center justify-center w-8 h-8 bg-orange-100 dark:bg-orange-900/30 rounded-full group-hover:bg-orange-200 dark:group-hover:bg-orange-900/50 transition-colors duration-200'>
+                      <Search
+                        className='h-4 w-4 text-orange-600 dark:text-orange-400'
+                        aria-hidden='true'
+                      />
+                    </div>
+                    <span className='text-sm font-medium text-gray-700 dark:text-gray-200 group-hover:text-orange-700 dark:group-hover:text-orange-300 transition-colors duration-200'>
+                      {suggestion}
+                    </span>
+                  </div>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       )}
