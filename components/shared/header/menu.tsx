@@ -32,6 +32,7 @@ import { NavigationButton } from './navigation-button'
 import { getAllTags } from '@/lib/actions/product.actions'
 import CurrencySwitcher from './currency-switcher'
 import ThemeSwitcher from './theme-switcher'
+import LanguageSwitcher from './language-switcher'
 
 const Menu = async ({}: { forAdmin?: boolean }) => {
   // fetch current user session for mobile menu actions
@@ -142,6 +143,7 @@ const Menu = async ({}: { forAdmin?: boolean }) => {
               <div className='space-y-2'>
                 <CurrencySwitcher />
                 <ThemeSwitcher />
+                <LanguageSwitcher />
                 {/* Featured navigation items */}
                 <SheetClose asChild>
                   <Link
