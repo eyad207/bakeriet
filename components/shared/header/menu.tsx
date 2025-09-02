@@ -173,7 +173,7 @@ const Menu = async ({}: { forAdmin?: boolean }) => {
                 </SheetClose>
                 <SheetClose asChild>
                   <Link
-                    href='/pages/about-us'
+                    href='/page/about-us'
                     className='w-full py-3 px-4 bg-gray-50 dark:bg-zinc-800 hover:bg-gray-100 dark:hover:bg-zinc-700 rounded-xl transition-all duration-200 text-gray-700 dark:text-gray-300 font-medium flex items-center gap-3 group'
                   >
                     <Info className='h-4 w-4 text-orange-500 group-hover:text-orange-600' />
@@ -182,7 +182,7 @@ const Menu = async ({}: { forAdmin?: boolean }) => {
                 </SheetClose>
                 <SheetClose asChild>
                   <Link
-                    href='/pages/contact-us'
+                    href='/page/contact-us'
                     className='w-full py-3 px-4 bg-gray-50 dark:bg-zinc-800 hover:bg-gray-100 dark:hover:bg-zinc-700 rounded-xl transition-all duration-200 text-gray-700 dark:text-gray-300 font-medium flex items-center gap-3 group'
                   >
                     <MessageCircle className='h-4 w-4 text-orange-500 group-hover:text-orange-600' />
@@ -190,24 +190,20 @@ const Menu = async ({}: { forAdmin?: boolean }) => {
                   </Link>
                 </SheetClose>
 
-                {/* Tags as modern chips */}
                 {tags.length > 0 && (
-                  <div className='pt-4'>
-                    <h4 className='text-sm font-medium text-gray-600 dark:text-gray-400 mb-3'>
-                      Categories
-                    </h4>
-                    <div className='flex flex-wrap gap-2'>
-                      {tags.slice(0, 4).map((tag: string) => (
-                        <SheetClose key={tag} asChild>
-                          <Link
-                            href={`/?tag=${encodeURIComponent(tag)}`}
-                            className='inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 hover:bg-orange-200 dark:bg-orange-900/30 dark:text-orange-300 dark:hover:bg-orange-900/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50'
-                          >
-                            {tag}
-                          </Link>
-                        </SheetClose>
-                      ))}
-                    </div>
+                  <div className='flex items-center gap-2 ml-4'>
+                    {tags.slice(0, 3).map((tag: string) => (
+                      <a
+                        key={tag}
+                        href={`/search?q=all&category=all&tag=${encodeURIComponent(
+                          tag
+                        )}&price=all&rating=all&sort=best-selling&page=1`}
+                        className='inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 hover:bg-orange-200 dark:bg-orange-900/30 dark:text-orange-300 dark:hover:bg-orange-900/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50'
+                        aria-label={`Filter by ${tag}`}
+                      >
+                        {tag}
+                      </a>
+                    ))}
                   </div>
                 )}
               </div>
