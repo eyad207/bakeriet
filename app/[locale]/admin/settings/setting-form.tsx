@@ -13,6 +13,7 @@ import LanguageForm from './language-form'
 import CurrencyForm from './currency-form'
 import PaymentMethodForm from './payment-method-form'
 import DeliveryDateForm from './delivery-date-form'
+import OpeningHoursForm from './opening-hours-form'
 import SiteInfoForm from './site-info-form'
 import CommonForm from './common-form'
 import CarouselForm from './carousel-form'
@@ -20,9 +21,28 @@ import CarouselForm from './carousel-form'
 const SettingForm = ({ setting }: { setting: ISettingInput }) => {
   const { setSetting } = useSetting()
 
+  // Ensure openingHours has all 7 days
+  const defaultOpeningHours = [
+    { day: 'monday' as const, isOpen: false, openTime: '', closeTime: '' },
+    { day: 'tuesday' as const, isOpen: false, openTime: '', closeTime: '' },
+    { day: 'wednesday' as const, isOpen: false, openTime: '', closeTime: '' },
+    { day: 'thursday' as const, isOpen: false, openTime: '', closeTime: '' },
+    { day: 'friday' as const, isOpen: false, openTime: '', closeTime: '' },
+    { day: 'saturday' as const, isOpen: false, openTime: '', closeTime: '' },
+    { day: 'sunday' as const, isOpen: false, openTime: '', closeTime: '' },
+  ]
+
+  const settingWithDefaults = {
+    ...setting,
+    openingHours:
+      setting.openingHours?.length === 7
+        ? setting.openingHours
+        : defaultOpeningHours,
+  }
+
   const form = useForm<ISettingInput>({
     resolver: zodResolver(SettingInputSchema),
-    defaultValues: setting,
+    defaultValues: settingWithDefaults,
   })
   const {
     formState: { isSubmitting },
@@ -127,6 +147,8 @@ const SettingForm = ({ setting }: { setting: ISettingInput }) => {
         <PaymentMethodForm id='setting-payment-methods' form={form} />
 
         <DeliveryDateForm id='setting-delivery-dates' form={form} />
+
+        <OpeningHoursForm id='setting-opening-hours' form={form} />
 
         <div>
           <Button

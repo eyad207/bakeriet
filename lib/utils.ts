@@ -214,3 +214,109 @@ export const getFilterUrl = ({
   if (sort) newParams.sort = sort
   return `/search?${new URLSearchParams(newParams).toString()}`
 }
+
+/**
+ * Check if the current time is within the opening hours for the given day
+ */
+export function isWithinOpeningHours(
+  openingHours: Array<{
+    day: string
+    isOpen: boolean
+    openTime?: string
+    closeTime?: string
+  }>
+): { isOpen: boolean; message?: string } {
+  const now = new Date()
+  const currentTime = now.toTimeString().slice(0, 5) // HH:MM format
+
+  // Map JavaScript day to our day format
+  const dayMap = {
+    0: 'sunday',
+    1: 'monday',
+    2: 'tuesday',
+    3: 'wednesday',
+    4: 'thursday',
+    5: 'friday',
+    6: 'saturday',
+  }
+
+  const todayString = dayMap[now.getDay() as keyof typeof dayMap]
+  const todayHours = openingHours.find((h) => h.day === todayString)
+
+  if (!todayHours) {
+    return { isOpen: false, message: 'Opening hours not configured for today' }
+  }
+
+  if (!todayHours.isOpen) {
+    return { isOpen: false, message: `We are closed on ${todayString}s` }
+  }
+
+  // Check if times are provided
+  if (!todayHours.openTime || !todayHours.closeTime) {
+    return { isOpen: false, message: 'Opening hours not properly configured' }
+  }
+
+  // Convert times to minutes for comparison
+  const [currentHour, currentMin] = currentTime.split(':').map(Number)
+  const [openHour, openMin] = todayHours.openTime.split(':').map(Number)
+  const [closeHour, closeMin] = todayHours.closeTime.split(':').map(Number)
+
+  const currentMinutes = currentHour * 60 + currentMin
+  const openMinutes = openHour * 60 + openMin
+  const closeMinutes = closeHour * 60 + closeMin
+
+  if (currentMinutes < openMinutes) {
+    return {
+      isOpen: false,
+      message: `We open at ${todayHours.openTime} today`,
+    }
+  }
+
+  if (currentMinutes >= closeMinutes) {
+    return {
+      isOpen: false,
+      message: `We closed at ${todayHours.closeTime} today`,
+    }
+  }
+
+  return { isOpen: true }
+}
+
+/**
+ * Get next opening time if currently closed
+ */
+export function getNextOpeningTime(
+  openingHours: Array<{
+    day: string
+    isOpen: boolean
+    openTime?: string
+    closeTime?: string
+  }>
+): string | null {
+  const now = new Date()
+  const dayMap = [
+    'sunday',
+    'monday',
+    'tuesday',
+    'wednesday',
+    'thursday',
+    'friday',
+    'saturday',
+  ]
+
+  // Try next 7 days
+  for (let i = 1; i <= 7; i++) {
+    const futureDate = new Date(now)
+    futureDate.setDate(now.getDate() + i)
+    const futureDayString = dayMap[futureDate.getDay()]
+
+    const dayHours = openingHours.find((h) => h.day === futureDayString)
+    if (dayHours?.isOpen && dayHours.openTime) {
+      const dayName =
+        futureDayString.charAt(0).toUpperCase() + futureDayString.slice(1)
+      return `${dayName} at ${dayHours.openTime}`
+    }
+  }
+
+  return null
+}

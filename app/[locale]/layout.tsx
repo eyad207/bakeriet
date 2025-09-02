@@ -86,7 +86,7 @@ export default async function AppLayout({
   params,
   children,
 }: {
-  params: { locale: string }
+  params: Promise<{ locale: string }>
   children: React.ReactNode
 }) {
   const setting = await getSetting()
@@ -99,7 +99,7 @@ export default async function AppLayout({
   if (!routing.locales.includes(locale as any)) {
     notFound()
   }
-  const messages = await getMessages()
+  const messages = await getMessages({ locale })
 
   return (
     <html

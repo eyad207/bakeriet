@@ -100,6 +100,26 @@ const settingSchema = new Schema<ISetting>(
       },
     ],
     defaultDeliveryDate: { type: String, required: true },
+    openingHours: [
+      {
+        day: {
+          type: String,
+          required: true,
+          enum: [
+            'monday',
+            'tuesday',
+            'wednesday',
+            'thursday',
+            'friday',
+            'saturday',
+            'sunday',
+          ],
+        },
+        isOpen: { type: Boolean, required: true, default: false },
+        openTime: { type: String, required: false },
+        closeTime: { type: String, required: false },
+      },
+    ],
   },
   {
     timestamps: true,

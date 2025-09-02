@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Zoom from 'react-medium-image-zoom'
 import 'react-medium-image-zoom/dist/styles.css'
-import { ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 export default function ProductGallery({ images }: { images: string[] }) {
@@ -57,15 +57,6 @@ export default function ProductGallery({ images }: { images: string[] }) {
             </Button>
           </>
         )}
-
-        {/* Zoom Indicator */}
-        <div className='absolute bottom-4 right-4 transition-all duration-300 group-hover:scale-110'>
-          <div className='bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer'>
-            <ZoomIn className='w-4 h-4' />
-            <span className='hidden sm:inline'>Click to zoom</span>
-            <span className='sm:hidden'>Zoom</span>
-          </div>
-        </div>
 
         {/* Image Counter */}
         {images.length > 1 && (

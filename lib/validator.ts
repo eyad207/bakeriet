@@ -304,6 +304,53 @@ export const DeliveryDateSchema = z.object({
     .min(0, 'Free shipping min amount must be at least 0'),
 })
 
+export const OpeningHourSchema = z
+  .object({
+    day: z.enum([
+      'monday',
+      'tuesday',
+      'wednesday',
+      'thursday',
+      'friday',
+      'saturday',
+      'sunday',
+    ]),
+    isOpen: z.boolean().default(false),
+    openTime: z
+      .string()
+      .regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Invalid time format (HH:MM)')
+      .optional()
+      .or(z.literal('')),
+    closeTime: z
+      .string()
+      .regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Invalid time format (HH:MM)')
+      .optional()
+      .or(z.literal('')),
+  })
+  .refine(
+    (data) => {
+      // If closed, no validation needed for times
+      if (!data.isOpen) return true
+      // If open, both times must be provided and not empty
+      if (
+        !data.openTime ||
+        !data.closeTime ||
+        data.openTime === '' ||
+        data.closeTime === ''
+      )
+        return false
+      const [openHour, openMin] = data.openTime.split(':').map(Number)
+      const [closeHour, closeMin] = data.closeTime.split(':').map(Number)
+      const openMinutes = openHour * 60 + openMin
+      const closeMinutes = closeHour * 60 + closeMin
+      return closeMinutes > openMinutes
+    },
+    {
+      message:
+        'When open, both opening and closing times are required, and closing time must be after opening time',
+    }
+  )
+
 export const SettingInputSchema = z.object({
   // PROMPT: create fields
   // codeium, based on the mongoose schema for settings
@@ -359,4 +406,7 @@ export const SettingInputSchema = z.object({
     .array(DeliveryDateSchema)
     .min(1, 'At least one delivery date is required'),
   defaultDeliveryDate: z.string().min(1, 'Delivery date is required'),
+  openingHours: z
+    .array(OpeningHourSchema)
+    .length(7, 'All 7 days of the week must be configured'),
 })

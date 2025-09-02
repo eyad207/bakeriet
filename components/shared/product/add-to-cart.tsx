@@ -10,8 +10,10 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import useCartStore from '@/hooks/use-cart-store'
+import useSettingStore from '@/hooks/use-setting-store'
 import { useToast } from '@/hooks/use-toast'
 import { OrderItem } from '@/types'
+import { isWithinOpeningHours } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -27,6 +29,7 @@ export default function AddToCart({
 }) {
   const router = useRouter()
   const { toast } = useToast()
+  const { setting } = useSettingStore()
 
   const { addItem } = useCartStore()
 
@@ -45,6 +48,16 @@ export default function AddToCart({
     if (e) {
       e.preventDefault()
       e.stopPropagation()
+    }
+
+    // Check opening hours first
+    const openingStatus = isWithinOpeningHours(setting.openingHours)
+    if (!openingStatus.isOpen) {
+      toast({
+        variant: 'destructive',
+        description: openingStatus.message || 'We are currently closed',
+      })
+      return
     }
 
     try {
@@ -96,6 +109,16 @@ export default function AddToCart({
     if (e) {
       e.preventDefault()
       e.stopPropagation()
+    }
+
+    // Check opening hours first
+    const openingStatus = isWithinOpeningHours(setting.openingHours)
+    if (!openingStatus.isOpen) {
+      toast({
+        variant: 'destructive',
+        description: openingStatus.message || 'We are currently closed',
+      })
+      return
     }
 
     try {

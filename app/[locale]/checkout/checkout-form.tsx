@@ -24,7 +24,7 @@ import { createOrder } from '@/lib/actions/order.actions'
 import {
   calculateFutureDate,
   formatDateTime,
-  timeUntilMidnight,
+  isWithinOpeningHours,
 } from '@/lib/utils'
 import { ShippingAddressSchema } from '@/lib/validator'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -73,6 +73,7 @@ const CheckoutForm = () => {
   const { toast } = useToast()
   const router = useRouter()
   const {
+    setting,
     setting: { defaultPaymentMethod, availableDeliveryDates },
   } = useSettingStore()
 
@@ -91,7 +92,6 @@ const CheckoutForm = () => {
     setPaymentMethod,
     updateItem,
     removeItem,
-    setDeliveryDateIndex,
     refreshCartStock,
     clearCart,
   } = useCartStore()
@@ -150,6 +150,16 @@ const CheckoutForm = () => {
     useState<boolean>(false)
 
   const handlePlaceOrder = async () => {
+    // Check opening hours first
+    const openingStatus = isWithinOpeningHours(setting.openingHours)
+    if (!openingStatus.isOpen) {
+      toast({
+        description: openingStatus.message || 'We are currently closed',
+        variant: 'destructive',
+      })
+      return
+    }
+
     // If total price is 0, automatically mark as paid and skip payment
     const isFreeOrder = totalPrice === 0
 
@@ -667,23 +677,6 @@ const CheckoutForm = () => {
                 </div>
                 <Card className='md:ml-8'>
                   <CardContent className='p-4'>
-                    <p className='mb-2'>
-                      <span className='text-lg font-bold text-green-700'>
-                        {t('arriving')}{' '}
-                        {
-                          formatDateTime(
-                            calculateFutureDate(
-                              availableDeliveryDates[deliveryDateIndex!]
-                                .daysToDeliver
-                            )
-                          ).dateOnly
-                        }
-                      </span>{' '}
-                      {t('orderInNext', {
-                        hours: timeUntilMidnight().hours,
-                        minutes: timeUntilMidnight().minutes,
-                      })}
-                    </p>
                     <div className='grid md:grid-cols-2 gap-6'>
                       <div>
                         {items.map((item, index) => (
@@ -767,60 +760,6 @@ const CheckoutForm = () => {
                             </div>
                           </div>
                         ))}
-                      </div>
-                      <div>
-                        <div className=' font-bold'>
-                          <p className='mb-2'>{t('chooseShippingSpeed')}:</p>
-
-                          <ul>
-                            <RadioGroup
-                              value={
-                                availableDeliveryDates[deliveryDateIndex!].name
-                              }
-                              onValueChange={(value) =>
-                                setDeliveryDateIndex(
-                                  availableDeliveryDates.findIndex(
-                                    (address) => address.name === value
-                                  )!
-                                )
-                              }
-                            >
-                              {availableDeliveryDates.map((dd) => (
-                                <div key={dd.name} className='flex'>
-                                  <RadioGroupItem
-                                    value={dd.name}
-                                    id={`address-${dd.name}`}
-                                  />
-                                  <Label
-                                    className='pl-2 space-y-2 cursor-pointer'
-                                    htmlFor={`address-${dd.name}`}
-                                  >
-                                    <div className='text-green-700 font-semibold'>
-                                      {
-                                        formatDateTime(
-                                          calculateFutureDate(dd.daysToDeliver)
-                                        ).dateOnly
-                                      }
-                                    </div>
-                                    <div>
-                                      {(dd.freeShippingMinPrice > 0 &&
-                                      itemsPrice >= dd.freeShippingMinPrice
-                                        ? 0
-                                        : dd.shippingPrice) === 0 ? (
-                                        t('freeShipping')
-                                      ) : (
-                                        <ProductPrice
-                                          price={dd.shippingPrice}
-                                          plain
-                                        />
-                                      )}
-                                    </div>
-                                  </Label>
-                                </div>
-                              ))}
-                            </RadioGroup>
-                          </ul>
-                        </div>
                       </div>
                     </div>
                   </CardContent>

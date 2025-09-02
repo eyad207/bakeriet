@@ -8,6 +8,7 @@ import {
   Languages,
   Package,
   SettingsIcon,
+  Clock,
 } from 'lucide-react'
 
 import { useEffect, useState } from 'react'
@@ -70,6 +71,11 @@ const SettingNav = () => {
             name: 'Delivery Dates',
             hash: 'setting-delivery-dates',
             icon: <Package />,
+          },
+          {
+            name: 'Opening Hours',
+            hash: 'setting-opening-hours',
+            icon: <Clock />,
           },
         ].map((item) => (
           <Button

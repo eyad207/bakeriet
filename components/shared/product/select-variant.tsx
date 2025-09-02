@@ -23,7 +23,7 @@ export default function SelectVariant({
     <>
       {product.colors.length > 0 && (
         <div className='space-x-2 space-y-2'>
-          <div>Color:</div>
+          <div>Type:</div>
           {product.colors.map((x, index) => (
             <Button
               asChild
@@ -55,7 +55,7 @@ export default function SelectVariant({
       )}
       {selectedColor && getSizesForColor(selectedColor).length > 0 && (
         <div className='mt-2 space-x-2 space-y-2'>
-          <div>Size:</div>
+          <div>Størrelsen:</div>
           {getSizesForColor(selectedColor).map((x, index) => (
             <Button
               asChild

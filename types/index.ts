@@ -2,6 +2,7 @@ import {
   CarouselSchema,
   CartSchema,
   DeliveryDateSchema,
+  OpeningHourSchema,
   OrderInputSchema,
   OrderItemSchema,
   PaymentMethodSchema,
@@ -92,6 +93,7 @@ export type SiteLanguage = z.infer<typeof SiteLanguageSchema>
 export type SiteCurrency = z.infer<typeof SiteCurrencySchema>
 export type PaymentMethod = z.infer<typeof PaymentMethodSchema>
 export type DeliveryDate = z.infer<typeof DeliveryDateSchema>
+export type OpeningHour = z.infer<typeof OpeningHourSchema>
 
 export type IProduct = {
   name: string

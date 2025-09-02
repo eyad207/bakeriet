@@ -437,12 +437,12 @@ export default function CartSidebar() {
                 </div>
                 <div>
                   <h2 className='text-2xl font-extrabold tracking-wide drop-shadow-sm'>
-                    Your Order
+                    Din Handlekurv
                   </h2>
                   <p className='text-white/90 text-sm font-medium'>
                     {cartSummary.totalItems === 0
-                      ? 'Cart is empty'
-                      : `${cartSummary.totalItems} item${cartSummary.totalItems === 1 ? '' : 's'}`}
+                      ? 'Handlekurven er tom'
+                      : `${cartSummary.totalItems} vare${cartSummary.totalItems === 1 ? '' : 'r'}`}
                   </p>
                 </div>
               </div>
@@ -450,7 +450,7 @@ export default function CartSidebar() {
                 <div className='flex items-center gap-2'>
                   <span className='text-sm font-semibold text-white/90'>
                     {cartSummary.totalItems}{' '}
-                    {cartSummary.totalItems === 1 ? 'item' : 'items'}
+                    {cartSummary.totalItems === 1 ? 'Vare' : 'Varer'}
                   </span>
                   {validation.hasErrors && (
                     <Badge
@@ -639,7 +639,7 @@ export default function CartSidebar() {
                           <div className='text-zinc-500 dark:text-zinc-300 text-xs mt-1 flex gap-2'>
                             {item.color && (
                               <span className='mr-2'>
-                                <span className='font-medium'>Color:</span>{' '}
+                                <span className='font-medium'>Type</span>{' '}
                                 {item.color}
                               </span>
                             )}
@@ -710,15 +710,15 @@ export default function CartSidebar() {
                       <div className='flex items-center gap-2 mb-1'>
                         <ShoppingBag className='h-4 w-4 text-primary' />
                         <span className='font-medium text-primary'>
-                          Free Shipping Available
+                          Gratis levering tilgjengelig
                         </span>
                       </div>
                       <p className='text-xs text-muted-foreground'>
-                        Add{' '}
+                        Legg til{' '}
                         <span className='text-primary font-medium'>
                           {formatPrice(cartSummary.freeShippingRemaining)}
                         </span>{' '}
-                        more to qualify for free shipping
+                        mer for å kvalifisere for gratis levering
                       </p>
                       <div className='mt-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2'>
                         <div
@@ -736,7 +736,7 @@ export default function CartSidebar() {
                           <div className='h-2 w-2 bg-white rounded-full' />
                         </div>
                         <span className='font-medium'>
-                          Your order qualifies for FREE Shipping
+                          Du har kvalifisert for gratis levering!
                         </span>
                       </div>
                     </div>
@@ -745,8 +745,8 @@ export default function CartSidebar() {
                   {/* Enhanced subtotal */}
                   <div className='flex items-center justify-between mb-4'>
                     <span className='text-muted-foreground'>
-                      Subtotal ({cartSummary.totalItems}{' '}
-                      {cartSummary.totalItems === 1 ? 'item' : 'items'})
+                      Totalt ({cartSummary.totalItems}{' '}
+                      {cartSummary.totalItems === 1 ? 'Vare' : 'Varer'})
                     </span>
                     <span className='font-bold text-lg'>
                       <ProductPrice price={itemsPrice} plain />
@@ -785,7 +785,7 @@ export default function CartSidebar() {
                     ) : isRefreshing ? (
                       <>
                         <Loader2 className='h-5 w-5 mr-2 animate-spin' />
-                        Updating
+                        Oppdaterer
                       </>
                     ) : (
                       'Proceed to Checkout'
@@ -801,7 +801,7 @@ export default function CartSidebar() {
                   )}
                   onClick={closeSidebar}
                 >
-                  Go to Cart
+                  Gå til Handlekurven
                 </Link>
 
                 {items.length > 0 && (
@@ -816,12 +816,12 @@ export default function CartSidebar() {
                       {isRefreshing ? (
                         <>
                           <Loader2 className='h-4 w-4 mr-1 animate-spin' />
-                          Refreshing
+                          Oppdaterer
                         </>
                       ) : (
                         <>
                           <RefreshCw className='h-4 w-4 mr-1' />
-                          Refresh
+                          Oppdater
                         </>
                       )}
                     </Button>
@@ -837,7 +837,7 @@ export default function CartSidebar() {
                       className='flex-1 text-xs rounded-xl border border-red-400 bg-red-50 hover:bg-red-200 text-red-700 shadow-sm hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-1 focus-visible:ring-2 focus-visible:ring-red-300'
                     >
                       <TrashIcon className='h-4 w-4 mr-1' />
-                      Empty Cart
+                      Tøm Handlekurven
                     </Button>
                   </div>
                 )}

@@ -9,7 +9,6 @@ import {
   LogOut,
   LogIn,
   UtensilsCrossed,
-  Calendar,
   ShoppingCart,
   Info,
   MessageCircle,
@@ -156,7 +155,7 @@ const Menu = async ({}: { forAdmin?: boolean }) => {
                 {/* Featured navigation items */}
                 <SheetClose asChild>
                   <Link
-                    href='/menu'
+                    href='/search?q=all&category=all&tag=all&price=all&rating=all&sort=best-selling&page=1'
                     className='w-full py-4 px-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 rounded-xl transition-all duration-200 text-white font-bold flex items-center gap-3 shadow-md hover:shadow-lg group'
                   >
                     <UtensilsCrossed className='h-5 w-5 group-hover:scale-110 transition-transform' />
@@ -165,27 +164,16 @@ const Menu = async ({}: { forAdmin?: boolean }) => {
                 </SheetClose>
                 <SheetClose asChild>
                   <Link
-                    href='/order'
+                    href='/search?q=all&category=all&tag=all&price=all&rating=all&sort=best-selling&page=1'
                     className='w-full py-3 px-4 bg-amber-50 dark:bg-amber-900/20 hover:bg-amber-100 dark:hover:bg-amber-900/30 rounded-xl transition-all duration-200 text-amber-700 dark:text-amber-400 font-semibold flex items-center gap-3 group border border-amber-200 dark:border-amber-800'
                   >
                     <ShoppingCart className='h-4 w-4 group-hover:scale-110 transition-transform' />
                     Order Online
                   </Link>
                 </SheetClose>
-
-                {/* Regular navigation */}
                 <SheetClose asChild>
                   <Link
-                    href='/reservations'
-                    className='w-full py-3 px-4 bg-gray-50 dark:bg-zinc-800 hover:bg-gray-100 dark:hover:bg-zinc-700 rounded-xl transition-all duration-200 text-gray-700 dark:text-gray-300 font-medium flex items-center gap-3 group'
-                  >
-                    <Calendar className='h-4 w-4 text-orange-500 group-hover:text-orange-600' />
-                    Reservations
-                  </Link>
-                </SheetClose>
-                <SheetClose asChild>
-                  <Link
-                    href='/about'
+                    href='/pages/about-us'
                     className='w-full py-3 px-4 bg-gray-50 dark:bg-zinc-800 hover:bg-gray-100 dark:hover:bg-zinc-700 rounded-xl transition-all duration-200 text-gray-700 dark:text-gray-300 font-medium flex items-center gap-3 group'
                   >
                     <Info className='h-4 w-4 text-orange-500 group-hover:text-orange-600' />
@@ -194,7 +182,7 @@ const Menu = async ({}: { forAdmin?: boolean }) => {
                 </SheetClose>
                 <SheetClose asChild>
                   <Link
-                    href='/contact'
+                    href='/pages/contact-us'
                     className='w-full py-3 px-4 bg-gray-50 dark:bg-zinc-800 hover:bg-gray-100 dark:hover:bg-zinc-700 rounded-xl transition-all duration-200 text-gray-700 dark:text-gray-300 font-medium flex items-center gap-3 group'
                   >
                     <MessageCircle className='h-4 w-4 text-orange-500 group-hover:text-orange-600' />

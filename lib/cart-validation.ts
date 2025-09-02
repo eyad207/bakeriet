@@ -3,6 +3,8 @@
 import { Cart, OrderItem } from '@/types'
 import { connectToDatabase } from './db'
 import Product from './db/models/product.model'
+import { getSetting } from './actions/setting.actions'
+import { isWithinOpeningHours } from './utils'
 
 export interface CartValidationResult {
   isValid: boolean
@@ -63,6 +65,21 @@ export async function validateCart(cart: Cart): Promise<CartValidationResult> {
   }
 
   try {
+    // Check opening hours first
+    const setting = await getSetting()
+    const openingStatus = isWithinOpeningHours(setting.openingHours)
+
+    if (!openingStatus.isOpen) {
+      return {
+        isValid: false,
+        errors: [openingStatus.message || 'We are currently closed'],
+        validItems: [],
+        invalidItems: cart.items,
+        warnings: [],
+        outdatedItems: [],
+      }
+    }
+
     // Connect to database to check current product data
     await connectToDatabase()
 

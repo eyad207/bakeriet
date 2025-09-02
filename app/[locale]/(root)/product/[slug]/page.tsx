@@ -2,7 +2,6 @@ import { auth } from '@/auth'
 import AddToCart from '@/components/shared/product/add-to-cart'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import {
   getProductBySlug,
   getRelatedProductsByCategory,
@@ -20,17 +19,11 @@ import TranslatedText from '@/components/shared/translated-text'
 import { getTranslations } from 'next-intl/server'
 import {
   Clock,
-  Users,
-  Flame,
   Star,
-  ChefHat,
-  Heart,
-  Share2,
   ShoppingBag,
   CheckCircle,
   AlertTriangle,
   Utensils,
-  Award,
   Info,
 } from 'lucide-react'
 
@@ -100,27 +93,6 @@ export default async function ProductDetails(props: {
             <div className='lg:sticky lg:top-8'>
               <div className='bg-white dark:bg-zinc-800 rounded-3xl shadow-2xl overflow-hidden border border-orange-100 dark:border-orange-900/30'>
                 <ProductGallery images={product.images} />
-
-                {/* Image Overlay Info */}
-                <div className='absolute top-4 left-4 flex flex-col gap-2'>
-                  <Badge className='bg-orange-500 text-white font-semibold'>
-                    <ChefHat className='w-3 h-3 mr-1' />
-                    {product.category}
-                  </Badge>
-                  {product.avgRating >= 4.5 && (
-                    <Badge className='bg-amber-500 text-white font-semibold'>
-                      <Award className='w-3 h-3 mr-1' />
-                      Chef&apos;s Choice
-                    </Badge>
-                  )}
-                  {product.tags?.includes('signature') && (
-                    <Badge className='bg-red-500 text-white font-semibold'>
-                      <Flame className='w-3 h-3 mr-1' />
-                      Signature Dish
-                    </Badge>
-                  )}
-                </div>
-
                 {/* Discount Badge */}
                 {product.discount && (
                   <div className='absolute top-4 right-4'>
@@ -143,22 +115,6 @@ export default async function ProductDetails(props: {
                   >
                     {product.brand}
                   </Badge>
-                  <div className='flex items-center gap-2'>
-                    <Button
-                      variant='outline'
-                      size='icon'
-                      className='rounded-full'
-                    >
-                      <Heart className='w-4 h-4' />
-                    </Button>
-                    <Button
-                      variant='outline'
-                      size='icon'
-                      className='rounded-full'
-                    >
-                      <Share2 className='w-4 h-4' />
-                    </Button>
-                  </div>
                 </div>
 
                 <h1 className='text-3xl lg:text-4xl font-bold text-gray-900 dark:text-gray-100 leading-tight'>
@@ -185,10 +141,6 @@ export default async function ProductDetails(props: {
                   <div className='flex items-center gap-1 text-gray-600'>
                     <Clock className='w-4 h-4' />
                     <span>15-20 min</span>
-                  </div>
-                  <div className='flex items-center gap-1 text-gray-600'>
-                    <Users className='w-4 h-4' />
-                    <span>Serves 1-2</span>
                   </div>
                 </div>
 
