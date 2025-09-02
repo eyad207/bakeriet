@@ -667,8 +667,8 @@ export default function OrdersClient() {
                               </>
                             ) : (
                               <>
-                                <EyeOff className='h-4 w-4 text-gray-500' />
-                                <span className='text-sm font-medium text-gray-600 dark:text-gray-400'>
+                                <EyeOff className='h-4 w-4 text-red-500' />
+                                <span className='text-sm font-medium text-red-600 dark:text-red-400'>
                                   New
                                 </span>
                               </>
