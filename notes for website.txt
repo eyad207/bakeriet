@@ -1,3 +1,3 @@
 use Select-varient to remove size quantity.
-use headers/index to add remove links from under header.
+use headers/index to add remove links from under header..
 If you get 404 stripe problem then it is a webhook problem (recreate a webhook)
