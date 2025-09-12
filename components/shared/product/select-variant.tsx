@@ -75,7 +75,7 @@ export default function SelectVariant({
                   size: x.size || '',
                 })}`}
               >
-                {x.size} ({x.countInStock})
+                {x.size}
               </Link>
             </Button>
           ))}
