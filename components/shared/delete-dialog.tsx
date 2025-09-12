@@ -29,7 +29,7 @@ export default function DeleteDialog({
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
-        <Button size='sm' variant='outline' className='bg-red-700'>
+        <Button size='sm' variant='outline' className='bg-red-500'>
           Delete
         </Button>
       </AlertDialogTrigger>
