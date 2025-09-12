@@ -35,9 +35,7 @@ const persianProducts: IProductInput[] = [
     colors: [
       {
         color: 'Fresh Grilled',
-        sizes: [
-          { size: 'Regular', countInStock: 15 },
-        ],
+        sizes: [{ size: 'Regular', countInStock: 15 }],
       },
     ],
     reviews: [],
@@ -67,9 +65,7 @@ const persianProducts: IProductInput[] = [
     colors: [
       {
         color: 'Fresh Grilled',
-        sizes: [
-          { size: 'Regular', countInStock: 12 },
-        ],
+        sizes: [{ size: 'Regular', countInStock: 12 }],
       },
     ],
     reviews: [],
@@ -79,7 +75,9 @@ const persianProducts: IProductInput[] = [
     name: 'Bakhtiari',
     slug: toSlug('Bakhtiari'),
     category: 'Main Dishes',
-    images: ['/images/products/WhatsApp Bilde 2025-09-12 kl. 19.04.39_a1d75d04.jpg'],
+    images: [
+      '/images/products/WhatsApp Bilde 2025-09-12 kl. 19.04.39_a1d75d04.jpg',
+    ],
     tags: ['signature', 'grilled', 'lamb', 'chicken'],
     isPublished: true,
     price: 259,
@@ -99,9 +97,7 @@ const persianProducts: IProductInput[] = [
     colors: [
       {
         color: 'Fresh Grilled',
-        sizes: [
-          { size: 'Regular', countInStock: 10 },
-        ],
+        sizes: [{ size: 'Regular', countInStock: 10 }],
       },
     ],
     reviews: [],
@@ -111,7 +107,9 @@ const persianProducts: IProductInput[] = [
     name: 'Chenjeh',
     slug: toSlug('Chenjeh'),
     category: 'Main Dishes',
-    images: ['/images/products/WhatsApp Bilde 2025-09-12 kl. 19.04.39_bd8b8591.jpg'],
+    images: [
+      '/images/products/WhatsApp Bilde 2025-09-12 kl. 19.04.39_bd8b8591.jpg',
+    ],
     tags: ['signature', 'grilled', 'lamb'],
     isPublished: true,
     price: 259,
@@ -131,9 +129,7 @@ const persianProducts: IProductInput[] = [
     colors: [
       {
         color: 'Fresh Grilled',
-        sizes: [
-          { size: 'Regular', countInStock: 8 },
-        ],
+        sizes: [{ size: 'Regular', countInStock: 8 }],
       },
     ],
     reviews: [],
@@ -143,7 +139,9 @@ const persianProducts: IProductInput[] = [
     name: 'Shishlik',
     slug: toSlug('Shishlik'),
     category: 'Main Dishes',
-    images: ['/images/products/WhatsApp Bilde 2025-09-12 kl. 19.04.47_2b14295b.jpg'],
+    images: [
+      '/images/products/WhatsApp Bilde 2025-09-12 kl. 19.04.47_2b14295b.jpg',
+    ],
     tags: ['signature', 'grilled', 'lamb', 'premium'],
     isPublished: true,
     price: 269,
@@ -163,9 +161,7 @@ const persianProducts: IProductInput[] = [
     colors: [
       {
         color: 'Fresh Grilled',
-        sizes: [
-          { size: 'Regular', countInStock: 6 },
-        ],
+        sizes: [{ size: 'Regular', countInStock: 6 }],
       },
     ],
     reviews: [],
@@ -175,7 +171,9 @@ const persianProducts: IProductInput[] = [
     name: 'Mix av Koobideh og Joojeh',
     slug: toSlug('Mix av Koobideh og Joojeh'),
     category: 'Main Dishes',
-    images: ['/images/products/WhatsApp Bilde 2025-09-12 kl. 19.04.47_c4493dbd.jpg'],
+    images: [
+      '/images/products/WhatsApp Bilde 2025-09-12 kl. 19.04.47_c4493dbd.jpg',
+    ],
     tags: ['signature', 'grilled', 'lamb', 'chicken', 'combo'],
     isPublished: true,
     price: 279,
@@ -195,9 +193,7 @@ const persianProducts: IProductInput[] = [
     colors: [
       {
         color: 'Fresh Grilled',
-        sizes: [
-          { size: 'Regular', countInStock: 12 },
-        ],
+        sizes: [{ size: 'Regular', countInStock: 12 }],
       },
     ],
     reviews: [],
@@ -207,7 +203,9 @@ const persianProducts: IProductInput[] = [
     name: 'Mix av Koobideh og Chenjeh',
     slug: toSlug('Mix av Koobideh og Chenjeh'),
     category: 'Main Dishes',
-    images: ['/images/products/WhatsApp Bilde 2025-09-12 kl. 19.04.47_c699ab23.jpg'],
+    images: [
+      '/images/products/WhatsApp Bilde 2025-09-12 kl. 19.04.47_c699ab23.jpg',
+    ],
     tags: ['signature', 'grilled', 'lamb', 'combo'],
     isPublished: true,
     price: 289,
@@ -227,9 +225,7 @@ const persianProducts: IProductInput[] = [
     colors: [
       {
         color: 'Fresh Grilled',
-        sizes: [
-          { size: 'Regular', countInStock: 10 },
-        ],
+        sizes: [{ size: 'Regular', countInStock: 10 }],
       },
     ],
     reviews: [],
@@ -239,7 +235,9 @@ const persianProducts: IProductInput[] = [
     name: 'Mix av Koobideh og Shishlik',
     slug: toSlug('Mix av Koobideh og Shishlik'),
     category: 'Main Dishes',
-    images: ['/images/products/WhatsApp Bilde 2025-09-12 kl. 19.04.48_0e60c1f4.jpg'],
+    images: [
+      '/images/products/WhatsApp Bilde 2025-09-12 kl. 19.04.48_0e60c1f4.jpg',
+    ],
     tags: ['signature', 'grilled', 'lamb', 'combo', 'premium'],
     isPublished: true,
     price: 299,
@@ -259,9 +257,7 @@ const persianProducts: IProductInput[] = [
     colors: [
       {
         color: 'Fresh Grilled',
-        sizes: [
-          { size: 'Regular', countInStock: 8 },
-        ],
+        sizes: [{ size: 'Regular', countInStock: 8 }],
       },
     ],
     reviews: [],
@@ -272,7 +268,9 @@ const persianProducts: IProductInput[] = [
     name: 'Kashk Badenjan',
     slug: toSlug('Kashk Badenjan'),
     category: 'Appetizers',
-    images: ['/images/products/WhatsApp Bilde 2025-09-12 kl. 19.04.48_3402513a.jpg'],
+    images: [
+      '/images/products/WhatsApp Bilde 2025-09-12 kl. 19.04.48_3402513a.jpg',
+    ],
     tags: ['vegetarian-friendly', 'traditional', 'appetizer'],
     isPublished: true,
     price: 99,
@@ -287,14 +285,11 @@ const persianProducts: IProductInput[] = [
       { rating: 5, count: 6 },
     ],
     numSales: 22,
-    description:
-      'Aubergine, stekt mint, løk, hvitløk, kashk (tørket myse)',
+    description: 'Aubergine, stekt mint, løk, hvitløk, kashk (tørket myse)',
     colors: [
       {
         color: 'Traditional',
-        sizes: [
-          { size: 'Regular', countInStock: 20 },
-        ],
+        sizes: [{ size: 'Regular', countInStock: 20 }],
       },
     ],
     reviews: [],
@@ -305,7 +300,9 @@ const persianProducts: IProductInput[] = [
     name: 'Ghorme Sabzi',
     slug: toSlug('Ghorme Sabzi'),
     category: 'Rice Dishes',
-    images: ['/images/products/WhatsApp Bilde 2025-09-12 kl. 19.04.48_42f01fe5.jpg'],
+    images: [
+      '/images/products/WhatsApp Bilde 2025-09-12 kl. 19.04.48_42f01fe5.jpg',
+    ],
     tags: ['traditional', 'stew', 'lamb', 'herbs'],
     isPublished: true,
     price: 169,
@@ -325,9 +322,7 @@ const persianProducts: IProductInput[] = [
     colors: [
       {
         color: 'Traditional',
-        sizes: [
-          { size: 'Regular', countInStock: 15 },
-        ],
+        sizes: [{ size: 'Regular', countInStock: 15 }],
       },
     ],
     reviews: [],
@@ -337,7 +332,9 @@ const persianProducts: IProductInput[] = [
     name: 'Zeresk Polo ba Morgh',
     slug: toSlug('Zeresk Polo ba Morgh'),
     category: 'Rice Dishes',
-    images: ['/images/products/WhatsApp Bilde 2025-09-12 kl. 19.04.48_7b7bfe83.jpg'],
+    images: [
+      '/images/products/WhatsApp Bilde 2025-09-12 kl. 19.04.48_7b7bfe83.jpg',
+    ],
     tags: ['traditional', 'chicken', 'rice-dish', 'berberis'],
     isPublished: true,
     price: 169,
@@ -357,9 +354,7 @@ const persianProducts: IProductInput[] = [
     colors: [
       {
         color: 'Traditional',
-        sizes: [
-          { size: 'Regular', countInStock: 12 },
-        ],
+        sizes: [{ size: 'Regular', countInStock: 12 }],
       },
     ],
     reviews: [],
@@ -369,7 +364,9 @@ const persianProducts: IProductInput[] = [
     name: 'Gheyme',
     slug: toSlug('Gheyme'),
     category: 'Rice Dishes',
-    images: ['/images/products/WhatsApp Bilde 2025-09-12 kl. 19.06.26_b95e7ae8.jpg'],
+    images: [
+      '/images/products/WhatsApp Bilde 2025-09-12 kl. 19.06.26_b95e7ae8.jpg',
+    ],
     tags: ['traditional', 'stew', 'lamb'],
     isPublished: true,
     price: 169,
@@ -384,14 +381,11 @@ const persianProducts: IProductInput[] = [
       { rating: 5, count: 12 },
     ],
     numSales: 32,
-    description:
-      'Lammekjøtt, tomatpurre, løk. Serveres med safaran ris',
+    description: 'Lammekjøtt, tomatpurre, løk. Serveres med safaran ris',
     colors: [
       {
         color: 'Traditional',
-        sizes: [
-          { size: 'Regular', countInStock: 10 },
-        ],
+        sizes: [{ size: 'Regular', countInStock: 10 }],
       },
     ],
     reviews: [],
@@ -402,7 +396,9 @@ const persianProducts: IProductInput[] = [
     name: 'Rull Kebab',
     slug: toSlug('Rull Kebab'),
     category: 'Light Meals',
-    images: ['/images/products/WhatsApp Bilde 2025-09-12 kl. 19.06.27_1296e6d5.jpg'],
+    images: [
+      '/images/products/WhatsApp Bilde 2025-09-12 kl. 19.06.27_1296e6d5.jpg',
+    ],
     tags: ['quick-bite', 'wrap', 'grilled'],
     isPublished: true,
     price: 119,
@@ -417,14 +413,11 @@ const persianProducts: IProductInput[] = [
       { rating: 5, count: 17 },
     ],
     numSales: 65,
-    description:
-      'Et spyd koobideh med salat og saus',
+    description: 'Et spyd koobideh med salat og saus',
     colors: [
       {
         color: 'Fresh',
-        sizes: [
-          { size: 'Regular', countInStock: 25 },
-        ],
+        sizes: [{ size: 'Regular', countInStock: 25 }],
       },
     ],
     reviews: [],
@@ -434,7 +427,9 @@ const persianProducts: IProductInput[] = [
     name: 'Kylling Salat',
     slug: toSlug('Kylling Salat'),
     category: 'Salads',
-    images: ['/images/products/WhatsApp Bilde 2025-09-12 kl. 19.06.27_51dc0c1f.jpg'],
+    images: [
+      '/images/products/WhatsApp Bilde 2025-09-12 kl. 19.06.27_51dc0c1f.jpg',
+    ],
     tags: ['healthy', 'grilled', 'chicken', 'fresh'],
     isPublished: true,
     price: 159,
@@ -449,14 +444,11 @@ const persianProducts: IProductInput[] = [
       { rating: 5, count: 10 },
     ],
     numSales: 36,
-    description:
-      'Grillet kylling serveres med salat',
+    description: 'Grillet kylling serveres med salat',
     colors: [
       {
         color: 'Fresh',
-        sizes: [
-          { size: 'Regular', countInStock: 18 },
-        ],
+        sizes: [{ size: 'Regular', countInStock: 18 }],
       },
     ],
     reviews: [],
@@ -467,7 +459,9 @@ const persianProducts: IProductInput[] = [
     name: 'Mast Khiyar',
     slug: toSlug('Mast Khiyar'),
     category: 'Sides',
-    images: ['/images/products/WhatsApp Bilde 2025-09-12 kl. 19.06.27_7e820cd1.jpg'],
+    images: [
+      '/images/products/WhatsApp Bilde 2025-09-12 kl. 19.06.27_7e820cd1.jpg',
+    ],
     tags: ['side-dish', 'yogurt', 'traditional', 'cool'],
     isPublished: true,
     price: 35,
@@ -482,14 +476,11 @@ const persianProducts: IProductInput[] = [
       { rating: 5, count: 6 },
     ],
     numSales: 28,
-    description:
-      'Yoghurt med agurk og tørket mynte',
+    description: 'Yoghurt med agurk og tørket mynte',
     colors: [
       {
         color: 'Fresh',
-        sizes: [
-          { size: 'Regular', countInStock: 30 },
-        ],
+        sizes: [{ size: 'Regular', countInStock: 30 }],
       },
     ],
     reviews: [],
@@ -499,7 +490,9 @@ const persianProducts: IProductInput[] = [
     name: 'Doogh',
     slug: toSlug('Doogh'),
     category: 'Beverages',
-    images: ['/images/products/WhatsApp Bilde 2025-09-12 kl. 19.06.27_c3c39137.jpg'],
+    images: [
+      '/images/products/WhatsApp Bilde 2025-09-12 kl. 19.06.27_c3c39137.jpg',
+    ],
     tags: ['drink', 'traditional', 'yogurt', 'refreshing'],
     isPublished: true,
     price: 35,
@@ -514,8 +507,7 @@ const persianProducts: IProductInput[] = [
       { rating: 5, count: 5 },
     ],
     numSales: 34,
-    description:
-      'Yoghurt med agurk og tørket mynte',
+    description: 'Yoghurt med agurk og tørket mynte',
     colors: [
       {
         color: 'Traditional',
@@ -532,7 +524,9 @@ const persianProducts: IProductInput[] = [
     name: 'Mast Mosir',
     slug: toSlug('Mast Mosir'),
     category: 'Sides',
-    images: ['/images/products/WhatsApp Bilde 2025-09-12 kl. 19.06.27_e854b639.jpg'],
+    images: [
+      '/images/products/WhatsApp Bilde 2025-09-12 kl. 19.06.27_e854b639.jpg',
+    ],
     tags: ['side-dish', 'yogurt', 'traditional', 'persian-shallot'],
     isPublished: true,
     price: 35,
@@ -547,14 +541,11 @@ const persianProducts: IProductInput[] = [
       { rating: 5, count: 4 },
     ],
     numSales: 18,
-    description:
-      'Yoghurt med persisk sjarlottløk',
+    description: 'Yoghurt med persisk sjarlottløk',
     colors: [
       {
         color: 'Fresh',
-        sizes: [
-          { size: 'Regular', countInStock: 25 },
-        ],
+        sizes: [{ size: 'Regular', countInStock: 25 }],
       },
     ],
     reviews: [],
@@ -580,14 +571,11 @@ const persianProducts: IProductInput[] = [
       { rating: 5, count: 15 },
     ],
     numSales: 31,
-    description:
-      'Premie is med safaran',
+    description: 'Premie is med safaran',
     colors: [
       {
         color: 'Golden Saffron',
-        sizes: [
-          { size: 'Single Scoop', countInStock: 30 },
-        ],
+        sizes: [{ size: 'Single Scoop', countInStock: 30 }],
       },
     ],
     reviews: [],
@@ -617,9 +605,7 @@ const persianProducts: IProductInput[] = [
     colors: [
       {
         color: 'Traditional',
-        sizes: [
-          { size: 'Regular', countInStock: 20 },
-        ],
+        sizes: [{ size: 'Regular', countInStock: 20 }],
       },
     ],
     reviews: [],
@@ -633,8 +619,10 @@ async function addPersianProducts() {
     await connectToDatabase()
 
     // Get all unique tag names from Persian products
-    const allTagNames = [...new Set(persianProducts.flatMap(product => product.tags))]
-    
+    const allTagNames = [
+      ...new Set(persianProducts.flatMap((product) => product.tags)),
+    ]
+
     // Create tags that don't exist yet
     console.log('🏷️  Creating tags...')
     for (const tagName of allTagNames) {
@@ -654,11 +642,11 @@ async function addPersianProducts() {
     console.log('📦 Adding Persian products...')
 
     // Create products with tag references
-    const productsToAdd = persianProducts.map(product => ({
+    const productsToAdd = persianProducts.map((product) => ({
       ...product,
       tags: product.tags.map((tagName) => {
-        const tagId = tagMap.get(tagName);
-        return tagId || tagName; // Use ObjectId if exists, otherwise string
+        const tagId = tagMap.get(tagName)
+        return tagId || tagName // Use ObjectId if exists, otherwise string
       }),
     }))
 
@@ -668,7 +656,9 @@ async function addPersianProducts() {
         // Check if product already exists
         const existingProduct = await Product.findOne({ slug: product.slug })
         if (existingProduct) {
-          console.log(`⚠️  Product "${product.name}" already exists, skipping...`)
+          console.log(
+            `⚠️  Product "${product.name}" already exists, skipping...`
+          )
           continue
         }
 
@@ -681,7 +671,6 @@ async function addPersianProducts() {
 
     console.log('🎉 Persian products added successfully!')
     console.log(`📊 Total products processed: ${persianProducts.length}`)
-    
   } catch (error) {
     console.error('💥 Error adding Persian products:', error)
   } finally {
