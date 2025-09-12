@@ -50,7 +50,8 @@ const productSchema = new Schema<IProduct>(
     images: [String],
     brand: {
       type: String,
-      required: true,
+      required: false,
+      default: 'a',
     },
     description: {
       type: String,

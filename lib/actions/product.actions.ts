@@ -21,6 +21,12 @@ export async function createProduct(data: IProductInput) {
   try {
     const product = ProductInputSchema.parse(data)
     await connectToDatabase()
+
+    // Ensure brand has a value (fallback for compatibility)
+    if (!product.brand) {
+      product.brand = 'Bakeriet' // Default brand
+    }
+
     product.tags = await resolveTagIds(product.tags)
     await Product.create(product)
     revalidatePath('/admin/products')
@@ -28,8 +34,33 @@ export async function createProduct(data: IProductInput) {
       success: true,
       message: 'Product created successfully',
     }
-  } catch {
-    return { success: false, message: 'Operation failed' }
+  } catch (error) {
+    console.error('Error creating product:', error)
+    if (error instanceof z.ZodError) {
+      return {
+        success: false,
+        message: `Validation error: ${error.errors.map((e) => e.message).join(', ')}`,
+      }
+    }
+    if (error instanceof mongoose.Error.ValidationError) {
+      return {
+        success: false,
+        message: `Database validation error: ${Object.values(error.errors)
+          .map((e) => (e as mongoose.Error.ValidatorError).message)
+          .join(', ')}`,
+      }
+    }
+    if (error instanceof mongoose.Error && error.message.includes('E11000')) {
+      return {
+        success: false,
+        message:
+          'Product with this slug already exists. Please use a different name.',
+      }
+    }
+    return {
+      success: false,
+      message: `Operation failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+    }
   }
 }
 
@@ -45,8 +76,33 @@ export async function updateProduct(data: z.infer<typeof ProductUpdateSchema>) {
       success: true,
       message: 'Product updated successfully',
     }
-  } catch {
-    return { success: false, message: 'Operation failed' }
+  } catch (error) {
+    console.error('Error updating product:', error)
+    if (error instanceof z.ZodError) {
+      return {
+        success: false,
+        message: `Validation error: ${error.errors.map((e) => e.message).join(', ')}`,
+      }
+    }
+    if (error instanceof mongoose.Error.ValidationError) {
+      return {
+        success: false,
+        message: `Database validation error: ${Object.values(error.errors)
+          .map((e) => (e as mongoose.Error.ValidatorError).message)
+          .join(', ')}`,
+      }
+    }
+    if (error instanceof mongoose.Error && error.message.includes('E11000')) {
+      return {
+        success: false,
+        message:
+          'Product with this slug already exists. Please use a different name.',
+      }
+    }
+    return {
+      success: false,
+      message: `Operation failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+    }
   }
 }
 
