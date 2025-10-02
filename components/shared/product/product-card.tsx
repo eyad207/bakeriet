@@ -77,15 +77,17 @@ const ProductCard = ({
       )}
 
       {/* Serving size indicator */}
-      <div className='absolute bottom-3 left-3 z-20 opacity-0 group-hover:opacity-100 transition-all duration-500'>
-        <Badge
-          variant='secondary'
-          className='bg-white/90 backdrop-blur-sm text-gray-700 font-medium text-xs px-2 py-1 shadow-sm'
-        >
-          <Users className='w-3 h-3 mr-1' />
-          {product.colors[0]?.sizes[0]?.size || 'Single Serving'}
-        </Badge>
-      </div>
+      {product.colors && product.colors.length > 0 && (
+        <div className='absolute bottom-3 left-3 z-20 opacity-0 group-hover:opacity-100 transition-all duration-500'>
+          <Badge
+            variant='secondary'
+            className='bg-white/90 backdrop-blur-sm text-gray-700 font-medium text-xs px-2 py-1 shadow-sm'
+          >
+            <Users className='w-3 h-3 mr-1' />
+            {product.colors[0]?.sizes[0]?.size || 'Single Serving'}
+          </Badge>
+        </div>
+      )}
     </div>
   )
 
