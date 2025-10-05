@@ -76,7 +76,34 @@ export default function OpeningHoursForm({
                           <FormControl>
                             <Checkbox
                               checked={field.value || false}
-                              onCheckedChange={field.onChange}
+                              onCheckedChange={(val) => {
+                                // Update the isOpen value
+                                field.onChange(val)
+
+                                // If toggled open, ensure the time fields have defaults
+                                if (val) {
+                                  const openPath = `openingHours.${index}.openTime`
+                                  const closePath = `openingHours.${index}.closeTime`
+                                  // Allow small explicit any casts for dynamic field access
+                                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                  const currentOpen = (form as any).getValues(
+                                    openPath
+                                  )
+                                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                  const currentClose = (form as any).getValues(
+                                    closePath
+                                  )
+
+                                  if (!currentOpen) {
+                                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                    ;(form as any).setValue(openPath, '09:00')
+                                  }
+                                  if (!currentClose) {
+                                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                    ;(form as any).setValue(closePath, '17:00')
+                                  }
+                                }
+                              }}
                             />
                           </FormControl>
                           <FormLabel className='text-sm font-medium'>
