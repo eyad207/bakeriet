@@ -97,9 +97,6 @@ export default async function OrderDetailsPage(props: {
         <CardContent className='p-4'>
           <div className='flex flex-col sm:flex-row sm:items-center gap-4 sm:justify-between'>
             <div className='space-y-1'>
-              <p className='text-sm text-muted-foreground'>
-                {t('Orders.PaymentStatus')}
-              </p>
               <p className='font-medium flex items-center gap-2'>
                 <span
                   className={`w-2 h-2 rounded-full ${order.isPaid ? 'bg-green-500' : 'bg-amber-500'}`}
@@ -109,9 +106,6 @@ export default async function OrderDetailsPage(props: {
             </div>
 
             <div className='space-y-1'>
-              <p className='text-sm text-muted-foreground'>
-                {t('Orders.Shipping Status')}
-              </p>
               <p className='font-medium flex items-center gap-2'>
                 <span
                   className={`w-2 h-2 rounded-full ${order.isShipped ? 'bg-blue-500' : 'bg-gray-400'}`}
@@ -121,9 +115,7 @@ export default async function OrderDetailsPage(props: {
             </div>
 
             <div className='space-y-1'>
-              <p className='text-sm text-muted-foreground'>
-                {t('Orders.Delivery Status')}
-              </p>
+              <p className='text-sm text-muted-foreground'></p>
               <p className='font-medium flex items-center gap-2'>
                 <span
                   className={`w-2 h-2 rounded-full ${order.isDelivered ? 'bg-green-500' : 'bg-gray-400'}`}
@@ -136,30 +128,8 @@ export default async function OrderDetailsPage(props: {
           </div>
         </CardContent>
       </Card>
-      {/* Expected delivery information */}
-      {order.expectedDeliveryDate && (
-        <Card className='mt-6'>
-          <CardContent className='p-4'>
-            <div className='flex items-center gap-2 text-sm'>
-              <p className='text-muted-foreground'>
-                {t('Orders.ExpectedDeliveryBy')}:
-              </p>
-              <p className='font-medium'>
-                {new Date(order.expectedDeliveryDate).toLocaleDateString(
-                  'en-US',
-                  {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  }
-                )}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      )}
       {/* Order Details Form wrapped in a card */}
-      <div className='rounded-lg overflow-hidden border border-border/40 shadow-sm'>
+      <div>
         <h2 className='font-semibold p-4'>{t('Orders.OrderDetailsForm')}</h2>
         <OrderDetailsForm
           order={order}

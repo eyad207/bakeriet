@@ -42,7 +42,7 @@ export function HomeClient({ carousels }: HomeClientProps) {
   // Memoize the function to avoid recreating it
   const loadTagProductsStaggered = useCallback(async () => {
     // Only load first 6 tags for performance
-    const tagsToLoad = tags.slice(0, 6)
+    const tagsToLoad = tags.slice(0, 3)
 
     for (let i = 0; i < tagsToLoad.length; i++) {
       const tag = tagsToLoad[i]
@@ -137,6 +137,35 @@ export function HomeClient({ carousels }: HomeClientProps) {
         className: 'transition-transform duration-300 hover:scale-105',
       })),
     },
+    // Add tag cards - include all tags. If products aren't loaded yet, show placeholder items so the card is visible immediately.
+    ...tags.map((tag) => {
+      const tagData = tagProducts.get(tag._id)
+      const products = tagData?.products || []
+
+      // If no products yet, create placeholder empty slots so the HomeCard still renders a full card layout
+      const items = products.length
+        ? products.map((product) => ({
+            name: product.name,
+            image: product.images?.[0] || '/images/placeholder.png',
+            href: `/product/${product.slug}`,
+            className: 'transition-transform duration-300 hover:scale-105',
+          }))
+        : Array.from({ length: 4 }).map((_, i) => ({
+            name: `${tag.name}${i === 0 ? '' : ' #' + (i + 1)}`,
+            image: '/images/placeholder.png',
+            href: `/search?tag=${tag._id}`,
+            className: 'opacity-60',
+          }))
+
+      return {
+        title: tag.name,
+        link: {
+          text: t('See More'),
+          href: `/search?tag=${tag._id}`,
+        },
+        items,
+      }
+    }),
   ]
 
   return (

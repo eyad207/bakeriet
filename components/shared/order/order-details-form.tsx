@@ -38,7 +38,6 @@ export default function OrderDetailsForm({
 }) {
   const t = useTranslations()
   const {
-    shippingAddress,
     items,
     itemsPrice,
     taxPrice,
@@ -177,95 +176,31 @@ export default function OrderDetailsForm({
     <div className='grid md:grid-cols-3 md:gap-6'>
       <div className='overflow-x-auto md:col-span-2 space-y-6'>
         {/* Shipping Address Card */}
-        <Card className='shadow-sm'>
-          <CardContent className='p-6'>
-            <h2 className='text-xl font-semibold border-b border-border pb-3 mb-4'>
-              {t('Orders.ShippingAddress')}
-            </h2>
-            <div className='space-y-3'>
-              <div className='bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-3'>
-                <p className='text-green-800 dark:text-green-200 font-medium text-sm flex items-center gap-2'>
-                  <svg
-                    className='w-4 h-4'
-                    fill='currentColor'
-                    viewBox='0 0 20 20'
-                  >
-                    <path
-                      fillRule='evenodd'
-                      d='M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z'
-                      clipRule='evenodd'
-                    />
-                  </svg>
-                  {t('Orders.ReceiptSent')}
-                </p>
-                {typeof order.user === 'object' && order.user?.email && (
-                  <p className='text-green-700 dark:text-green-300 text-sm mt-2 ml-6'>
-                    {order.user.email}
-                  </p>
-                )}
-              </div>
-
-              <div className='space-y-2'>
-                <div className='flex items-start gap-3'>
-                  <svg
-                    className='w-5 h-5 text-muted-foreground mt-0.5 flex-shrink-0'
-                    fill='none'
-                    stroke='currentColor'
-                    viewBox='0 0 24 24'
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth='2'
-                      d='M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z'
-                    />
-                  </svg>
-                  <div>
-                    <p className='font-semibold'>{shippingAddress.fullName}</p>
-                    <p className='text-muted-foreground text-sm'>
-                      {shippingAddress.phone}
-                    </p>
-                  </div>
-                </div>
-
-                <div className='flex items-start gap-3'>
-                  <svg
-                    className='w-5 h-5 text-muted-foreground mt-0.5 flex-shrink-0'
-                    fill='none'
-                    stroke='currentColor'
-                    viewBox='0 0 24 24'
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth='2'
-                      d='M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z'
-                    />
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth='2'
-                      d='M15 11a3 3 0 11-6 0 3 3 0 016 0z'
-                    />
-                  </svg>
-                  <div className='text-sm leading-relaxed'>
-                    <p>{shippingAddress.street}</p>
-                    <p>
-                      {shippingAddress.city}, {shippingAddress.province}
-                    </p>
-                    <p>
-                      {shippingAddress.postalCode}, {shippingAddress.country}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
 
         {/* Payment Method Card */}
         <Card className='shadow-sm'>
           <CardContent className='p-6'>
+            <div className='bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-3 mb-6'>
+              <p className='text-green-800 dark:text-green-200 font-medium text-sm flex items-center gap-2'>
+                <svg
+                  className='w-4 h-4'
+                  fill='currentColor'
+                  viewBox='0 0 20 20'
+                >
+                  <path
+                    fillRule='evenodd'
+                    d='M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z'
+                    clipRule='evenodd'
+                  />
+                </svg>
+                {t('Orders.ReceiptSent')}
+              </p>
+              {typeof order.user === 'object' && order.user?.email && (
+                <p className='text-green-700 dark:text-green-300 text-sm mt-2 ml-6'>
+                  {order.user.email}
+                </p>
+              )}
+            </div>
             <h2 className='text-xl font-semibold border-b border-border pb-3 mb-4'>
               {t('Orders.PaymentMethod')}
             </h2>
@@ -362,12 +297,6 @@ export default function OrderDetailsForm({
                         date: formatDateTime(paidAt!).dateTime,
                       })}
                     </Badge>
-                    {/* Show if payment method differs from selection */}
-                    {isAdmin && actualPaymentMethod !== paymentMethod && (
-                      <p className='text-xs text-muted-foreground'>
-                        {t('Orders.SelectedMethod')}: {paymentMethod}
-                      </p>
-                    )}
                   </div>
                 ) : (
                   <Badge
